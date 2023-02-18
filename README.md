@@ -1,4 +1,4 @@
-# Django Practice Assessment
+# Project B-03 (Spring 2023)
 
 __Name: Gavin Fortner, Abby Dhakal, Ananya Ananda, Ashwin Shankar, Caleb Lee
 
