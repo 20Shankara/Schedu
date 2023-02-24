@@ -84,11 +84,18 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "mydb",
-        "USER" : "ananyaananda",
-        "PASSWORD" : "AAnanda_26",
-        "HOST" : "localhost",
+        # "NAME": "mydb",
+        # "USER" : "ananyaananda",
+        # "PASSWORD" : "AAnanda_26",
+        # "HOST" : "localhost",
+        # "PORT" : "5432",
+        "NAME": "d91j10444ek3fv",
+        "USER" : "thchwasvixrbtr",
+        "PASSWORD" : "20396eed5d08e0c6e76897decc963b34bb4f13fddf0df62320a8273499474e6e",
+        "HOST" : "ec2-3-209-124-113.compute-1.amazonaws.com",
         "PORT" : "5432",
+        "DATABASE_URI" : "postgres://thchwasvixrbtr:20396eed5d08e0c6e76897decc963b34bb4f13fddf0df62320a8273499474e6e@ec2-3-209-124-113.compute-1.amazonaws.com:5432/d91j10444ek3fv",
+        "HEROKU_CLI" : "heroku pg:psql postgresql-fitted-32662 --app safe-lake-70180",
     }
 }
 
@@ -110,7 +117,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
-SITE_ID = 2
+SITE_ID = 3
 LOGIN_REDIRECT_URL = '/'
 
 # Additional configuration settings
