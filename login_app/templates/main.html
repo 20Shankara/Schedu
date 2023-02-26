@@ -8,7 +8,9 @@
 <body>
     {% if user.is_authenticated %}
     <h1>UVA Schedule Portal</h1>
+    <!--
     <p>Welcome, {{ user.username }} ({{user.email}})!</p>
+    -->
     <a href="{% url 'student_homepage' %}">Student</a></br>
     <a href="{% url 'advisor_homepage' %}">Advisor</a>
 
