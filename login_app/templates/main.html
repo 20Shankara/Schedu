@@ -8,10 +8,9 @@
 <body>
     {% if user.is_authenticated %}
     <h1>UVA Schedule Portal</h1>
-    <p>Welcome, {{ user.username }}!</p>
-    {% for account in user.socialaccount_set.all %}
-     <p>Username: {{ account.extra_data.username }}</p>
-    {% endfor %}
+    <p>Welcome, {{ user.username }} ({{user.email}})!</p>
+    <a href="{% url 'student_homepage' %}">Student</a></br>
+    <a href="{% url 'advisor_homepage' %}">Advisor</a>
 
 
     {% else %}
