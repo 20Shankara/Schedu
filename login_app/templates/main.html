@@ -6,12 +6,15 @@
 </head>
 
 <body>
-    <h1>My Google Login Project</h1>
     {% if user.is_authenticated %}
-    <p>Welcome, {{ user.username }} !</p>
+    <h1>UVA Schedule Portal</h1>
+    <p>Welcome, {{ user.username }} ({{user.email}})!</p>
+    <a href="{% url 'student_homepage' %}">Student</a></br>
+    <a href="{% url 'advisor_homepage' %}">Advisor</a>
+
 
     {% else %}
-    <h1>My Google Login Project</h1>
+    <h1>UVA Schedule Portal</h1>
     <a href="{% provider_login_url 'google' %}">Login with Google</a>
     {% endif %}
 
