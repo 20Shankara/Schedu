@@ -1,28 +1,20 @@
-{% load static %}
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
-<!DOCTYPE html>
+{% load socialaccount %}
+<html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Home</title>
 </head>
 <body>
-    {% load bootstrap5 %}
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    <!-- navbar code adapted from https://ordinarycoders.com/django-bootstrap -->
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <a class="navbar-brand" href="/">UVA Schedule Portal</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
-
-    <a href="{% url 'portal:student_page' %}">Student</a></br>
-    <a href="{% url 'portal:student_page' %}">Advisor</a>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.email }}</p>
+    {% if user.email in uva_users %}
+        <p>user is student</p>
+    {% else %}
+        <p>will need to create user</p>
+    {% endif %}
+{% else %}
+  <a href="{% provider_login_url 'google' %}">Login With Google</a>
+{% endif %}
 </body>
 </html>
