@@ -20,15 +20,27 @@ def homepage(request):
 #         form = StudentForm(request.POST)
 #         if form.is_valid():
 #             form.save()
-#             # print("-------")
-#             # fn = form.cleaned_data.get('student_first_name')
-#             # ln = form.cleaned_data.get('student_last_name')
-#             # em = form.cleaned_data.get('student_email')
-#             # print(fn)
-#             # print(ln)
-#             # print(em)
-#             # print("-------")
-#             return HttpResponseRedirect(reverse('portal:student_dashboard'), {"form": form})
+#             print("-------")
+#             fn = form.cleaned_data.get('student_first_name')
+#             ln = form.cleaned_data.get('student_last_name')
+#             yr = form.cleaned_data.get('year_in_school')
+#             fn2 = request.POST['student_first_name']
+#             ln2 = request.POST['student_last_name']
+#             # newStudent = Student(student_first_name=fn2+'zzz', student_last_name=ln2+'zzz')
+#             # newStudent.save()
+#             print("-------")
+#             return HttpResponseRedirect(reverse('portal:student_dashboard', {"form": form}))
+#     else:
+#         form = StudentForm()
+#
+#     return render(request, "pages/student_sign_up.html")
+
+# def student_sign_up(request):
+#     if request.method == "POST":
+#         form = StudentForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return HttpResponseRedirect(reverse('portal:student_dashboard'))
 #     else:
 #         form = StudentForm()
 #
@@ -36,30 +48,24 @@ def homepage(request):
 
 def student_sign_up(request):
     if request.method == "POST":
-        form = StudentForm(request.POST)
-        if form.is_valid():
-            form.save()
-            print("-------")
-            fn = form.cleaned_data.get('student_first_name')
-            ln = form.cleaned_data.get('student_last_name')
-            em = form.cleaned_data.get('student_email')
-            print(fn)
-            print(ln)
-            print(em)
-            print("-------")
-            return HttpResponseRedirect(reverse('portal:student_dashboard'), {"form": form})
-    else:
-        form = StudentForm()
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        year = request.POST['year']
+        print('----------')
+        print(first_name)
+        print(last_name)
+        print(email)
+        print(year)
+        print('----------')
+        # add some logic here for year
+        newStudent = Student(student_first_name=first_name, student_last_name=last_name, student_email=email, year_in_school=year)
+        newStudent.save()
+        # this should be redirect...in dashboard can fetch all information by getting student profile based off email
+        return render(request, 'pages/student_dashboard.html')
 
-    return render(request, "pages/student_sign_up.html", {"form": form})
+    return render(request, "pages/student_sign_up.html")
 
-
-# def student_dashboard(request):
-#     students = Student.objects.all()
-#     if 'student_first_name' in request.POST:
-#         print("GOT A FIRST NAME")
-#     print(students)
-#     return render(request, 'pages/student_dashboard.html', {"Students": students})
 
 def student_dashboard(request):
     students = Student.objects.all()  # fetch by email here, instead

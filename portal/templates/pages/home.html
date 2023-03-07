@@ -10,10 +10,10 @@
     <p>Welcome, {{ user.email }}</p>
     {% if user.email in students %}
         <p>user is student</p>
-        <!-- go to student dashboard -->
+        <!-- display student dashboard -->
     {% elif user.email in advisors %}
         <p>user is advisor</p>
-        <!-- go to advisor dashboard -->
+        <!-- display advisor dashboard -->
     {% else %}
         <p>need to sign up</p>
         <a href="{% url 'portal:student_link' %}">Students</a>
