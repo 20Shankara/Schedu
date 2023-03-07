@@ -6,18 +6,18 @@
     <title>Home</title>
 </head>
 <body>
+<!-- reason logic is either sign up or google, is that in view.py -->
+<!--     the logic is already built in for authenticated user -->
+<!--     to check if authenticated user is student/advisor, so only gets to this page -->
+<!--     if not already a student or advisor -->
+
 {% if user.is_authenticated %}
     <p>Welcome, {{ user.email }}</p>
-    {% if user.email in students %}
-        <p>user is student</p>
-        <!-- display student dashboard -->
-    {% elif user.email in advisors %}
-        <p>user is advisor</p>
-        <!-- display advisor dashboard -->
-    {% else %}
-        <p>need to sign up</p>
-        <a href="{% url 'portal:student_link' %}">Students</a>
-    {% endif %}
+    <p>need to sign up</p>
+    <a href="{% url 'portal:student_link' %}">Students</a>
+    <!-- >>>>>>>> -->
+    <!-- TODO: add here sign up for advisors -->
+    <!-- >>>>>>>> -->
 {% else %}
   <a href="{% provider_login_url 'google' %}">Login With Google</a>
 {% endif %}
