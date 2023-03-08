@@ -1,0 +1,14 @@
+{% load socialaccount %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h2>{{ advisor.advisor_first_name }}'s Dashboard</h2>
+<h4>Advisor Information: </h4>
+<p>Name: {{ advisor.advisor_first_name }} {{ advisor.advisor_last_name }}</p>
+<p>Email: {{ advisor.advisor_email }} </p>
+<p>Year: {{ advisor.advisor_department }} </p>
+</body>
+</html>
