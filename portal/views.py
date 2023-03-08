@@ -19,12 +19,14 @@ def homepage(request):
             print(student.id)
             return render(request, 'pages/student_dashboard.html', {"student": student})
         if request.user.email in uva_advisors:
-            print("found an advisor")
-            # eventually, mke this go to advisor dashboard
-            return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+            print("FOUND AN ADVISOR")
+            advisor = Advisor.objects.get(advisor_email=request.user.email)
+            print(advisor.id)
+            return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
     else:
         print("LOG IN WITH GOOGLE or SIGN UP")
-        return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+
+    return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
 
 
 def student_sign_up(request):
@@ -54,3 +56,32 @@ def student_dashboard(request, student_id):
     print(student)
     print("HIIIIIII")
     return render(request, 'pages/student_dashboard.html', {"student": student})
+
+
+def advisor_sign_up(request):
+    if request.method == "POST":
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        department = request.POST['department']
+        print('----------')
+        print(first_name)
+        print(last_name)
+        print(email)
+        print(department)
+        print('----------')
+        # add some logic here for year
+        newAdvisor = Advisor(advisor_first_name=first_name, advisor_last_name=last_name, advisor_email=email,
+                             advisor_department=department)
+        newAdvisor.save()
+        print(newAdvisor.id)
+        return HttpResponseRedirect(reverse('portal:advisor_dashboard', args=(newAdvisor.id,)))
+
+    return render(request, "pages/advisor_sign_up.html")
+
+
+def advisor_dashboard(request, advisor_id):
+    advisor = Advisor.objects.get(pk=advisor_id)
+    # print(advisor)
+    print("HIIIIIII")
+    return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})

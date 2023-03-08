@@ -12,12 +12,10 @@
 <!--     if not already a student or advisor -->
 
 {% if user.is_authenticated %}
-    <p>Welcome, {{ user.email }}</p>
-    <p>need to sign up</p>
-    <a href="{% url 'portal:student_link' %}">Students</a>
-    <!-- >>>>>>>> -->
-    <!-- TODO: add here sign up for advisors -->
-    <!-- >>>>>>>> -->
+    <h2>Welcome, {{ user.email }}</h2>
+    <h4>Please Sign Up</h4>
+    <a href="{% url 'portal:student_link' %}">Students</a><br>
+    <a href="{% url 'portal:advisor_link' %}">Advisors</a>
 {% else %}
   <a href="{% provider_login_url 'google' %}">Login With Google</a>
 {% endif %}

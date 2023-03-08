@@ -1,0 +1,35 @@
+{% load socialaccount %}
+<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Advisor Sign-Up</title>
+</head>
+<body>
+<form novalidate action="{% url 'portal:advisor_link' %}" method="post">
+    {% csrf_token %}
+    <!-- from https://www.w3schools.com/tags/att_input_readonly.asp -->
+    <label for="first_name">First name:</label>
+    <input type="text" id="first_name" name="first_name" value={{ user.first_name }}><br><br>
+    <label for="last_name">Last name:</label>
+    <input type="text" id="last_name" name="last_name" value={{ user.last_name }}><br><br>
+    <label for="email">Email: </label>
+    <input type="email" value={{ user.email }} id="email" name="email" readonly><br><br>
+    <label for="department">Department: </label>
+    <select id="department" name="department">
+        <option value="African-American and African Studies">African-American and African Studies</option>
+        <option value="Air Science">Air Science</option>
+        <option value="Applied Mechanics">Applied Mechanics</option>
+        <option value="American Studies">American Studies</option>
+        <option value="Anthropology">Anthropology</option>
+        <option value="Applied Mathematics">Applied Mathematics</option>
+        <option value="Arabic">Arabic</option>
+        <option value="Architecture">Architecture</option>
+        <option value="Archaeology">Archaeology</option>
+        <option value="Studio Art">Studio Art</option>
+        <option value="Astronomy">Astronomy</option>
+    </select><br><br>
+    <button type="submit">Sign Up</button>
+</form>
+</body>
+</html>
