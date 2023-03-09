@@ -64,6 +64,8 @@ def student_class_lookup(request, student_id):
     student = Student.objects.get(pk=student_id)
     print(student)
     try:
+        # try passing year in from student_dashboard so on student dashboard you can select semester
+        #      then edit this link accordingly.
         r = requests.get('https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1228')
         # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
         departments = []
@@ -73,9 +75,9 @@ def student_class_lookup(request, student_id):
                 if key == 'subjects':
                     # print(key, ":", value, file=f)
                     for v in value:
-                        dept = v['descr']
+                        # dept = v['descr']
                         # x = dept.split(" - ", 1)
-                        departments.append(dept)
+                        departments.append(v['descr'])
                         # helper.append(x)
             # print(departments, file=f)
             # for y in helper:
