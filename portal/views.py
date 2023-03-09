@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from .models import Student, Advisor
-from .forms import StudentForm, AdvisorForm
+import requests
+# from https://pynative.com/parse-json-response-using-python-requests-library/ for HTTPError
+from requests.exceptions import HTTPError
 
 
 # Create your views here.
@@ -56,6 +58,33 @@ def student_dashboard(request, student_id):
     print(student)
     print("HIIIIIII")
     return render(request, 'pages/student_dashboard.html', {"student": student})
+
+
+def student_class_lookup(request, student_id):
+    student = Student.objects.get(pk=student_id)
+    print(student)
+    try:
+        r = requests.get('https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1228')
+        # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
+        departments = []
+        # helper = []
+        with open("class_lookup.txt", "a") as f:
+            for key, value in r.json().items():
+                if key == 'subjects':
+                    # print(key, ":", value, file=f)
+                    for v in value:
+                        dept = v['descr']
+                        # x = dept.split(" - ", 1)
+                        departments.append(dept)
+                        # helper.append(x)
+            # print(departments, file=f)
+            # for y in helper:
+            #     print("<option value='" + y[1] + "'>" + y[1] + "</option>", file=f)
+        return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments})
+    # from https://pynative.com/parse-json-response-using-python-requests-library/
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')
+    return render(request, 'pages/student_class_lookup.html', {"student": student})
 
 
 def advisor_sign_up(request):
