@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+{% load socialaccount %}
+<html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -32,18 +33,37 @@
 </div>
 
 <!-- CONTENT -->
-<p>Class Lookup for {{ student.student_first_name }} ({{ student.id }})</p>
-<!--<ul>-->
-<!--  {% for department in departments %}-->
-<!--    <li>-->
-<!--        <p>{{ department }}</p>-->
-<!--    </li>-->
-<!--  {% endfor %}-->
-<!--</ul>-->
-<select id="department" name="department">
-    {% for department in departments %}-->
-        <option value={{department}}>{{department}}</option>
-    {% endfor %}
-</select><br><br>
+<!--<p>Class Lookup for {{ student.student_first_name }} ({{ student.id }})</p>-->
+<h2>Find Classes</h2><br>
+<form novalidate action="{% url 'portal:student_class_lookup' student.id %}" method="post">
+    {% csrf_token %}
+    <label for="year">Year: </label>
+    <select id="year" name="year">
+        <option value="s23">Spring 2023</option>
+        <!-- ---------------- -->
+        <option value="f22">Fall 2022</option>
+        <option value="s22">Spring 2022</option>
+        <!-- ---------------- -->
+        <option value="f21">Fall 2021</option>
+        <option value="s21">Spring 2021</option>
+        <!-- ---------------- -->
+        <option value="f20">Fall 2020</option>
+        <option value="s20">Spring 2020</option>
+        <!-- ---------------- -->
+        <option value="f19">Fall 2019</option>
+        <option value="s19">Spring 2019</option>
+        <!-- ---------------- -->
+        <option value="f18">Fall 2018</option>
+        <option value="s18">Spring 2018</option>
+    </select><br><br>
+    <label for="department">Department: </label>
+    <select id="department" name="department">
+        <option readonly value="none">--select--</option>
+        {% for department in departments %}
+            <option value={{department}}>{{department}}</option>
+        {% endfor %}
+    </select><br><br>
+    <button type="submit">Search</button>
+</form>
 </body>
 </html>

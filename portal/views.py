@@ -64,7 +64,10 @@ def student_class_lookup(request, student_id):
     student = Student.objects.get(pk=student_id)
     print(student)
     try:
-        r = requests.get('https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1228')
+        # try passing year in from student_dashboard so on student dashboard you can select semester
+        #      then edit this link accordingly.
+        r = requests.get(
+            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1228')
         # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
         departments = []
         # helper = []
@@ -73,18 +76,61 @@ def student_class_lookup(request, student_id):
                 if key == 'subjects':
                     # print(key, ":", value, file=f)
                     for v in value:
-                        dept = v['descr']
+                        # dept = v['descr']
                         # x = dept.split(" - ", 1)
-                        departments.append(dept)
+                        departments.append(v['descr'])
                         # helper.append(x)
             # print(departments, file=f)
             # for y in helper:
             #     print("<option value='" + y[1] + "'>" + y[1] + "</option>", file=f)
+        if request.method == "POST":
+            year = request.POST['year']
+            department = request.POST['department']
+            print(year)
+            print(department)
+            return HttpResponseRedirect(reverse('portal:class_results', args=(student_id, year, department,)))
         return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     return render(request, 'pages/student_class_lookup.html', {"student": student})
+
+
+def class_results(request, student_id, semester, department):
+    student = Student.objects.get(pk=student_id)
+    print(student)
+    term = semester[0:1]
+    year = semester[1:3]
+    print(term)
+    print(year)
+    url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
+    if term == 'f':
+        term = '8'
+        print(term)
+    else:
+        term = '2'
+        print(term)
+    url = url + '&term=1' + year + term + '&subject=' + department
+    print(url)
+    # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
+    filter_results = []
+    with open("department_classes.txt", "a") as d:
+        page_num = 1
+        r = requests.get(url + '&page=' + str(page_num))
+        classes = r.json()
+        # class_set = set()
+        while len(classes) != 0:
+            for c in classes:
+                # class_set.add(c['descr'])
+                for prof in c['instructors']:
+                    a_class = {'title': c['descr'], 'type': c['section_type'], 'professor': prof['name']}
+                    # filter_results.append(c['descr'] + ' - ' + c['section_type'] + "(" + prof['name'] + ")")
+                    filter_results.append(a_class)
+            page_num += 1
+            classes = requests.get(url + '&page=' + str(page_num)).json()
+    # print(class_set) # all unique names
+    return render(request, 'pages/class_results.html',
+                  {"student": student, "semester": semester, "department": department, "classes": filter_results})
 
 
 def advisor_sign_up(request):
