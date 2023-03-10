@@ -66,7 +66,8 @@ def student_class_lookup(request, student_id):
     try:
         # try passing year in from student_dashboard so on student dashboard you can select semester
         #      then edit this link accordingly.
-        r = requests.get('https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1228')
+        r = requests.get(
+            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1228')
         # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
         departments = []
         # helper = []
@@ -82,11 +83,24 @@ def student_class_lookup(request, student_id):
             # print(departments, file=f)
             # for y in helper:
             #     print("<option value='" + y[1] + "'>" + y[1] + "</option>", file=f)
+        if request.method == "POST":
+            year = request.POST['year']
+            department = request.POST['department']
+            print(year)
+            print(department)
+            return HttpResponseRedirect(reverse('portal:class_results', args=(student_id, year, department,)))
         return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     return render(request, 'pages/student_class_lookup.html', {"student": student})
+
+
+def class_results(request, student_id, semester, department):
+    student = Student.objects.get(pk=student_id)
+    print(student)
+    print("HIIIIIII")
+    return render(request, 'pages/class_results.html', {"student": student, "semester": semester, "department": department})
 
 
 def advisor_sign_up(request):
