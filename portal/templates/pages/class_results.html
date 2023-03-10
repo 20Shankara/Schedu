@@ -5,7 +5,11 @@
     <title>Filter Results</title>
 </head>
 <body>
-Need to figure this out how to get department and year over here.
-<p>{{ student_id }} {{ semester }} {{ department }}</p>
+<h2>Classes: </h2>
+<ol>
+    {% for class in classes %}
+        <li> {{ class }} </li>
+    {% endfor %}
+</ol>
 </body>
 </html>

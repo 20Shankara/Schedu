@@ -39,8 +39,6 @@
     {% csrf_token %}
     <label for="year">Year: </label>
     <select id="year" name="year">
-        <option readonly value="none">--select--</option>
-        <!-- ---------------- -->
         <option value="s23">Spring 2023</option>
         <!-- ---------------- -->
         <option value="f22">Fall 2022</option>
@@ -61,7 +59,7 @@
     <label for="department">Department: </label>
     <select id="department" name="department">
         <option readonly value="none">--select--</option>
-        {% for department in departments %}-->
+        {% for department in departments %}
             <option value={{department}}>{{department}}</option>
         {% endfor %}
     </select><br><br>

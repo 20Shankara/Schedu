@@ -99,8 +99,34 @@ def student_class_lookup(request, student_id):
 def class_results(request, student_id, semester, department):
     student = Student.objects.get(pk=student_id)
     print(student)
-    print("HIIIIIII")
-    return render(request, 'pages/class_results.html', {"student": student, "semester": semester, "department": department})
+    term = semester[0:1]
+    year = semester[1:3]
+    print(term)
+    print(year)
+    url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
+    if term == 'f':
+        term = '8'
+        print(term)
+    else:
+        term = '2'
+        print(term)
+    url = url + '&term=1' + year + term + '&subject=' + department
+    print(url)
+    # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
+    filter_results = []
+    with open("department_classes.txt", "a") as d:
+        page_num = 1
+        r = requests.get(url + '&page=' + str(page_num))
+        classes = r.json()
+        while len(classes) != 0:
+            for c in classes:
+                for prof in c['instructors']:
+                    # print(c['descr'] + ' - ' + c['section_type'] + "(" + prof['name'] + ")", file=d)
+                    filter_results.append(c['descr'] + ' - ' + c['section_type'] + "(" + prof['name'] + ")")
+            page_num += 1
+            classes = requests.get(url + '&page=' + str(page_num)).json()
+    return render(request, 'pages/class_results.html',
+                  {"student": student, "semester": semester, "department": department, "classes": filter_results})
 
 
 def advisor_sign_up(request):
