@@ -118,13 +118,17 @@ def class_results(request, student_id, semester, department):
         page_num = 1
         r = requests.get(url + '&page=' + str(page_num))
         classes = r.json()
+        # class_set = set()
         while len(classes) != 0:
             for c in classes:
+                # class_set.add(c['descr'])
                 for prof in c['instructors']:
-                    # print(c['descr'] + ' - ' + c['section_type'] + "(" + prof['name'] + ")", file=d)
-                    filter_results.append(c['descr'] + ' - ' + c['section_type'] + "(" + prof['name'] + ")")
+                    a_class = {'title': c['descr'], 'type': c['section_type'], 'professor': prof['name']}
+                    # filter_results.append(c['descr'] + ' - ' + c['section_type'] + "(" + prof['name'] + ")")
+                    filter_results.append(a_class)
             page_num += 1
             classes = requests.get(url + '&page=' + str(page_num)).json()
+    # print(class_set) # all unique names
     return render(request, 'pages/class_results.html',
                   {"student": student, "semester": semester, "department": department, "classes": filter_results})
 
