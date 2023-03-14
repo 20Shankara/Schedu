@@ -34,8 +34,13 @@
 <!-- CONTENT -->
 <h2>Classes: </h2>
 <ol>
-    {% for class in classes %}
-        <li> {{ class.title }} - {{ class.type }} ({{ class.professor }}) </li>
+    {% for key, value in classes.items %}
+        <h4>{{key}}</h4>
+        <ul>
+        {% for v in value %}
+            <li> {{v.type}} -- {{v.professor}}</li>
+        {% endfor %}
+        </ul>
     {% endfor %}
 </ol>
 </body>

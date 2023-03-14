@@ -33,10 +33,12 @@ def homepage(request):
 
 def student_sign_up(request):
     if request.method == "POST":
+        id = request.user.id
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         year = request.POST['year']
+        # change unique thing to id
         print('----------')
         print(first_name)
         print(last_name)
@@ -44,10 +46,10 @@ def student_sign_up(request):
         print(year)
         print('----------')
         # add some logic here for year
-        newStudent = Student(student_first_name=first_name, student_last_name=last_name, student_email=email,
+        newStudent = Student(student_id=id, student_first_name=first_name, student_last_name=last_name, student_email=email,
                              year_in_school=year)
         newStudent.save()
-        print(newStudent.id)
+        # print(newStudent.id)
         return HttpResponseRedirect(reverse('portal:student_dashboard', args=(newStudent.id,)))
 
     return render(request, "pages/student_sign_up.html")
@@ -67,7 +69,7 @@ def student_class_lookup(request, student_id):
         # try passing year in from student_dashboard so on student dashboard you can select semester
         #      then edit this link accordingly.
         r = requests.get(
-            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1228')
+            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
         # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
         departments = []
         # helper = []
@@ -97,12 +99,16 @@ def student_class_lookup(request, student_id):
 
 
 def class_results(request, student_id, semester, department):
+    # could pass as list of customized strings worse come worse
+    # probably just get classes in as models
     student = Student.objects.get(pk=student_id)
+    # TODO: take student_id out of parameters and just use request.user.id
     print(student)
     term = semester[0:1]
     year = semester[1:3]
     print(term)
     print(year)
+    # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
     url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
     if term == 'f':
         term = '8'
@@ -114,23 +120,27 @@ def class_results(request, student_id, semester, department):
     print(url)
     # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
     filter_results = []
+    class_dictionary = {}
     with open("department_classes.txt", "a") as d:
         page_num = 1
         r = requests.get(url + '&page=' + str(page_num))
         classes = r.json()
-        # class_set = set()
         while len(classes) != 0:
             for c in classes:
-                # class_set.add(c['descr'])
                 for prof in c['instructors']:
                     a_class = {'title': c['descr'], 'type': c['section_type'], 'professor': prof['name']}
-                    # filter_results.append(c['descr'] + ' - ' + c['section_type'] + "(" + prof['name'] + ")")
+                    if c['descr'] in class_dictionary:
+                        class_dictionary[c['descr']].append(a_class)
+                    else:
+                        class_dictionary[c['descr']]=[]
+                        class_dictionary[c['descr']].append(a_class)
                     filter_results.append(a_class)
             page_num += 1
             classes = requests.get(url + '&page=' + str(page_num)).json()
+        print(class_dictionary, file=d)
     # print(class_set) # all unique names
     return render(request, 'pages/class_results.html',
-                  {"student": student, "semester": semester, "department": department, "classes": filter_results})
+                  {"student": student, "semester": semester, "department": department, "classes": class_dictionary})
 
 
 def advisor_sign_up(request):
