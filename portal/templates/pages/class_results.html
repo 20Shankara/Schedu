@@ -38,7 +38,7 @@
         <h4>{{key}}</h4>
         <ul>
         {% for v in value %}
-            <li> {{v.type}} -- {{v.professor}}</li>
+            <li> {{v.type}} {{v.number}} -- {{v.professor}} ({{v.status}}) {{v.classroom}}</li>
         {% endfor %}
         </ul>
     {% endfor %}

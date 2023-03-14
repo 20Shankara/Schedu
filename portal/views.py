@@ -46,7 +46,8 @@ def student_sign_up(request):
         print(year)
         print('----------')
         # add some logic here for year
-        newStudent = Student(student_id=id, student_first_name=first_name, student_last_name=last_name, student_email=email,
+        newStudent = Student(student_id=id, student_first_name=first_name, student_last_name=last_name,
+                             student_email=email,
                              year_in_school=year)
         newStudent.save()
         # print(newStudent.id)
@@ -119,25 +120,58 @@ def class_results(request, student_id, semester, department):
     url = url + '&term=1' + year + term + '&subject=' + department
     print(url)
     # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
-    filter_results = []
+    # filter_results = []
     class_dictionary = {}
-    with open("department_classes.txt", "a") as d:
+    with open("department_classes2.txt", "a") as f:
         page_num = 1
         r = requests.get(url + '&page=' + str(page_num))
         classes = r.json()
         while len(classes) != 0:
             for c in classes:
+                # print(c, file=f) # can uncomment this to see whole json output
+                professors = []
+                times = []
+                days = []
+                locations = []
                 for prof in c['instructors']:
-                    a_class = {'title': c['descr'], 'type': c['section_type'], 'professor': prof['name']}
-                    if c['descr'] in class_dictionary:
-                        class_dictionary[c['descr']].append(a_class)
-                    else:
-                        class_dictionary[c['descr']]=[]
-                        class_dictionary[c['descr']].append(a_class)
-                    filter_results.append(a_class)
+                    professors.append(prof['name'])
+                for info in c['meetings']:
+                    professor = info['instructor']
+                    times.append(info['start_time'])
+                    days.append(info['days'])
+                    locations.append(info['facility_descr'])
+                a_class = {
+                    'title': c['descr'],
+                    'id': c['crse_id'],
+                    'number': c['catalog_nbr'],
+                    'type': c['section_type'],
+                    'professor': professors,
+                    'class_capacity': c['class_capacity'],
+                    'enrollment_available': c['enrollment_available'],
+                    'status': c['enrl_stat_descr'],
+                    'times': times,
+                    'days': days,
+                    'classroom': locations,
+                }
+                # fields of interest:
+                # title
+                # section type
+                # professor --> might be multiple instructors if you see '\n\r in professor name'
+                # time --> if empty, means TBA
+                # class_capacity and enrollment_available
+                #   --> class_capacity - enrollment_available = students enrolled
+                # facility_descr
+                # days --> if empty, means TBA
+                # ** to collect facility, days, etc., must loop through c['meetings']
+                if c['descr'] in class_dictionary: # needs to be course_id
+                    class_dictionary[c['descr']].append(a_class)
+                else:
+                    class_dictionary[c['descr']] = []
+                    class_dictionary[c['descr']].append(a_class)
+                # filter_results.append(a_class)
             page_num += 1
             classes = requests.get(url + '&page=' + str(page_num)).json()
-        print(class_dictionary, file=d)
+        print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
     # print(class_set) # all unique names
     return render(request, 'pages/class_results.html',
                   {"student": student, "semester": semester, "department": department, "classes": class_dictionary})
