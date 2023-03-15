@@ -35,7 +35,8 @@
 <!-- CONTENT -->
 <!--<p>Class Lookup for {{ student.student_first_name }} ({{ student.id }})</p>-->
 <h2>Find Classes</h2><br>
-<form novalidate action="{% url 'portal:student_class_lookup' student.id %}" method="post">
+<!--<form novalidate action="{% url 'portal:student_class_lookup' student.id %}" method="post">-->
+<form action="{% url 'portal:student_class_lookup' student.id %}" method="post">
     {% csrf_token %}
     <label for="year">Year: </label>
     <select id="year" name="year">
@@ -57,12 +58,14 @@
         <option value="s18">Spring 2018</option>
     </select><br><br>
     <label for="department">Department: </label>
-    <select id="department" name="department">
-        <option readonly value="none">--select--</option>
+    <select id="department" name="department" required>
+        <option readonly value="">--select--</option>
         {% for department in departments %}
             <option value={{department}}>{{department}}</option>
         {% endfor %}
     </select><br><br>
+<!--    <label for="course_number">Course Number:</label>-->
+<!--    <input type="number" id="course_number" name="course_number">-->
     <button type="submit">Search</button>
 </form>
 </body>

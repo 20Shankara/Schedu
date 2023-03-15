@@ -153,22 +153,16 @@ def class_results(request, student_id, semester, department):
                     'days': days,
                     'classroom': locations,
                 }
-                # fields of interest:
-                # title
-                # section type
-                # professor --> might be multiple instructors if you see '\n\r in professor name'
-                # time --> if empty, means TBA
-                # class_capacity and enrollment_available
-                #   --> class_capacity - enrollment_available = students enrolled
-                # facility_descr
-                # days --> if empty, means TBA
-                # ** to collect facility, days, etc., must loop through c['meetings']
-                if c['descr'] in class_dictionary: # needs to be course_id
-                    class_dictionary[c['descr']].append(a_class)
+                # if c['descr'] in class_dictionary: # needs to be course_id
+                #     class_dictionary[c['descr']].append(a_class)
+                # else:
+                #     class_dictionary[c['descr']] = []
+                #     class_dictionary[c['descr']].append(a_class)
+                if c['catalog_nbr'] in class_dictionary: # needs to be course_id
+                    class_dictionary[c['catalog_nbr']].append(a_class)
                 else:
-                    class_dictionary[c['descr']] = []
-                    class_dictionary[c['descr']].append(a_class)
-                # filter_results.append(a_class)
+                    class_dictionary[c['catalog_nbr']] = []
+                    class_dictionary[c['catalog_nbr']].append(a_class)
             page_num += 1
             classes = requests.get(url + '&page=' + str(page_num)).json()
         print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
