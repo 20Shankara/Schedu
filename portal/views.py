@@ -91,166 +91,117 @@ def student_class_lookup(request, student_id):
             department = request.POST['department']
             print(year)
             print(department)
+            
             return HttpResponseRedirect(reverse('portal:class_results', args=(student_id, year, department,)))
-        return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments})
+        return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments, "error":""})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
-    return render(request, 'pages/student_class_lookup.html', {"student": student})
-
-
-# def class_results(request, student_id, semester, department):
-#     # could pass as list of customized strings worse come worse
-#     # probably just get classes in as models
-#     student = Student.objects.get(pk=student_id)
-#     # TODO: take student_id out of parameters and just use request.user.id
-#     print('----------------------')
-#     print(request.POST['year'])
-#     print('----------------------')
-#     print(student)
-#     term = semester[0:1]
-#     year = semester[1:3]
-#     print(term)
-#     print(year)
-#     # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
-#     url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
-#     if term == 'f':
-#         term = '8'
-#         print(term)
-#     else:
-#         term = '2'
-#         print(term)
-#     url = url + '&term=1' + year + term + '&subject=' + department
-#     print(url)
-#     # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
-#     # filter_results = []
-#     class_dictionary = {}
-#     with open("department_classes2.txt", "a") as f:
-#         page_num = 1
-#         r = requests.get(url + '&page=' + str(page_num))
-#         classes = r.json()
-#         while len(classes) != 0:
-#             for c in classes:
-#                 # print(c, file=f) # can uncomment this to see whole json output
-#                 professors = []
-#                 times = []
-#                 days = []
-#                 locations = []
-#                 for prof in c['instructors']:
-#                     professors.append(prof['name'])
-#                 for info in c['meetings']:
-#                     professor = info['instructor']
-#                     times.append(info['start_time'])
-#                     days.append(info['days'])
-#                     locations.append(info['facility_descr'])
-#                 a_class = {
-#                     'title': c['descr'],
-#                     'id': c['crse_id'],
-#                     'number': c['catalog_nbr'],
-#                     'type': c['section_type'],
-#                     'professor': professors,
-#                     'class_capacity': c['class_capacity'],
-#                     'enrollment_available': c['enrollment_available'],
-#                     'status': c['enrl_stat_descr'],
-#                     'times': times,
-#                     'days': days,
-#                     'classroom': locations,
-#                 }
-#                 # if c['descr'] in class_dictionary: # needs to be course_id
-#                 #     class_dictionary[c['descr']].append(a_class)
-#                 # else:
-#                 #     class_dictionary[c['descr']] = []
-#                 #     class_dictionary[c['descr']].append(a_class)
-#                 if c['catalog_nbr'] in class_dictionary: # needs to be course_id
-#                     class_dictionary[c['catalog_nbr']].append(a_class)
-#                 else:
-#                     class_dictionary[c['catalog_nbr']] = []
-#                     class_dictionary[c['catalog_nbr']].append(a_class)
-#             page_num += 1
-#             classes = requests.get(url + '&page=' + str(page_num)).json()
-#         print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
-#     # print(class_set) # all unique names
-#     return render(request, 'pages/class_results.html',
-#                   {"student": student, "semester": semester, "department": department, "classes": class_dictionary})
-
+    return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
 
 def class_results(request, student_id):
     # could pass as list of customized strings worse come worse
     # probably just get classes in as models
-    student = Student.objects.get(pk=student_id)
-    # TODO: take student_id out of parameters and just use request.user.id
-    print('----------------------')
-    print(request.POST['year'])
-    semester = request.POST['year']
-    department = request.POST['department']
-    print('----------------------')
-    print(student)
-    term = semester[0:1]
-    year = semester[1:3]
-    print(term)
-    print(year)
-    # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
-    url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
-    if term == 'f':
-        term = '8'
+    try: 
+        student = Student.objects.get(pk=student_id)
+        # TODO: take student_id out of parameters and just use request.user.id
+        print('----------------------')
+        print(request.POST['year'])
+        semester = request.POST['year']
+        department = request.POST['department']
+        course_number = request.POST['course_number']
+        instructor_name = request.POST['instructor_name']
+        
+        print('----------------------')
+        print(student)
+        term = semester[0:1]
+        year = semester[1:3]
         print(term)
-    else:
-        term = '2'
-        print(term)
-    url = url + '&term=1' + year + term + '&subject=' + department
-    print(url)
-    # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
-    # filter_results = []
-    class_dictionary = {}
-    with open("department_classes2.txt", "a") as f:
-        page_num = 1
-        r = requests.get(url + '&page=' + str(page_num))
-        classes = r.json()
-        while len(classes) != 0:
-            for c in classes:
-                # print(c, file=f) # can uncomment this to see whole json output
-                professors = []
-                times = []
-                days = []
-                locations = []
-                for prof in c['instructors']:
-                    professors.append(prof['name'])
-                for info in c['meetings']:
-                    professor = info['instructor']
-                    times.append(info['start_time'])
-                    days.append(info['days'])
-                    locations.append(info['facility_descr'])
-                a_class = {
-                    'title': c['descr'],
-                    'id': c['crse_id'],
-                    'number': c['catalog_nbr'],
-                    'type': c['section_type'],
-                    'professor': professors,
-                    'class_capacity': c['class_capacity'],
-                    'enrollment_available': c['enrollment_available'],
-                    'status': c['enrl_stat_descr'],
-                    'times': times,
-                    'days': days,
-                    'classroom': locations,
-                }
-                # if c['descr'] in class_dictionary: # needs to be course_id
-                #     class_dictionary[c['descr']].append(a_class)
-                # else:
-                #     class_dictionary[c['descr']] = []
-                #     class_dictionary[c['descr']].append(a_class)
-                if c['catalog_nbr'] in class_dictionary: # needs to be course_id
-                    class_dictionary[c['catalog_nbr']].append(a_class)
-                else:
-                    class_dictionary[c['catalog_nbr']] = []
-                    class_dictionary[c['catalog_nbr']].append(a_class)
-            page_num += 1
-            classes = requests.get(url + '&page=' + str(page_num)).json()
-        print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
-    # print(class_set) # all unique names
-    return render(request, 'pages/class_results.html',
-                  {"student": student, "semester": semester, "department": department, "classes": class_dictionary})
-
-
+        print(year)
+        print(course_number)
+        print (instructor_name)
+        
+        # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
+        url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
+        if term == 'f':
+            term = '8'
+            print(term)
+        else:
+            term = '2'
+            print(term)
+        url = url + '&term=1' + year + term + '&subject=' + department
+        # append course_number/ professor if inputted
+        if course_number != "":
+            url = url + '&class_nbr=' + course_number
+        if instructor_name != "":
+            url = url + '&instructor_name=' + instructor_name
+        print(url)
+        # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
+        class_dictionary = {}
+        with open("department_classes2.txt", "a") as f:
+            page_num = 1
+            r = requests.get(url + '&page=' + str(page_num))
+            classes = r.json()
+            # COURSE NUMBER & PROFESSOR LOOKUP - redirect if incorrect course number
+            if ((len(classes) == 0) & (course_number != '')) | ((len(classes) == 0) & (instructor_name != '')): 
+                r = requests.get(
+            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
+                departments = []
+                for key, value in r.json().items():
+                    if key == 'subjects':
+                        # print(key, ":", value, file=f)
+                        for v in value:
+                            # dept = v['descr']
+                            # x = dept.split(" - ", 1)
+                            departments.append(v['descr'])
+                # NEED TO CHANGE ERROR MESSAGE BASED ON INPUT
+                return render(request, 'pages/student_class_lookup.html', {"student": student, "error":"Incorrect input", "departments": departments})
+            while len(classes) != 0:
+                for c in classes:
+                    # print(c, file=f) # can uncomment this to see whole json output
+                    professors = []
+                    times = []
+                    days = []
+                    locations = []
+                    for prof in c['instructors']:
+                        professors.append(prof['name'])
+                    for info in c['meetings']:
+                        professor = info['instructor']
+                        times.append(info['start_time'])
+                        days.append(info['days'])
+                        locations.append(info['facility_descr'])
+                    a_class = {
+                        'title': c['descr'],
+                        'id': c['crse_id'],
+                        'number': c['catalog_nbr'],
+                        'type': c['section_type'],
+                        'professor': professors,
+                        'class_capacity': c['class_capacity'],
+                        'enrollment_available': c['enrollment_available'],
+                        'status': c['enrl_stat_descr'],
+                        'times': times,
+                        'days': days,
+                        'classroom': locations,
+                    }
+                    # if c['descr'] in class_dictionary: # needs to be course_id
+                    #     class_dictionary[c['descr']].append(a_class)
+                    # else:
+                    #     class_dictionary[c['descr']] = []
+                    #     class_dictionary[c['descr']].append(a_class)
+                    if c['catalog_nbr'] in class_dictionary: # needs to be course_id
+                        class_dictionary[c['catalog_nbr']].append(a_class)
+                    else:
+                        class_dictionary[c['catalog_nbr']] = []
+                        class_dictionary[c['catalog_nbr']].append(a_class)
+                page_num += 1
+                classes = requests.get(url + '&page=' + str(page_num)).json()
+            print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
+        # print(class_set) # all unique names
+        return render(request, 'pages/class_results.html',
+                    {"student": student, "semester": semester, "department": department, "classes": class_dictionary})
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')
+        return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
 def advisor_sign_up(request):
     if request.method == "POST":
         first_name = request.POST['first_name']

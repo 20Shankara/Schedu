@@ -35,6 +35,9 @@
 <!-- CONTENT -->
 <!--<p>Class Lookup for {{ student.student_first_name }} ({{ student.id }})</p>-->
 <h2>Find Classes</h2><br>
+{% if error != "" %}
+    {{error}}
+{% endif %}
 <!--<form action="{% url 'portal:student_class_lookup' student.id %}" method="post">-->
 <form action="{% url 'portal:class_results' student.id %}" method="post">
     {% csrf_token %}
@@ -64,8 +67,11 @@
             <option value={{department}}>{{department}}</option>
         {% endfor %}
     </select><br><br>
-<!--    <label for="course_number">Course Number:</label>-->
-<!--    <input type="number" id="course_number" name="course_number">-->
+   <label for="course_number">Course Number:</label>
+   <input type="number" id="course_number" name="course_number">
+   <br><br>
+   <label for="instructor_name">Professor:</label>
+   <input type="text" id="instructor_name" name="instructor_name">
     <button type="submit">Search</button>
 </form>
 </body>
