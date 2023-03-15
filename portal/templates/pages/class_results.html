@@ -34,8 +34,13 @@
 <!-- CONTENT -->
 <h2>Classes: </h2>
 <ol>
-    {% for class in classes %}
-        <li> {{ class.title }} - {{ class.type }} ({{ class.professor }}) </li>
+    {% for key, value in classes.items %}
+        <h4>{{department}} {{key}}</h4>
+        <ul>
+        {% for v in value %}
+            <li> {{v.type}} -- {{v.professor}} ({{v.status}}) <br> &emsp; Location: {{v.classroom}}</li>
+        {% endfor %}
+        </ul>
     {% endfor %}
 </ol>
 </body>

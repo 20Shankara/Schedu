@@ -3,6 +3,7 @@ from portal import departments
 
 
 class Student(models.Model):
+    # student_id = models.IntegerField(primary_key=True)
     student_first_name = models.CharField(max_length=255)
     student_last_name = models.CharField(max_length=255)
     student_email = models.EmailField(max_length=255)
@@ -27,6 +28,7 @@ class Student(models.Model):
 
 
 class Advisor(models.Model):
+    # advisor_id = models.IntegerField(primary_key=True)
     advisor_first_name = models.CharField(max_length=255)
     advisor_last_name = models.CharField(max_length=255)
     advisor_email = models.EmailField(max_length=255)
