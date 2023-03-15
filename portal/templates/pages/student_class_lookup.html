@@ -35,8 +35,8 @@
 <!-- CONTENT -->
 <!--<p>Class Lookup for {{ student.student_first_name }} ({{ student.id }})</p>-->
 <h2>Find Classes</h2><br>
-<!--<form novalidate action="{% url 'portal:student_class_lookup' student.id %}" method="post">-->
-<form action="{% url 'portal:student_class_lookup' student.id %}" method="post">
+<!--<form action="{% url 'portal:student_class_lookup' student.id %}" method="post">-->
+<form action="{% url 'portal:class_results' student.id %}" method="post">
     {% csrf_token %}
     <label for="year">Year: </label>
     <select id="year" name="year">
