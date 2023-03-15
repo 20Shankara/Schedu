@@ -110,6 +110,8 @@ def class_results(request, student_id):
         semester = request.POST['year']
         department = request.POST['department']
         course_number = request.POST['course_number']
+        instructor_name = request.POST['instructor_name']
+        
         print('----------------------')
         print(student)
         term = semester[0:1]
@@ -117,6 +119,7 @@ def class_results(request, student_id):
         print(term)
         print(year)
         print(course_number)
+        print (instructor_name)
         
         # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
@@ -127,18 +130,20 @@ def class_results(request, student_id):
             term = '2'
             print(term)
         url = url + '&term=1' + year + term + '&subject=' + department
+        # append course_number/ professor if inputted
         if course_number != "":
             url = url + '&class_nbr=' + course_number
+        if instructor_name != "":
+            url = url + '&instructor_name=' + instructor_name
         print(url)
         # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
-        # filter_results = []
         class_dictionary = {}
         with open("department_classes2.txt", "a") as f:
             page_num = 1
             r = requests.get(url + '&page=' + str(page_num))
             classes = r.json()
-            # redirect if incorrect course number
-            if (len(classes) == 0) & (course_number != ''): 
+            # COURSE NUMBER & PROFESSOR LOOKUP - redirect if incorrect course number
+            if ((len(classes) == 0) & (course_number != '')) | ((len(classes) == 0) & (instructor_name != '')): 
                 r = requests.get(
             'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
                 departments = []
@@ -149,7 +154,8 @@ def class_results(request, student_id):
                             # dept = v['descr']
                             # x = dept.split(" - ", 1)
                             departments.append(v['descr'])
-                return render(request, 'pages/student_class_lookup.html', {"student": student, "error":"incorrect class number", "departments": departments})
+                # NEED TO CHANGE ERROR MESSAGE BASED ON INPUT
+                return render(request, 'pages/student_class_lookup.html', {"student": student, "error":"Incorrect input", "departments": departments})
             while len(classes) != 0:
                 for c in classes:
                     # print(c, file=f) # can uncomment this to see whole json output
