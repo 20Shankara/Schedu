@@ -1,3 +1,7 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
-# Create your tests here.
+class StatusCodeTests(TestCase):
+    def test_login_page_status(self):
+        client = Client()
+        response = client.get('/')
+        self.assertIs(response.status_code, "200")
