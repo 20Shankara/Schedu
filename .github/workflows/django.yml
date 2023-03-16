@@ -2,9 +2,9 @@ name: Django CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "GithubActions" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "GithubActions" ]
 
 jobs:
   build:
@@ -27,4 +27,4 @@ jobs:
         pip install -r requirements.txt
     - name: Run Tests
       run: |
-        python manage.py test
+        python manage.py test --keepdb

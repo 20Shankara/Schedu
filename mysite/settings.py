@@ -89,6 +89,9 @@ DATABASES = {
         "PORT": "5432",
         "DATABASE_URI": "postgres://thchwasvixrbtr:20396eed5d08e0c6e76897decc963b34bb4f13fddf0df62320a8273499474e6e@ec2-3-209-124-113.compute-1.amazonaws.com:5432/d91j10444ek3fv",
         "HEROKU_CLI": "heroku pg:psql postgresql-fitted-32662 --app safe-lake-70180",
+        "TEST": {
+            "NAME": "d91j10444ek3fv"
+        }
     }
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
