@@ -111,6 +111,8 @@ def class_results(request, student_id):
         department = request.POST['department']
         course_number = request.POST['course_number']
         instructor_name = request.POST['instructor_name']
+        days = "".join(request.POST.getlist('days[]'))
+        enrl_stat = request.POST.get('enrl_stat', 'default') #set default value if not open
         
         print('----------------------')
         print(student)
@@ -120,6 +122,8 @@ def class_results(request, student_id):
         print(year)
         print(course_number)
         print (instructor_name)
+        print (days)
+        print (enrl_stat)
         
         # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
@@ -135,6 +139,10 @@ def class_results(request, student_id):
             url = url + '&class_nbr=' + course_number
         if instructor_name != "":
             url = url + '&instructor_name=' + instructor_name
+        if len(days) != 0:
+            url = url + '&days=' + days
+        if enrl_stat == "O":
+            url = url + '&enrl_stat='+ enrl_stat
         print(url)
         # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
         class_dictionary = {}
@@ -143,7 +151,7 @@ def class_results(request, student_id):
             r = requests.get(url + '&page=' + str(page_num))
             classes = r.json()
             # COURSE NUMBER & PROFESSOR LOOKUP - redirect if incorrect course number
-            if ((len(classes) == 0) & (course_number != '')) | ((len(classes) == 0) & (instructor_name != '')): 
+            if ((len(classes) == 0) & (course_number != '')) | ((len(classes) == 0) & (instructor_name != '')) | ((len(classes) == 0) & (days != '')): 
                 r = requests.get(
             'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
                 departments = []
