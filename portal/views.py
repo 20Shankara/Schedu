@@ -112,6 +112,7 @@ def class_results(request, student_id):
         course_number = request.POST['course_number']
         instructor_name = request.POST['instructor_name']
         days = "".join(request.POST.getlist('days[]'))
+        course_days = days
         enrl_stat = request.POST.get('enrl_stat', 'default') #set default value if not open
         
         print('----------------------')
@@ -169,14 +170,15 @@ def class_results(request, student_id):
                     # print(c, file=f) # can uncomment this to see whole json output
                     professors = []
                     times = []
-                    days = []
+                    # days = []
                     locations = []
                     for prof in c['instructors']:
                         professors.append(prof['name'])
                     for info in c['meetings']:
                         professor = info['instructor']
                         times.append(info['start_time'])
-                        days.append(info['days'])
+                        # days.append(info['days'])
+                        days = info['days']
                         locations.append(info['facility_descr'])
                     a_class = {
                         'title': c['descr'],
@@ -196,11 +198,15 @@ def class_results(request, student_id):
                     # else:
                     #     class_dictionary[c['descr']] = []
                     #     class_dictionary[c['descr']].append(a_class)
-                    if c['catalog_nbr'] in class_dictionary: # needs to be course_id
-                        class_dictionary[c['catalog_nbr']].append(a_class)
-                    else:
-                        class_dictionary[c['catalog_nbr']] = []
-                        class_dictionary[c['catalog_nbr']].append(a_class)
+                    # print(days)
+                    # print(course_days)
+                    # print(course_days == days)
+                    if(days == course_days):
+                        if c['catalog_nbr'] in class_dictionary: # needs to be course_id
+                            class_dictionary[c['catalog_nbr']].append(a_class)
+                        else:
+                            class_dictionary[c['catalog_nbr']] = []
+                            class_dictionary[c['catalog_nbr']].append(a_class)
                 page_num += 1
                 classes = requests.get(url + '&page=' + str(page_num)).json()
             print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
