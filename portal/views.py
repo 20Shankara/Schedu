@@ -42,13 +42,11 @@ def student(request):
         last_name = request.POST['last_name']
         email = request.POST['email']
         year = request.POST['year']
-        # change unique thing to id
         # add some logic here for year
         newStudent = Student(student_first_name=first_name, student_last_name=last_name,
                              student_email=email,
                              year_in_school=year)
         newStudent.save()
-        # print(newStudent.id)
         return HttpResponseRedirect(reverse('portal:student_dashboard', args=(newStudent.id,)))
 
     return render(request, "pages/student_sign_up.html")
@@ -80,33 +78,28 @@ def student_dashboard(request, student_id):
     student = Student.objects.get(pk=student_id)
     return render(request, 'pages/student_dashboard.html', {"student": student})
 
+def get_departments():
+    r = requests.get(
+        'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
+    # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
+    departments = []
+    with open("class_lookup.txt", "a") as f:
+        for key, value in r.json().items():
+            if key == 'subjects':
+                for v in value:
+                    departments.append(v['descr'])
+    return departments
 
 def student_class_lookup(request, student_id):
     student = Student.objects.get(pk=student_id)
     try:
-        # try passing year in from student_dashboard so on student dashboard you can select semester
-        #      then edit this link accordingly.
-        r = requests.get(
-            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
-        # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
-        departments = []
-        with open("class_lookup.txt", "a") as f:
-            for key, value in r.json().items():
-                if key == 'subjects':
-                    for v in value:
-                        departments.append(v['descr'])
-        if request.method == "POST":
-            year = request.POST['year']
-            department = request.POST['department']
-            
-            return HttpResponseRedirect(reverse('portal:class_results', args=(student_id, year, department,)))
+        departments = get_departments()
         return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments, "error":""})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
 
-def get_departments():
 
 def class_results(request, student_id):
     # could pass as list of customized strings worse come worse
@@ -136,19 +129,13 @@ def class_results(request, student_id):
             r = requests.get(url + '&page=' + str(page_num))
             classes = r.json()
             # COURSE NUMBER & PROFESSOR LOOKUP - redirect if incorrect course number
+
+            # If user inputted incorrect fields then redirect back to lookup page:
             if ((len(classes) == 0) and course_number) or ((len(classes) == 0) and instructor_name):
-                r = requests.get(
-            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
-                departments = []
-                for key, value in r.json().items():
-                    if key == 'subjects':
-                        # print(key, ":", value, file=f)
-                        for v in value:
-                            # dept = v['descr']
-                            # x = dept.split(" - ", 1)
-                            departments.append(v['descr'])
+                departments = get_departments()
                 # NEED TO CHANGE ERROR MESSAGE BASED ON INPUT
                 return render(request, 'pages/student_class_lookup.html', {"student": student, "error":"Incorrect input", "departments": departments})
+
             while len(classes) != 0:
                 for c in classes:
                     # print(c, file=f) # can uncomment this to see whole json output
