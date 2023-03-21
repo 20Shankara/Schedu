@@ -104,8 +104,13 @@ def class_results(request, student_id):
         department = request.POST['department']
         course_number = request.POST['course_number']
         instructor_name = request.POST['instructor_name']
+
         term = '8' if semester[0:1] == 'f' else '2'
         year = semester[1:3]
+
+        days = "".join(request.POST.getlist('days[]'))
+        course_days = days
+        enrl_stat = request.POST.get('enrl_stat', 'default') #set default value if not open
         
         # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
@@ -115,6 +120,13 @@ def class_results(request, student_id):
             url = url + '&class_nbr=' + course_number
         if instructor_name:
             url = url + '&instructor_name=' + instructor_name
+
+        if len(days) != 0:
+            url = url + '&days=' + days
+        if enrl_stat == "O":
+            url = url + '&enrl_stat='+ enrl_stat
+        print(url)
+        
         # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
         class_dictionary = {}
         with open("department_classes2.txt", "a") as f:
@@ -123,9 +135,11 @@ def class_results(request, student_id):
             classes = r.json()
             # COURSE NUMBER & PROFESSOR LOOKUP - redirect if incorrect course number
 
+
             # If user inputted incorrect fields then redirect back to lookup page:
             if ((len(classes) == 0) and course_number) or ((len(classes) == 0) and instructor_name):
                 departments = get_departments()
+
                 # NEED TO CHANGE ERROR MESSAGE BASED ON INPUT
                 return render(request, 'pages/student_class_lookup.html', {"student": student, "error":"Incorrect input", "departments": departments})
 
@@ -134,14 +148,15 @@ def class_results(request, student_id):
                     # print(c, file=f) # can uncomment this to see whole json output
                     professors = []
                     times = []
-                    days = []
+                    # days = []
                     locations = []
                     for prof in c['instructors']:
                         professors.append(prof['name'])
                     for info in c['meetings']:
                         professor = info['instructor']
                         times.append(info['start_time'])
-                        days.append(info['days'])
+                        # days.append(info['days'])
+                        days = info['days']
                         locations.append(info['facility_descr'])
                     a_class = {
                         'title': c['descr'],
@@ -161,11 +176,15 @@ def class_results(request, student_id):
                     # else:
                     #     class_dictionary[c['descr']] = []
                     #     class_dictionary[c['descr']].append(a_class)
-                    if c['catalog_nbr'] in class_dictionary: # needs to be course_id
-                        class_dictionary[c['catalog_nbr']].append(a_class)
-                    else:
-                        class_dictionary[c['catalog_nbr']] = []
-                        class_dictionary[c['catalog_nbr']].append(a_class)
+                    # print(days)
+                    # print(course_days)
+                    # print(course_days == days)
+                    if(days == course_days):
+                        if c['catalog_nbr'] in class_dictionary: # needs to be course_id
+                            class_dictionary[c['catalog_nbr']].append(a_class)
+                        else:
+                            class_dictionary[c['catalog_nbr']] = []
+                            class_dictionary[c['catalog_nbr']].append(a_class)
                 page_num += 1
                 classes = requests.get(url + '&page=' + str(page_num)).json()
             print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
