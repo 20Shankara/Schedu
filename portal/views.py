@@ -28,12 +28,8 @@ def home(request):
 
 
 def student(request):
-    if not request.user.is_authenticated:
-        return render(request, login_app.templates.main_html)
-
-
     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
-    if request.user.email in uva_students:
+    if request.user.is_authenticated and request.user.email in uva_students:
         student = Student.objects.get(student_email=request.user.email)
         return render(request, 'pages/student_dashboard.html', {"student": student})
 
@@ -52,11 +48,8 @@ def student(request):
     return render(request, "pages/student_sign_up.html")
 
 def advisor(request):
-    if not request.user.is_authenticated:
-        return render(request, login_app.templates.main_html)
-
     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
-    if request.user.email in uva_advisors:
+    if request.user.is_authenticated and request.user.email in uva_advisors:
         advisor = Advisor.objects.get(advisor_email=request.user.email)
         return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
 
