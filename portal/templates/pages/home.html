@@ -13,7 +13,7 @@
 
 {% if user.is_authenticated %}
     <h2>Welcome, {{ user.email }}</h2>
-    <h4>Please Sign Up</h4>
+    <h4>Please Log in Or Sign Up</h4>
     <a href="{% url 'portal:student_link' %}">Students</a><br>
     <a href="{% url 'portal:advisor_link' %}">Advisors</a>
 {% else %}

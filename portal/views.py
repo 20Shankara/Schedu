@@ -1,103 +1,98 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+
+import login_app.views
 from .models import Student, Advisor
 import requests
 # from https://pynative.com/parse-json-response-using-python-requests-library/ for HTTPError
 from requests.exceptions import HTTPError
 
 
-# Create your views here.
-def homepage(request):
-    # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django 
+def home(request):
+    return render(request, 'pages/home.html',)
+
+# def homepage(request):
+#     # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
+#     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
+#     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
+#     if request.user.is_authenticated:
+#         if request.user.email in uva_students:
+#             student = Student.objects.get(student_email=request.user.email)
+#             return render(request, 'pages/student_dashboard.html', {"student": student})
+#         if request.user.email in uva_advisors:
+#             advisor = Advisor.objects.get(advisor_email=request.user.email)
+#             return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+#
+#     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+
+
+def student(request):
     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
-    uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
-    print(request.user)
-    if request.user.is_authenticated:
-        print("LOGGED IN")
-        if request.user.email in uva_students:
-            print("FOUND A STUDENT")
-            student = Student.objects.get(student_email=request.user.email)
-            print(student.id)
-            return render(request, 'pages/student_dashboard.html', {"student": student})
-        if request.user.email in uva_advisors:
-            print("FOUND AN ADVISOR")
-            advisor = Advisor.objects.get(advisor_email=request.user.email)
-            print(advisor.id)
-            return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
-    else:
-        print("LOG IN WITH GOOGLE or SIGN UP")
+    if request.user.is_authenticated and request.user.email in uva_students:
+        student = Student.objects.get(student_email=request.user.email)
+        return render(request, 'pages/student_dashboard.html', {"student": student})
 
-    return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
-
-
-def student_sign_up(request):
     if request.method == "POST":
-        id = request.user.id
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         year = request.POST['year']
-        # change unique thing to id
-        print('----------')
-        print(first_name)
-        print(last_name)
-        print(email)
-        print(year)
-        print('----------')
         # add some logic here for year
-        newStudent = Student(student_id=id, student_first_name=first_name, student_last_name=last_name,
+        newStudent = Student(student_first_name=first_name, student_last_name=last_name,
                              student_email=email,
                              year_in_school=year)
         newStudent.save()
-        # print(newStudent.id)
         return HttpResponseRedirect(reverse('portal:student_dashboard', args=(newStudent.id,)))
 
     return render(request, "pages/student_sign_up.html")
 
+def advisor(request):
+    uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
+    if request.user.is_authenticated and request.user.email in uva_advisors:
+        advisor = Advisor.objects.get(advisor_email=request.user.email)
+        return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+
+    if request.method == "POST":
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        department = request.POST['department']
+        # add some logic here for year
+        newAdvisor = Advisor(advisor_first_name=first_name, advisor_last_name=last_name, advisor_email=email,
+                             advisor_department=department)
+        newAdvisor.save()
+        return HttpResponseRedirect(reverse('portal:advisor_dashboard', args=(newAdvisor.id,)))
+
+    return render(request, "pages/advisor_sign_up.html")
+
 
 def student_dashboard(request, student_id):
     student = Student.objects.get(pk=student_id)
-    print(student)
-    print("HIIIIIII")
     return render(request, 'pages/student_dashboard.html', {"student": student})
 
+def get_departments():
+    r = requests.get(
+        'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
+    # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
+    departments = []
+    with open("class_lookup.txt", "a") as f:
+        for key, value in r.json().items():
+            if key == 'subjects':
+                for v in value:
+                    departments.append(v['descr'])
+    return departments
 
 def student_class_lookup(request, student_id):
     student = Student.objects.get(pk=student_id)
-    print(student)
     try:
-        # try passing year in from student_dashboard so on student dashboard you can select semester
-        #      then edit this link accordingly.
-        r = requests.get(
-            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
-        # printing to file in your file explorer from https://stackoverflow.com/questions/36571560/directing-print-output-to-a-txt-file
-        departments = []
-        # helper = []
-        with open("class_lookup.txt", "a") as f:
-            for key, value in r.json().items():
-                if key == 'subjects':
-                    # print(key, ":", value, file=f)
-                    for v in value:
-                        # dept = v['descr']
-                        # x = dept.split(" - ", 1)
-                        departments.append(v['descr'])
-                        # helper.append(x)
-            # print(departments, file=f)
-            # for y in helper:
-            #     print("<option value='" + y[1] + "'>" + y[1] + "</option>", file=f)
-        if request.method == "POST":
-            year = request.POST['year']
-            department = request.POST['department']
-            print(year)
-            print(department)
-            
-            return HttpResponseRedirect(reverse('portal:class_results', args=(student_id, year, department,)))
+        departments = get_departments()
         return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments, "error":""})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
+
 
 def class_results(request, student_id):
     # could pass as list of customized strings worse come worse
@@ -105,46 +100,33 @@ def class_results(request, student_id):
     try: 
         student = Student.objects.get(pk=student_id)
         # TODO: take student_id out of parameters and just use request.user.id
-        print('----------------------')
-        print(request.POST['year'])
         semester = request.POST['year']
         department = request.POST['department']
         course_number = request.POST['course_number']
         instructor_name = request.POST['instructor_name']
+
+        term = '8' if semester[0:1] == 'f' else '2'
+        year = semester[1:3]
+
         days = "".join(request.POST.getlist('days[]'))
         course_days = days
         enrl_stat = request.POST.get('enrl_stat', 'default') #set default value if not open
         
-        print('----------------------')
-        print(student)
-        term = semester[0:1]
-        year = semester[1:3]
-        print(term)
-        print(year)
-        print(course_number)
-        print (instructor_name)
-        print (days)
-        print (enrl_stat)
-        
         # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
-        if term == 'f':
-            term = '8'
-            print(term)
-        else:
-            term = '2'
-            print(term)
         url = url + '&term=1' + year + term + '&subject=' + department
         # append course_number/ professor if inputted
-        if course_number != "":
+        if course_number:
             url = url + '&class_nbr=' + course_number
-        if instructor_name != "":
+        if instructor_name:
             url = url + '&instructor_name=' + instructor_name
+
         if len(days) != 0:
             url = url + '&days=' + days
         if enrl_stat == "O":
             url = url + '&enrl_stat='+ enrl_stat
         print(url)
+        
         # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
         class_dictionary = {}
         with open("department_classes2.txt", "a") as f:
@@ -152,19 +134,15 @@ def class_results(request, student_id):
             r = requests.get(url + '&page=' + str(page_num))
             classes = r.json()
             # COURSE NUMBER & PROFESSOR LOOKUP - redirect if incorrect course number
-            if ((len(classes) == 0) & (course_number != '')) | ((len(classes) == 0) & (instructor_name != '')) | ((len(classes) == 0) & (days != '')): 
-                r = requests.get(
-            'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
-                departments = []
-                for key, value in r.json().items():
-                    if key == 'subjects':
-                        # print(key, ":", value, file=f)
-                        for v in value:
-                            # dept = v['descr']
-                            # x = dept.split(" - ", 1)
-                            departments.append(v['descr'])
+
+
+            # If user inputted incorrect fields then redirect back to lookup page:
+            if ((len(classes) == 0) and course_number) or ((len(classes) == 0) and instructor_name):
+                departments = get_departments()
+
                 # NEED TO CHANGE ERROR MESSAGE BASED ON INPUT
                 return render(request, 'pages/student_class_lookup.html', {"student": student, "error":"Incorrect input", "departments": departments})
+
             while len(classes) != 0:
                 for c in classes:
                     # print(c, file=f) # can uncomment this to see whole json output
@@ -216,30 +194,9 @@ def class_results(request, student_id):
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
         return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
-def advisor_sign_up(request):
-    if request.method == "POST":
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        department = request.POST['department']
-        print('----------')
-        print(first_name)
-        print(last_name)
-        print(email)
-        print(department)
-        print('----------')
-        # add some logic here for year
-        newAdvisor = Advisor(advisor_first_name=first_name, advisor_last_name=last_name, advisor_email=email,
-                             advisor_department=department)
-        newAdvisor.save()
-        print(newAdvisor.id)
-        return HttpResponseRedirect(reverse('portal:advisor_dashboard', args=(newAdvisor.id,)))
 
-    return render(request, "pages/advisor_sign_up.html")
 
 
 def advisor_dashboard(request, advisor_id):
     advisor = Advisor.objects.get(pk=advisor_id)
-    # print(advisor)
-    print("HIIIIIII")
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
