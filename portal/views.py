@@ -1,29 +1,42 @@
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+
+import login_app.views
 from .models import Student, Advisor
 import requests
 # from https://pynative.com/parse-json-response-using-python-requests-library/ for HTTPError
 from requests.exceptions import HTTPError
 
 
-# Create your views here.
-def homepage(request):
-    # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django 
+def home(request):
+    return render(request, 'pages/home.html',)
+
+# def homepage(request):
+#     # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
+#     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
+#     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
+#     if request.user.is_authenticated:
+#         if request.user.email in uva_students:
+#             student = Student.objects.get(student_email=request.user.email)
+#             return render(request, 'pages/student_dashboard.html', {"student": student})
+#         if request.user.email in uva_advisors:
+#             advisor = Advisor.objects.get(advisor_email=request.user.email)
+#             return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+#
+#     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+
+
+def student(request):
+    if not request.user.is_authenticated:
+        return render(request, login_app.templates.main_html)
+
+
     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
-    uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
-    if request.user.is_authenticated:
-        if request.user.email in uva_students:
-            student = Student.objects.get(student_email=request.user.email)
-            return render(request, 'pages/student_dashboard.html', {"student": student})
-        if request.user.email in uva_advisors:
-            advisor = Advisor.objects.get(advisor_email=request.user.email)
-            return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+    if request.user.email in uva_students:
+        student = Student.objects.get(student_email=request.user.email)
+        return render(request, 'pages/student_dashboard.html', {"student": student})
 
-    return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
-
-
-def student_sign_up(request):
     if request.method == "POST":
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -39,6 +52,28 @@ def student_sign_up(request):
         return HttpResponseRedirect(reverse('portal:student_dashboard', args=(newStudent.id,)))
 
     return render(request, "pages/student_sign_up.html")
+
+def advisor(request):
+    if not request.user.is_authenticated:
+        return render(request, login_app.templates.main_html)
+
+    uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
+    if request.user.email in uva_advisors:
+        advisor = Advisor.objects.get(advisor_email=request.user.email)
+        return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+
+    if request.method == "POST":
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        department = request.POST['department']
+        # add some logic here for year
+        newAdvisor = Advisor(advisor_first_name=first_name, advisor_last_name=last_name, advisor_email=email,
+                             advisor_department=department)
+        newAdvisor.save()
+        return HttpResponseRedirect(reverse('portal:advisor_dashboard', args=(newAdvisor.id,)))
+
+    return render(request, "pages/advisor_sign_up.html")
 
 
 def student_dashboard(request, student_id):
@@ -71,6 +106,8 @@ def student_class_lookup(request, student_id):
         print(f'HTTP error occurred: {http_err}')
     return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
 
+def get_departments():
+
 def class_results(request, student_id):
     # could pass as list of customized strings worse come worse
     # probably just get classes in as models
@@ -81,15 +118,11 @@ def class_results(request, student_id):
         department = request.POST['department']
         course_number = request.POST['course_number']
         instructor_name = request.POST['instructor_name']
-        term = semester[0:1]
+        term = '8' if semester[0:1] == 'f' else '2'
         year = semester[1:3]
         
         # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
-        if term == 'f':
-            term = '8'
-        else:
-            term = '2'
         url = url + '&term=1' + year + term + '&subject=' + department
         # append course_number/ professor if inputted
         if course_number:
@@ -162,19 +195,7 @@ def class_results(request, student_id):
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
         return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
-def advisor_sign_up(request):
-    if request.method == "POST":
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        department = request.POST['department']
-        # add some logic here for year
-        newAdvisor = Advisor(advisor_first_name=first_name, advisor_last_name=last_name, advisor_email=email,
-                             advisor_department=department)
-        newAdvisor.save()
-        return HttpResponseRedirect(reverse('portal:advisor_dashboard', args=(newAdvisor.id,)))
 
-    return render(request, "pages/advisor_sign_up.html")
 
 
 def advisor_dashboard(request, advisor_id):
