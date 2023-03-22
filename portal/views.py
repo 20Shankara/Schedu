@@ -86,7 +86,7 @@ def get_departments():
 def student_class_lookup(request, student_id):
     student = Student.objects.get(pk=student_id)
     try:
-        departments = get_departments()
+        departments =get_departments()
         return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments, "error":""})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
