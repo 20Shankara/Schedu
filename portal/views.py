@@ -134,6 +134,7 @@ def class_results(request, student_id):
 
         # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
         class_dictionary = {}
+        open('department_classes2.txt', 'w').close()
         with open("department_classes2.txt", "a") as f:
             page_num = 1
             r = requests.get(url + '&page=' + str(page_num))
@@ -199,12 +200,29 @@ def class_results(request, student_id):
                         # only this if because it must already have lecture in there, so already an entry = shortcut
                         if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
                             class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                    # ----------------------------------------------------------------------------
+                    # ----------------------------------------------------------------------------
+                    # if course_days == "":
+                    #     if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
+                    #         class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                    #     elif (a_class['type'] == "Lecture") | (a_class['type'] == "SEM"):
+                    #         class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])] = []
+                    #         class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
                     if course_days == "":
-                        if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
-                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
-                        elif (a_class['type'] == "Lecture") | (a_class['type'] == "SEM"):
-                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])] = []
-                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                        if a_class['number'] in class_dictionary:  # needs to be course_id
+                            if (a_class['type'] == "Lecture") | (a_class['type'] == "SEM") | (a_class['type'] == "IND"):
+                                class_dictionary[a_class['number']]["Lectures"].append(a_class)
+                            elif a_class['type'] == "Discussion":
+                                class_dictionary[a_class['number']]["Discussions"].append(a_class)
+                        elif (a_class['type'] == "Lecture") | (a_class['type'] == "SEM") | (a_class['type'] == "IND"):
+                            class_dictionary[a_class['number']] = {
+                                "Course_Name": a_class['title'],
+                                "Lectures": [],
+                                "Discussions": []
+                            }
+                            class_dictionary[a_class['number']]["Lectures"].append(a_class)
+                    # ----------------------------------------------------------------------------
+                    # ----------------------------------------------------------------------------
                 page_num += 1
                 classes = requests.get(url + '&page=' + str(page_num)).json()
             print(class_dictionary, file=f)  # uncomment this to see what is added to dictionary for each class
