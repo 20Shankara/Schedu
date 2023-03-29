@@ -187,24 +187,24 @@ def class_results(request, student_id):
                     print(course_days == days)
 
                     if (days == course_days) & (course_days != ""):
-                        if c['catalog_nbr'] in class_dictionary:  # needs to be course_id
-                            class_dictionary[c['catalog_nbr']].append(a_class)
+                        if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
                         else:
-                            class_dictionary[c['catalog_nbr']] = []
-                            class_dictionary[c['catalog_nbr']].append(a_class)
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])] = []
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
                     # here we want all open discussions added even if days are specified
                     # discussion days won't match lecture requirements, but they still must see
                     if (a_class['type'] == "Discussion") & (course_days != ""):
                         # well, only want to add open discussion if there is open lecture
                         # only this if because it must already have lecture in there, so already an entry = shortcut
-                        if c['catalog_nbr'] in class_dictionary:  # needs to be course_id
-                            class_dictionary[c['catalog_nbr']].append(a_class)
+                        if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
                     if course_days == "":
-                        if c['catalog_nbr'] in class_dictionary:  # needs to be course_id
-                            class_dictionary[c['catalog_nbr']].append(a_class)
-                        elif a_class['type'] == "Lecture":
-                            class_dictionary[c['catalog_nbr']] = []
-                            class_dictionary[c['catalog_nbr']].append(a_class)
+                        if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                        elif (a_class['type'] == "Lecture") | (a_class['type'] == "SEM"):
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])] = []
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
                 page_num += 1
                 classes = requests.get(url + '&page=' + str(page_num)).json()
             print(class_dictionary, file=f)  # uncomment this to see what is added to dictionary for each class
