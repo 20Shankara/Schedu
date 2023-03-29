@@ -6,6 +6,9 @@ __pycache__
 db.sqlite3
 media
 
+# Text Files for Testing
+*.txt
+
 # Backup files # 
 *.bak 
 
