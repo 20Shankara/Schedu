@@ -43,7 +43,7 @@
             {% endif %}
             {% if key1 == "Lectures" %}
                 {% if value1 %}
-                    <h5>&emsp;Lectures: </h5>
+<!--                    <h5>&emsp;Lectures: </h5>-->
                     <ul>
                     {% for lec in value1 %}
                         <li> {{lec.type}} -- {{lec.professor}} ({{lec.status}}) <br> &emsp; Location: {{lec.classroom}}</li>
@@ -53,7 +53,7 @@
             {% endif %}
             {% if key1 == "Discussions" %}
                 {% if value1 %}
-                    <h5>&emsp;Discussions: </h5>
+<!--                    <h5>&emsp;Discussions: </h5>-->
                     <ul>
                     {% for dis in value1 %}
                         <li> {{dis.type}} -- {{dis.professor}} ({{dis.status}}) <br> &emsp; Location: {{dis.classroom}}</li>
