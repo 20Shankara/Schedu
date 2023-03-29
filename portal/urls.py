@@ -5,13 +5,10 @@ from . import views
 app_name = 'portal'
 urlpatterns = [
     path('', views.home, name='home'),
-
     path('student', views.student, name='student_link'),
     path('advisor', views.advisor, name='advisor_link'),
-
     path('<int:student_id>/student_dashboard/', views.student_dashboard, name='student_dashboard'),
     path('<int:advisor_id>/advisor_dashboard/', views.advisor_dashboard, name='advisor_dashboard'),
-
     path('<int:student_id>/student_class_lookup/', views.student_class_lookup, name='student_class_lookup'),
     path('<int:student_id>/class_results/', views.class_results, name='class_results'),
     # might need to put filters as parameters in url here

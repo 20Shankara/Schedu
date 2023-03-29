@@ -176,10 +176,18 @@ def class_results(request, student_id):
                     # else:
                     #     class_dictionary[c['descr']] = []
                     #     class_dictionary[c['descr']].append(a_class)
-                    # print(days)
-                    # print(course_days)
-                    # print(course_days == days)
-                    if(days == course_days):
+                    print(c["descr"])
+                    print(days)
+                    print(course_days)
+                    print(course_days == days)
+
+                    if((days == course_days) & (course_days !="")):
+                        if c['catalog_nbr'] in class_dictionary: # needs to be course_id
+                            class_dictionary[c['catalog_nbr']].append(a_class)
+                        else:
+                            class_dictionary[c['catalog_nbr']] = []
+                            class_dictionary[c['catalog_nbr']].append(a_class)
+                    if (course_days == ""):
                         if c['catalog_nbr'] in class_dictionary: # needs to be course_id
                             class_dictionary[c['catalog_nbr']].append(a_class)
                         else:
