@@ -9,23 +9,23 @@ import requests
 from requests.exceptions import HTTPError
 
 
+# def home(request):
+#     return render(request, 'pages/home.html', )
+
+
 def home(request):
-    return render(request, 'pages/home.html', )
+    # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
+    uva_students = list(Student.objects.all().values_list('student_email', flat=True))
+    uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
+    if request.user.is_authenticated:
+        if request.user.email in uva_students:
+            student = Student.objects.get(student_email=request.user.email)
+            return render(request, 'pages/student_dashboard.html', {"student": student})
+        if request.user.email in uva_advisors:
+            advisor = Advisor.objects.get(advisor_email=request.user.email)
+            return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
 
-
-# def homepage(request):
-#     # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
-#     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
-#     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
-#     if request.user.is_authenticated:
-#         if request.user.email in uva_students:
-#             student = Student.objects.get(student_email=request.user.email)
-#             return render(request, 'pages/student_dashboard.html', {"student": student})
-#         if request.user.email in uva_advisors:
-#             advisor = Advisor.objects.get(advisor_email=request.user.email)
-#             return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
-#
-#     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+    return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
 
 
 def student(request):
@@ -192,10 +192,17 @@ def class_results(request, student_id):
                         else:
                             class_dictionary[c['catalog_nbr']] = []
                             class_dictionary[c['catalog_nbr']].append(a_class)
+                    # here we want all open discussions added even if days are specified
+                    # discussion days won't match lecture requirements, but they still must see
+                    if (a_class['type'] == "Discussion") & (course_days != ""):
+                        # well, only want to add open discussion if there is open lecture
+                        # only this if because it must already have lecture in there, so already an entry = shortcut
+                        if c['catalog_nbr'] in class_dictionary:  # needs to be course_id
+                            class_dictionary[c['catalog_nbr']].append(a_class)
                     if course_days == "":
                         if c['catalog_nbr'] in class_dictionary:  # needs to be course_id
                             class_dictionary[c['catalog_nbr']].append(a_class)
-                        else:
+                        elif a_class['type'] == "Lecture":
                             class_dictionary[c['catalog_nbr']] = []
                             class_dictionary[c['catalog_nbr']].append(a_class)
                 page_num += 1
