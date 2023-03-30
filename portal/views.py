@@ -9,22 +9,23 @@ import requests
 from requests.exceptions import HTTPError
 
 
-def home(request):
-    return render(request, 'pages/home.html',)
+# def home(request):
+#     return render(request, 'pages/home.html', )
 
-# def homepage(request):
-#     # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
-#     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
-#     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
-#     if request.user.is_authenticated:
-#         if request.user.email in uva_students:
-#             student = Student.objects.get(student_email=request.user.email)
-#             return render(request, 'pages/student_dashboard.html', {"student": student})
-#         if request.user.email in uva_advisors:
-#             advisor = Advisor.objects.get(advisor_email=request.user.email)
-#             return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
-#
-#     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+
+def home(request):
+    # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
+    uva_students = list(Student.objects.all().values_list('student_email', flat=True))
+    uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
+    if request.user.is_authenticated:
+        if request.user.email in uva_students:
+            student = Student.objects.get(student_email=request.user.email)
+            return render(request, 'pages/student_dashboard.html', {"student": student})
+        if request.user.email in uva_advisors:
+            advisor = Advisor.objects.get(advisor_email=request.user.email)
+            return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+
+    return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
 
 
 def student(request):
@@ -46,6 +47,7 @@ def student(request):
         return HttpResponseRedirect(reverse('portal:student_dashboard', args=(newStudent.id,)))
 
     return render(request, "pages/student_sign_up.html")
+
 
 def advisor(request):
     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
@@ -71,6 +73,7 @@ def student_dashboard(request, student_id):
     student = Student.objects.get(pk=student_id)
     return render(request, 'pages/student_dashboard.html', {"student": student})
 
+
 def get_departments():
     r = requests.get(
         'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearchOptions?institution=UVA01&term=1232')
@@ -83,21 +86,23 @@ def get_departments():
                     departments.append(v['descr'])
     return departments
 
+
 def student_class_lookup(request, student_id):
     student = Student.objects.get(pk=student_id)
     try:
-        departments =get_departments()
-        return render(request, 'pages/student_class_lookup.html', {"student": student, "departments": departments, "error":""})
+        departments = get_departments()
+        return render(request, 'pages/student_class_lookup.html',
+                      {"student": student, "departments": departments, "error": ""})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
-    return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
+    return render(request, 'pages/student_class_lookup.html', {"student": student, "error": ""})
 
 
 def class_results(request, student_id):
     # could pass as list of customized strings worse come worse
     # probably just get classes in as models
-    try: 
+    try:
         student = Student.objects.get(pk=student_id)
         # TODO: take student_id out of parameters and just use request.user.id
         semester = request.POST['year']
@@ -110,8 +115,8 @@ def class_results(request, student_id):
 
         days = "".join(request.POST.getlist('days[]'))
         course_days = days
-        enrl_stat = request.POST.get('enrl_stat', 'default') #set default value if not open
-        
+        enrl_stat = request.POST.get('enrl_stat', 'default')  # set default value if not open
+
         # https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232&subject=CS&page=1
         url = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
         url = url + '&term=1' + year + term + '&subject=' + department
@@ -124,24 +129,25 @@ def class_results(request, student_id):
         if len(days) != 0:
             url = url + '&days=' + days
         if enrl_stat == "O":
-            url = url + '&enrl_stat='+ enrl_stat
+            url = url + '&enrl_stat=' + enrl_stat
         print(url)
-        
+
         # looks like len(json) will be 0 if page has nothing, so that is way to tell in loop of all pages
         class_dictionary = {}
+        open('department_classes2.txt', 'w').close()
         with open("department_classes2.txt", "a") as f:
             page_num = 1
             r = requests.get(url + '&page=' + str(page_num))
             classes = r.json()
             # COURSE NUMBER & PROFESSOR LOOKUP - redirect if incorrect course number
 
-
             # If user inputted incorrect fields then redirect back to lookup page:
             if ((len(classes) == 0) and course_number) or ((len(classes) == 0) and instructor_name):
                 departments = get_departments()
 
                 # NEED TO CHANGE ERROR MESSAGE BASED ON INPUT
-                return render(request, 'pages/student_class_lookup.html', {"student": student, "error":"Incorrect input", "departments": departments})
+                return render(request, 'pages/student_class_lookup.html',
+                              {"student": student, "error": "Incorrect input", "departments": departments})
 
             while len(classes) != 0:
                 for c in classes:
@@ -181,24 +187,48 @@ def class_results(request, student_id):
                     # print(course_days)
                     # print(course_days == days)
 
-                    if((days == course_days) & (course_days !="")):
-                        if c['catalog_nbr'] in class_dictionary: # needs to be course_id
-                            class_dictionary[c['catalog_nbr']].append(a_class)
+                    if (days == course_days) & (course_days != ""):
+                        if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
                         else:
-                            class_dictionary[c['catalog_nbr']] = []
-                            class_dictionary[c['catalog_nbr']].append(a_class)
-                    if (course_days == ""):
-                        if c['catalog_nbr'] in class_dictionary: # needs to be course_id
-                            class_dictionary[c['catalog_nbr']].append(a_class)
-                        else:
-                            class_dictionary[c['catalog_nbr']] = []
-                            class_dictionary[c['catalog_nbr']].append(a_class)
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])] = []
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                    # here we want all open discussions added even if days are specified
+                    # discussion days won't match lecture requirements, but they still must see
+                    if (a_class['type'] == "Discussion") & (course_days != ""):
+                        # well, only want to add open discussion if there is open lecture
+                        # only this if because it must already have lecture in there, so already an entry = shortcut
+                        if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
+                            class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                    # ----------------------------------------------------------------------------
+                    # ----------------------------------------------------------------------------
+                    # if course_days == "":
+                    #     if (c['catalog_nbr'] + " - " + c['descr']) in class_dictionary:  # needs to be course_id
+                    #         class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                    #     elif (a_class['type'] == "Lecture") | (a_class['type'] == "SEM"):
+                    #         class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])] = []
+                    #         class_dictionary[(c['catalog_nbr'] + " - " + c['descr'])].append(a_class)
+                    if course_days == "":
+                        if a_class['number'] in class_dictionary:  # needs to be course_id
+                            if (a_class['type'] == "Lecture") | (a_class['type'] == "SEM") | (a_class['type'] == "IND"):
+                                class_dictionary[a_class['number']]["Lectures"].append(a_class)
+                            elif a_class['type'] == "Discussion":
+                                class_dictionary[a_class['number']]["Discussions"].append(a_class)
+                        elif (a_class['type'] == "Lecture") | (a_class['type'] == "SEM") | (a_class['type'] == "IND"):
+                            class_dictionary[a_class['number']] = {
+                                "Course_Name": a_class['title'],
+                                "Lectures": [],
+                                "Discussions": []
+                            }
+                            class_dictionary[a_class['number']]["Lectures"].append(a_class)
+                    # ----------------------------------------------------------------------------
+                    # ----------------------------------------------------------------------------
                 page_num += 1
                 classes = requests.get(url + '&page=' + str(page_num)).json()
-            print(class_dictionary, file=f) # uncomment this to see what is added to dictionary for each class
+            print(class_dictionary, file=f)  # uncomment this to see what is added to dictionary for each class
         # print(class_set) # all unique names
         return render(request, 'pages/class_results.html',
-                    {"student": student, "semester": semester, "department": department, "classes": class_dictionary})
+                      {"student": student, "semester": semester, "department": department, "classes": class_dictionary})
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
         return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
@@ -210,3 +240,4 @@ def advisor_dashboard(request, advisor_id):
 def student_schedule(request, student_id):
     student = Student.objects.get(pk=student_id)
     return render(request, 'pages/student_schedule.html', {"student": student})
+        return render(request, 'pages/student_class_lookup.html', {"student": student, "error": ""})
