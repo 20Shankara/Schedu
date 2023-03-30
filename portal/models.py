@@ -20,7 +20,7 @@ class Student(models.Model):
     student_first_name = models.CharField(max_length=255)
     student_last_name = models.CharField(max_length=255)
     student_email = models.EmailField(max_length=255)
-    #advisor = models.ForeignKey(Advisor, on_delete=models.CASCADE)
+    advisor = models.ForeignKey(Advisor, on_delete=models.CASCADE, default="5")
     FIRST_YEAR = '1'
     SECOND_YEAR = '2'
     THIRD_YEAR = '3'

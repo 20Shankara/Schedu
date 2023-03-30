@@ -203,8 +203,6 @@ def class_results(request, student_id):
         print(f'HTTP error occurred: {http_err}')
         return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
 
-
-
 def advisor_dashboard(request, advisor_id):
     advisor = Advisor.objects.get(pk=advisor_id)
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
