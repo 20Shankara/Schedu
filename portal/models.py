@@ -39,29 +39,7 @@ class Student(models.Model):
 
     def __str__(self):
         return self.student_email
-
-<<<<<<< HEAD
-
-class Advisor(models.Model):
-    # advisor_id = models.IntegerField(primary_key=True)
-    advisor_first_name = models.CharField(max_length=255)
-    advisor_last_name = models.CharField(max_length=255)
-    advisor_email = models.EmailField(max_length=255)
-    DEPARTMENT_CHOICES = departments.DEPARTMENTS
-    advisor_department = models.CharField(
-        max_length=50,
-        choices=DEPARTMENT_CHOICES,
-        default='',
-    )
-
-    def __str__(self):
-        return self.advisor_email
-=======
-class Instructor(models.Model):
-    name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
->>>>>>> 9509212cfff2d332e85ad4a534f60a20ee442eec
-
+        
 class Department(models.Model):
     subject = models.CharField(max_length=255)
     descr = models.CharField(max_length=255)
