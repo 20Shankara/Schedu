@@ -1,0 +1,15 @@
+<h1>{{class}}</h1>
+
+<div>
+    {% for class in classData %}
+        <h2> Section Number: {{class.class_section}} - {{class.section_type}}</h2>
+        <h4>&emsp; Enrollment: {{class.enrollment_total}} / {{class.class_capacity}}</h4>
+        {% for meeting in class.meetings %}
+            <h4>&emsp; Time: {{meeting.start_time}} - {{meeting.end_time}}</h4>
+            <h4>&emsp; Days: {{meeting.days}} </h4>
+            <h4>&emsp; Room: {{meeting.facility_descr}}</h4>
+            <h4>&emsp; Instructor: {{meeting.instructor}}</h4>
+
+        {% endfor %}
+    {% endfor %}
+</div>
