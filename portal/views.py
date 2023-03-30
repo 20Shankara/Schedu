@@ -176,10 +176,10 @@ def class_results(request, student_id):
                     # else:
                     #     class_dictionary[c['descr']] = []
                     #     class_dictionary[c['descr']].append(a_class)
-                    print(c["descr"])
-                    print(days)
-                    print(course_days)
-                    print(course_days == days)
+                    # print(c["descr"])
+                    # print(days)
+                    # print(course_days)
+                    # print(course_days == days)
 
                     if((days == course_days) & (course_days !="")):
                         if c['catalog_nbr'] in class_dictionary: # needs to be course_id
@@ -208,3 +208,7 @@ def class_results(request, student_id):
 def advisor_dashboard(request, advisor_id):
     advisor = Advisor.objects.get(pk=advisor_id)
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+
+def student_schedule(request, student_id):
+    student = Student.objects.get(pk=student_id)
+    return render(request, 'pages/student_schedule.html', {"student": student})
