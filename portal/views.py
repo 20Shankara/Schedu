@@ -240,4 +240,3 @@ def advisor_dashboard(request, advisor_id):
 def student_schedule(request, student_id):
     student = Student.objects.get(pk=student_id)
     return render(request, 'pages/student_schedule.html', {"student": student})
-        return render(request, 'pages/student_class_lookup.html', {"student": student, "error": ""})
