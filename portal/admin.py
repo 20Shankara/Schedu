@@ -4,7 +4,7 @@ from .models import Student, Advisor
 
 class StudentAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Student Information', {'fields': ['student_email', 'student_first_name', 'student_last_name', 'year_in_school']}),
+        ('Student Information', {'fields': ['student_email', 'student_first_name', 'student_last_name', 'year_in_school', 'advisor']}),
     ]
     list_display = ('student_first_name', 'student_last_name', 'student_email', 'year_in_school')
 
