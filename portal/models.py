@@ -1,11 +1,26 @@
 from django.db import models
 from portal import departments
 
+class Advisor(models.Model):
+    # advisor_id = models.IntegerField(primary_key=True)
+    advisor_first_name = models.CharField(max_length=255)
+    advisor_last_name = models.CharField(max_length=255)
+    advisor_email = models.EmailField(max_length=255)
+    DEPARTMENT_CHOICES = departments.DEPARTMENTS
+    advisor_department = models.CharField(
+        max_length=50,
+        choices=DEPARTMENT_CHOICES,
+        default='',
+    )
+
+    def __str__(self):
+        return self.advisor_email
 
 class Student(models.Model):
     student_first_name = models.CharField(max_length=255)
     student_last_name = models.CharField(max_length=255)
     student_email = models.EmailField(max_length=255)
+    advisor = models.ForeignKey(Advisor, on_delete=models.CASCADE, default="5")
     FIRST_YEAR = '1'
     SECOND_YEAR = '2'
     THIRD_YEAR = '3'
@@ -25,6 +40,7 @@ class Student(models.Model):
     def __str__(self):
         return self.student_email
 
+<<<<<<< HEAD
 
 class Advisor(models.Model):
     # advisor_id = models.IntegerField(primary_key=True)
@@ -40,6 +56,11 @@ class Advisor(models.Model):
 
     def __str__(self):
         return self.advisor_email
+=======
+class Instructor(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+>>>>>>> 9509212cfff2d332e85ad4a534f60a20ee442eec
 
 class Department(models.Model):
     subject = models.CharField(max_length=255)
