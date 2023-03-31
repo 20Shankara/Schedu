@@ -34,7 +34,6 @@
 <!-- CONTENT -->
 <h2>Classes: </h2>
 <form action="{% url 'portal:class_view' year %}" method="post">
-
     <div>
     {% csrf_token %}
     {% for Class in classes %}
@@ -42,6 +41,8 @@
     {% endfor %}
     </div>
 </form>
+
+<!--https://enmascript.com/articles/2019/10/14/show-and-hide-content-on-click-with-just-html-->
 
 
 </body>
