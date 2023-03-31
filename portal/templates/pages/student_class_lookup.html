@@ -32,7 +32,7 @@
 <body>
 <!-- NAVIGATION -->
  <div class="topnav">
-  <a href="{% url 'portal:student_dashboard' student.id %}">Student Dashboard</a>
+  <a href="{% url 'portal:student_dashboard' %}">Student Dashboard</a>
   <a href="{% url 'portal:student_schedule' student.id %}">Schedule</a>
 </div>
 
@@ -42,8 +42,7 @@
 {% if error != "" %}
     {{error}}
 {% endif %}
-<!--<form action="{% url 'portal:student_class_lookup' student.id %}" method="post">-->
-<form action="{% url 'portal:class_results' student.id %}" method="post">
+<form action="{% url 'portal:class_results' %}" method="post">
     {% csrf_token %}
     <label for="year">Year: </label>
     <select id="year" name="year">
@@ -57,8 +56,8 @@
             <option value={{department}}>{{department}}</option>
         {% endfor %}
     </select><br><br>
-   <label for="course_number">Course Number:</label>
-        <input type="number" id="course_number" name="course_number"><br><br>
+<!--   <label for="course_number">Course Number:</label>-->
+<!--        <input type="number" id="course_number" name="course_number"><br><br>-->
 <!--   <label for="instructor_name">Professor:</label>-->
 <!--        <input type="text" id="instructor_name" name="instructor_name"><br><br>-->
 <!--    <label for="days">Days:</label>-->
