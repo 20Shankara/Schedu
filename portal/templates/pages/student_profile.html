@@ -33,10 +33,16 @@
 </div>
 
 <!-- CONTENT -->
-<h2>{{ student.student_first_name }}'s Profile</h2>
+<h2>{{ student.student_first_name }} {{ student.student_last_name }}'s Profile</h2>
 <h4>Student Information: </h4>
 <p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
 <p>Email: {{ student.student_email }} </p>
 <p>Year: {{ student.year_in_school }} </p>
+<form action="{% url 'portal:advisor_schedule_view' %}" method="post">
+    <div>
+        {% csrf_token %}
+        <button name="student_email" value={{student.student_email}}> View Schedule</button><br>
+    </div>
+</form>
 </body>
 </html>

@@ -184,3 +184,18 @@ def student_profile(request):
     print((request.POST['advisee_email']))
     student_advisee = Student.objects.get(student_email=request.POST['advisee_email'])
     return render(request, 'pages/student_profile.html', {"student": student_advisee})
+
+
+def advisor_schedule_view(request):
+    print((request.POST['student_email']))
+    student_advisee = Student.objects.get(student_email=request.POST['student_email'])
+    schedule = []
+    if student_advisee.schedule is None:
+        return render(request, 'pages/advisor_schedule_view.html', {"schedule": {}})
+    else:
+        for item in student_advisee.schedule.classes:
+            curClass = ClassSection.objects.get(pk=item)
+            schedule.append(curClass)
+        schedule = serializers.serialize('json', schedule)
+        data = json.loads(schedule)
+        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee})
