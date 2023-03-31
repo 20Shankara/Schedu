@@ -19,7 +19,9 @@ urlpatterns = [
     # Class Sections
     path('<str:year>/class_view', views.class_view, name='class_view'),
     # Student's Schedule
-    path('<int:student_id>/student_schedule/', views.student_schedule, name='student_schedule'),
+    path('student_schedule', views.student_schedule, name='student_schedule'),
+    # Add Class
+
     # -----------------------------------------------------------------------------------------------------
 
     # -----------------------------------------------------------------------------------------------------

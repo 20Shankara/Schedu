@@ -85,8 +85,8 @@ def class_view(request, year):
     return render(request, 'pages/class_view.html', {"classData": classData, "class": c.subject + '-' + c.descr})
 
 
-def student_schedule(request, student_id):
-    student_logged_in = Student.objects.get(pk=student_id)
+def student_schedule(request):
+    student_logged_in = Student.objects.get(student_email=request.user.email)
     return render(request, 'pages/student_schedule.html', {"student": student_logged_in})
 
 
@@ -111,3 +111,7 @@ def advisor(request):
 def advisor_dashboard(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor_logged_in})
+
+def add_class(request):
+    print(request.POST['Class'])
+    return HttpResponseRedirect('/student_schedule')

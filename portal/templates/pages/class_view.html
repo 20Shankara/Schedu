@@ -2,6 +2,8 @@
 
 <div>
     {% for class in classData %}
+    <form action="{% url 'portal:add_class' %}" method="post">
+        {% csrf_token %}
         <h2> Section Number: {{class.class_section}} - {{class.section_type}}</h2>
         <h4>&emsp; Enrollment: {{class.enrollment_total}} / {{class.class_capacity}}</h4>
         {% for meeting in class.meetings %}
@@ -12,5 +14,5 @@
         {% endfor %}
     <button name="Class" value="{{class}}" name>Add Class</button>
     {% endfor %}
-
+        </form>
 </div>
