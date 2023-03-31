@@ -22,6 +22,7 @@ urlpatterns = [
     path('student_schedule', views.student_schedule, name='student_schedule'),
     # Add Class
     path('<str:year>/add_class', views.add_class, name='add_class'),
+
     # -----------------------------------------------------------------------------------------------------
 
     # -----------------------------------------------------------------------------------------------------
@@ -30,5 +31,7 @@ urlpatterns = [
     path('advisor_sign_up', views.advisor, name='advisor_link'),
     # Advisor Dashboard
     path('advisor_dashboard', views.advisor_dashboard, name='advisor_dashboard'),
+    # Manage Students
+    path('manage_students', views.manage_students, name='manage_students')
     # -----------------------------------------------------------------------------------------------------
 ]
