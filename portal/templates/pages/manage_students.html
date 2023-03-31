@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Filter Results</title>
+    <title>Manage Students</title>
     <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
     <style>
         body {
@@ -28,18 +28,19 @@
 <body>
 <!-- NAVIGATION -->
  <div class="topnav">
-  <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
-  <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
+  <a href="{% url 'portal:advisor_dashboard' %}">Dashboard</a>
 </div>
 
 <!-- CONTENT -->
-<h2>Classes: </h2>
-<form action="{% url 'portal:class_view' year %}" method="post">
+<h2>Students</h2>
+<form action="{% url 'portal:student_profile' %}" method="post">
     <div>
-    {% csrf_token %}
-    {% for Class in classes %}
-    <button name="ClassPK" value={{Class.pk}}> {{Class.catalog_nbr}} - {{Class.descr}}</button><br>
-    {% endfor %}
+        {% csrf_token %}
+        {% for advisee in advisees %}
+            <ul>
+                <button name="advisee_email" value={{advisee.student_email}}> {{advisee.student_first_name}} - {{advisee.student_last_name}}</button><br>
+            </ul>
+        {% endfor %}
     </div>
 </form>
 

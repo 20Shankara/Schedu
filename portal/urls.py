@@ -31,5 +31,9 @@ urlpatterns = [
     path('advisor_sign_up', views.advisor, name='advisor_link'),
     # Advisor Dashboard
     path('advisor_dashboard', views.advisor_dashboard, name='advisor_dashboard'),
+    # Manage Students
+    path('manage_students', views.manage_students, name='manage_students'),
+    # Student Profile
+    path('student_profile', views.student_profile, name='student_profile')
     # -----------------------------------------------------------------------------------------------------
 ]

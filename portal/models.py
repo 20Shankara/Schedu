@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from portal import departments
 
+
 class Advisor(models.Model):
     # advisor_id = models.IntegerField(primary_key=True)
     advisor_first_name = models.CharField(max_length=255)
@@ -16,6 +17,7 @@ class Advisor(models.Model):
 
     def __str__(self):
         return self.advisor_email
+
 
 class Student(models.Model):
     student_first_name = models.CharField(max_length=255)
@@ -42,12 +44,14 @@ class Student(models.Model):
     def __str__(self):
         return self.student_email
 
+
 class Department(models.Model):
     subject = models.CharField(max_length=255)
     descr = models.CharField(max_length=255)
 
     def __str__(self):
         return self.descr
+
 
 class Class(models.Model):
     subject = models.CharField(max_length=255)
@@ -57,6 +61,7 @@ class Class(models.Model):
 
     def __str__(self):
         return self.subject + '-' + self.catalog_nbr
+
 
 class ClassSection(models.Model):
     class_nbr = models.CharField(max_length=255)
@@ -73,6 +78,7 @@ class ClassSection(models.Model):
     catalog_nbr = models.CharField(max_length=255, default='')
     season = models.CharField(max_length=255)
 
+
 class Schedule(models.Model):
     # Should be either spring or fall
     season = models.CharField(max_length=255)
@@ -81,7 +87,3 @@ class Schedule(models.Model):
         blank=True,
         null=True,
     )
-
-
-
-

@@ -1,18 +1,47 @@
-<h1>{{class}}</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Class</title>
+    <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
+    <style>
+        body {
+            margin: 0;
+            font-family: "Times New Roman", Times, serif;
+        }
 
-<div>
-    {% for class in classData %}
-    <form action="{% url 'portal:add_class' year %}" method="post">
-        {% csrf_token %}
-        <h2> Section Number: {{class.class_section}} - {{class.section_type}}</h2>
-        <h4>&emsp; Enrollment: {{class.enrollment_total}} / {{class.class_capacity}}</h4>
-        {% for meeting in class.meetings %}
-            <h4>&emsp; Time: {{meeting.start_time}} - {{meeting.end_time}}</h4>
-            <h4>&emsp; Days: {{meeting.days}} </h4>
-            <h4>&emsp; Room: {{meeting.facility_descr}}</h4>
-            <h4>&emsp; Instructor: {{meeting.instructor}}</h4>
-        {% endfor %}
-    <button name="Class_nbr" value="{{class.class_nbr}}" name>Add Class</button>
-    {% endfor %}
-        </form>
+        .topnav {
+          overflow: hidden;
+          background-color: #333;
+        }
+
+        .topnav a {
+          float: left;
+          color: #f2f2f2;
+          text-align: center;
+          padding: 14px 16px;
+          text-decoration: none;
+          font-size: 17px;
+        }
+    </style>
+</head>
+<body>
+<!-- NAVIGATION -->
+ <div class="topnav">
+  <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
+  <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
 </div>
+
+<!-- CONTENT -->
+<h2>Classes: </h2>
+<form action="{% url 'portal:class_view' year %}" method="post">
+    <div>
+    {% csrf_token %}
+    {% for Class in classes %}
+    <button name="ClassPK" value={{Class.pk}}> {{Class.catalog_nbr}} - {{Class.descr}}</button><br>
+    {% endfor %}
+    </div>
+</form>
+
+</body>
+</html>

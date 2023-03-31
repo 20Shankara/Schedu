@@ -56,6 +56,7 @@ def get_departments():
 
 
 def student_class_lookup(request):
+    # TODO: fix this to be redirect
     student_logged_in = Student.objects.get(student_email=request.user.email)
     try:
         all_departments = get_departments()
@@ -80,13 +81,14 @@ def class_view(request, year):
     url = baseURL + "&subject=" + c.subject + "&catalog_nbr=" + c.catalog_nbr + "&term=123" + year
     r = requests.get(url)
     classData = r.json()
-    return render(request, 'pages/class_view.html', {"classData": classData, "class": c.subject + '-' + c.descr, "year": year})
+    return render(request, 'pages/class_view.html',
+                  {"classData": classData, "class": c.subject + '-' + c.descr, "year": year})
 
 
 def student_schedule(request):
-    student = Student.objects.get(student_email=request.user.email)
+    student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
-    for item in student.schedule.classes:
+    for item in student_logged_in.schedule.classes:
         curClass = ClassSection.objects.get(pk=item)
         schedule.append(curClass)
     schedule = serializers.serialize('json', schedule)
@@ -117,9 +119,10 @@ def advisor_dashboard(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor_logged_in})
 
+
 def add_class(request, year):
     class_nbr = (request.POST['Class_nbr'])
-    base_URL =  baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
+    base_URL = baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
     url = baseURL + "&term=123" + year + "&class_nbr=" + class_nbr
     r = requests.get(url)
     r = r.json()[0]
@@ -148,7 +151,7 @@ def add_class(request, year):
 
     # Check if student has a schedule
     schedule = None
-    if (student.schedule == None):
+    if student.schedule == None:
         schedule = Schedule(season=year, classes=[])
         schedule.save()
         student.schedule = schedule
@@ -160,7 +163,21 @@ def add_class(request, year):
         schedule.classes.append(c.pk)
         schedule.save()
 
-
-
-
     return HttpResponseRedirect('/student_schedule')
+
+
+def manage_students(request):
+    advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
+    advisees = list(Student.objects.filter(advisor=advisor_logged_in))
+    if request.method == "POST":
+        return HttpResponseRedirect(reverse('portal:student_profile'))
+    # print(advisees)
+    # for advisee in advisees:
+    #     a_student = Student.objects.get(student_email=advisee.student_email)
+    #     print(a_student.student_first_name)
+    return render(request, 'pages/manage_students.html', {"advisees": advisees, "advisor": advisor_logged_in})
+
+
+def student_profile(request):
+    print((request.POST['advisee_email']))
+    return render(request, 'pages/student_profile.html')
