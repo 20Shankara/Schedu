@@ -46,7 +46,9 @@
 <!--                    <h5>&emsp;Lectures: </h5>-->
                     <ul>
                     {% for lec in value1 %}
-                        <li> {{lec.type}} -- {{lec.professor}} ({{lec.status}}) <br> &emsp; Location: {{lec.classroom}}</li>
+                        <input type="checkbox" name="lecture" value={{lec.id}}>
+                        <label for="lecture"> {{lec.type}} &#45;&#45; {{lec.professor}} ({{lec.status}}) <br> &emsp; Location: {{lec.classroom}}</label><br>
+<!--                        <li> {{lec.type}} &#45;&#45; {{lec.professor}} ({{lec.status}}) <br> &emsp; Location: {{lec.classroom}}</li>-->
                     {% endfor %}
                     </ul>
                 {% endif %}
