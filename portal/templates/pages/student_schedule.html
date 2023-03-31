@@ -25,18 +25,23 @@
         }
     </style>
 </head>
-<body>
-<!-- NAVIGATION -->
- <div class="topnav">
-  <a href="{% url 'portal:student_class_lookup' student.id %}">Find Classes</a>
-  <a href="{% url 'portal:student_schedule' student.id %}">Schedule</a>
-</div>
+  <body>
+    <!-- NAVIGATION -->
+    <div class="topnav">
+      <a href="{% url 'portal:student_dashboard' student.id %}">Student Dashboard</a>
+      <a href="{% url 'portal:student_class_lookup' student.id %}">Find Classes</a>
+    </div>
 
-<!-- CONTENT -->
-<h2>{{ student.student_first_name }}'s Dashboard</h2>
-<h4>Student Information: </h4>
-<p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
-<p>Email: {{ student.student_email }} </p>
-<p>Year: {{ student.year_in_school }} </p>
-</body>
+    <!-- CONTENT -->
+    <h2>Schedule:</h2>
+
+    <button onclick="send_student_Schedule()">Send Schedule </button>
+    <!-- <button onclick="myFunction()">Try it</button> -->
+
+    <script>
+      function send_student_Schedule() {
+        alert("Your schedule was just sent!");
+      }
+    </script>
+  </body>
 </html>

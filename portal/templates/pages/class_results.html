@@ -33,43 +33,15 @@
 
 <!-- CONTENT -->
 <h2>Classes: </h2>
-<ol>
-    {% for key, value in classes.items %}
-<!--        <h4>{{department}} {{key}}</h4>-->
-<!--        {{ value.items }}-->
-        {% for key1, value1 in value.items %}
-            {% if key1 == "Course_Name" %}
-                <h4>{{department}} {{key}} - {{value1}}</h4>
-            {% endif %}
-            {% if key1 == "Lectures" %}
-                {% if value1 %}
-<!--                    <h5>&emsp;Lectures: </h5>-->
-                    <ul>
-                    {% for lec in value1 %}
-                        <input type="checkbox" name="lecture" value={{lec.id}}>
-                        <label for="lecture"> {{lec.type}} &#45;&#45; {{lec.professor}} ({{lec.status}}) <br> &emsp; Location: {{lec.classroom}}</label><br>
-<!--                        <li> {{lec.type}} &#45;&#45; {{lec.professor}} ({{lec.status}}) <br> &emsp; Location: {{lec.classroom}}</li>-->
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endif %}
-            {% if key1 == "Discussions" %}
-                {% if value1 %}
-<!--                    <h5>&emsp;Discussions: </h5>-->
-                    <ul>
-                    {% for dis in value1 %}
-                        <li> {{dis.type}} -- {{dis.professor}} ({{dis.status}}) <br> &emsp; Location: {{dis.classroom}}</li>
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-<!--        <ul>-->
-<!--        {% for v in value %}-->
-<!--            <li> {{v.type}} &#45;&#45; {{v.professor}} ({{v.status}}) <br> &emsp; Location: {{v.classroom}}</li>-->
-<!--        {% endfor %}-->
-<!--        </ul>-->
+<form action="{% url 'portal:class_view' %}" method="post">
+    <div>
+    {% csrf_token %}
+    {% for Class in classes %}
+    <button name="ClassPK" value={{Class.pk}}> {{Class.catalog_nbr}} - {{Class.descr}}</button>
     {% endfor %}
-</ol>
+    </div>
+</form>
+
+
 </body>
 </html>
