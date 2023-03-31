@@ -44,11 +44,14 @@
 {% endif %}
 <form action="{% url 'portal:class_results' %}" method="post">
     {% csrf_token %}
+
+    <!-- -----------YEAR----------- -->
     <label for="year">Year: </label>
     <select id="year" name="year">
         <option value="8"> Fall 2023 </option>
         <option value="2">Spring 2023</option>
     </select><br><br>
+    <!-- -----------DEPARTMENT----------- -->
     <label for="department">Department: </label>
     <select id="department" name="department" required>
         <option readonly value="">--select--</option>
@@ -56,8 +59,9 @@
             <option value={{department}}>{{department}}</option>
         {% endfor %}
     </select><br><br>
-<!--   <label for="course_number">Course Number:</label>-->
-<!--        <input type="number" id="course_number" name="course_number"><br><br>-->
+    <!-- -----------COURSE NUMBER----------- -->
+    <label for="course_number">Course Number (ex. 2150): </label>
+    <input type="number" id="course_number" name="course_number"><br><br>
 <!--   <label for="instructor_name">Professor:</label>-->
 <!--        <input type="text" id="instructor_name" name="instructor_name"><br><br>-->
 <!--    <label for="days">Days:</label>-->

@@ -54,15 +54,19 @@ def get_departments():
 
 
 def student_class_lookup(request):
-    student_logged_in = Student.objects.get(student_email=request.user.email)
-    try:
-        all_departments = get_departments()
-        return render(request, 'pages/student_class_lookup.html',
-                      {"student": student_logged_in, "departments": all_departments, "error": ""})
-    # from https://pynative.com/parse-json-response-using-python-requests-library/
-    except HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')
-    return render(request, 'pages/student_class_lookup.html', {"student": student_logged_in, "error": ""})
+    # student_logged_in = Student.objects.get(student_email=request.user.email)
+    all_departments = get_departments()
+    if request.method == "POST":
+        return HttpResponseRedirect(reverse('portal:student_class_lookup'))
+    return render(request, 'pages/student_class_lookup.html', {"departments": all_departments, "error": ""})
+
+    # try:
+    #     return render(request, 'pages/student_class_lookup.html',
+    #                   {"student": student_logged_in, "departments": all_departments, "error": ""})
+    # # from https://pynative.com/parse-json-response-using-python-requests-library/
+    # except HTTPError as http_err:
+    #     print(f'HTTP error occurred: {http_err}')
+    # return render(request, 'pages/student_class_lookup.html', {"student": student_logged_in, "error": ""})
 
 
 def class_results(request):
