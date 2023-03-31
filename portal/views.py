@@ -150,7 +150,7 @@ def add_class(request, year):
 
     # Check if student has a schedule
     schedule = None
-    if student.schedule == None:
+    if (student.schedule == None):
         schedule = Schedule(season=year, classes=[])
         schedule.save()
         student.schedule = schedule
