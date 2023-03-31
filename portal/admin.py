@@ -2,21 +2,12 @@ from django.contrib import admin
 from .models import Student, Advisor, Schedule
 
 
-# class ScheduleInline(admin.TabularInline):
-#     model = Schedule
-#     extra = 0
-
-
 class StudentAdmin(admin.ModelAdmin):
-    # model = Student
-    # inlines = [
-    #     ScheduleInline
-    # ]
     fieldsets = [
         ('Student Information',
-         {'fields': ['student_email', 'student_first_name', 'student_last_name', 'year_in_school', 'advisor']}),
+         {'fields': ['student_email', 'student_first_name', 'student_last_name', 'year_in_school', 'advisor', 'schedule']}),
     ]
-    list_display = ('student_first_name', 'student_last_name', 'student_email', 'year_in_school')
+    list_display = ('student_first_name', 'student_last_name', 'student_email', 'year_in_school', 'schedule')
 
 
 # https://stackoverflow.com/questions/20725426/django-displaying-one-to-many-relationship-in-the-admin-page

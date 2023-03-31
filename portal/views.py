@@ -56,6 +56,7 @@ def get_departments():
 
 
 def student_class_lookup(request):
+    # TODO: fix this to be redirect
     student_logged_in = Student.objects.get(student_email=request.user.email)
     try:
         all_departments = get_departments()
@@ -168,8 +169,15 @@ def add_class(request, year):
 def manage_students(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
     advisees = list(Student.objects.filter(advisor=advisor_logged_in))
+    if request.method == "POST":
+        return HttpResponseRedirect(reverse('portal:student_profile'))
     # print(advisees)
     # for advisee in advisees:
     #     a_student = Student.objects.get(student_email=advisee.student_email)
     #     print(a_student.student_first_name)
     return render(request, 'pages/manage_students.html', {"advisees": advisees, "advisor": advisor_logged_in})
+
+
+def student_profile(request):
+    print((request.POST['advisee_email']))
+    return render(request, 'pages/student_profile.html')
