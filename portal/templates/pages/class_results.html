@@ -33,7 +33,8 @@
 
 <!-- CONTENT -->
 <h2>Classes: </h2>
-<form action="{% url 'portal:class_view' %}" method="post">
+<form action="{% url 'portal:class_view' year %}" method="post">
+
     <div>
     {% csrf_token %}
     {% for Class in classes %}

@@ -12,7 +12,7 @@ urlpatterns = [
     path('<int:student_id>/student_class_lookup/', views.student_class_lookup, name='student_class_lookup'),
     path('<int:student_id>/class_results/', views.class_results, name='class_results'),
     path('<int:student_id>/student_schedule/', views.student_schedule, name='student_schedule'),
-    path('class_view', views.class_view, name='class_view'),
+    path('<str:year>/class_view', views.class_view, name='class_view'),
     # might need to put filters as parameters in url here
     # path('<int:student_id>/<str:semester>/<str:department>/class_results/', views.class_results, name='class_results'),
 ]

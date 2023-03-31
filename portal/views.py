@@ -233,17 +233,15 @@ def class_results(request, student_id):
     # except HTTPError as http_err:
     #     print(f'HTTP error occurred: {http_err}')
     #     return render(request, 'pages/student_class_lookup.html', {"student": student, "error":""})
-    classes = Class.objects.filter(subject=request.POST['department'])
-    return render(request, 'pages/class_results.html', {"classes": classes, "student" : student})
+    classes = Class.objects.filter(subject=request.POST['department']).order_by('catalog_nbr')
+    return render(request, 'pages/class_results.html', {"classes": classes, "student" : student, "year" : request.POST['year']})
 
-def class_view(request):
+def class_view(request, year):
     c = Class.objects.get(pk=request.POST['ClassPK'])
-    baseURL =  'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232'
-    url = baseURL + "&subject=" + c.subject + "&catalog_nbr=" + c.catalog_nbr
-    print(url)
+    baseURL =  'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
+    url = baseURL + "&subject=" + c.subject + "&catalog_nbr=" + c.catalog_nbr + "&term=123" + year
     r = requests.get(url)
     classData = r.json()
-    print(classData)
     return render(request, 'pages/class_view.html', {"classData": classData, "class": c.subject + '-' + c.descr })
 
 def advisor_dashboard(request, advisor_id):
