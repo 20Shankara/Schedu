@@ -88,13 +88,15 @@ def class_view(request, year):
 def student_schedule(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
-    for item in student_logged_in.schedule.classes:
-        curClass = ClassSection.objects.get(pk=item)
-        schedule.append(curClass)
-    schedule = serializers.serialize('json', schedule)
-    data = json.loads(schedule)
-    print(data)
-    return render(request, 'pages/student_schedule.html', {"schedule": data})
+    if student_logged_in.schedule is None:
+        return render(request, 'pages/student_schedule.html', {"schedule": {}})
+    else:
+        for item in student_logged_in.schedule.classes:
+            curClass = ClassSection.objects.get(pk=item)
+            schedule.append(curClass)
+        schedule = serializers.serialize('json', schedule)
+        data = json.loads(schedule)
+        return render(request, 'pages/student_schedule.html', {"schedule": data})
 
 
 def advisor(request):
@@ -151,7 +153,7 @@ def add_class(request, year):
 
     # Check if student has a schedule
     schedule = None
-    if student.schedule == None:
+    if (student.schedule == None):
         schedule = Schedule(season=year, classes=[])
         schedule.save()
         student.schedule = schedule
@@ -180,4 +182,20 @@ def manage_students(request):
 
 def student_profile(request):
     print((request.POST['advisee_email']))
-    return render(request, 'pages/student_profile.html')
+    student_advisee = Student.objects.get(student_email=request.POST['advisee_email'])
+    return render(request, 'pages/student_profile.html', {"student": student_advisee})
+
+
+def advisor_schedule_view(request):
+    print((request.POST['student_email']))
+    student_advisee = Student.objects.get(student_email=request.POST['student_email'])
+    schedule = []
+    if student_advisee.schedule is None:
+        return render(request, 'pages/advisor_schedule_view.html', {"schedule": {}})
+    else:
+        for item in student_advisee.schedule.classes:
+            curClass = ClassSection.objects.get(pk=item)
+            schedule.append(curClass)
+        schedule = serializers.serialize('json', schedule)
+        data = json.loads(schedule)
+        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee})

@@ -34,6 +34,8 @@ urlpatterns = [
     # Manage Students
     path('manage_students', views.manage_students, name='manage_students'),
     # Student Profile
-    path('student_profile', views.student_profile, name='student_profile')
+    path('student_profile', views.student_profile, name='student_profile'),
+    # Advisor Schedule View
+    path('view_schedule', views.advisor_schedule_view, name='advisor_schedule_view')
     # -----------------------------------------------------------------------------------------------------
 ]
