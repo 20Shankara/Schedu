@@ -60,14 +60,6 @@ def student_class_lookup(request):
         return HttpResponseRedirect(reverse('portal:student_class_lookup'))
     return render(request, 'pages/student_class_lookup.html', {"departments": all_departments, "error": ""})
 
-    # try:
-    #     return render(request, 'pages/student_class_lookup.html',
-    #                   {"student": student_logged_in, "departments": all_departments, "error": ""})
-    # # from https://pynative.com/parse-json-response-using-python-requests-library/
-    # except HTTPError as http_err:
-    #     print(f'HTTP error occurred: {http_err}')
-    # return render(request, 'pages/student_class_lookup.html', {"student": student_logged_in, "error": ""})
-
 
 def class_results(request):
     test_student = Student.objects.get(student_email=request.user.email)
@@ -82,7 +74,7 @@ def class_view(request, year):
     url = baseURL + "&subject=" + c.subject + "&catalog_nbr=" + c.catalog_nbr + "&term=123" + year
     r = requests.get(url)
     classData = r.json()
-    return render(request, 'pages/class_view.html', {"classData": classData, "class": c.subject + '-' + c.descr})
+    return render(request, 'pages/class_view.html', {"classData": classData, "class": (c.subject + '-' + c.descr), "year": year})
 
 
 def student_schedule(request):

@@ -2,7 +2,7 @@
 
 <div>
     {% for class in classData %}
-    <form action="{% url 'portal:add_class' %}" method="post">
+    <form action="{% url 'portal:add_class' {{year}} %}" method="post">
         {% csrf_token %}
         <h2> Section Number: {{class.class_section}} - {{class.section_type}}</h2>
         <h4>&emsp; Enrollment: {{class.enrollment_total}} / {{class.class_capacity}}</h4>
