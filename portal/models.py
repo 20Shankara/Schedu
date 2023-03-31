@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from portal import departments
 
 class Advisor(models.Model):
@@ -36,11 +37,11 @@ class Student(models.Model):
         choices=YEAR_IN_SCHOOL_CHOICES,
         default='',
     )
-    # schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE, blank=True)
+    schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE, blank=True, null=True, default='')
 
     def __str__(self):
         return self.student_email
-        
+
 class Department(models.Model):
     subject = models.CharField(max_length=255)
     descr = models.CharField(max_length=255)
@@ -57,21 +58,29 @@ class Class(models.Model):
     def __str__(self):
         return self.subject + '-' + self.catalog_nbr
 
-# class ClassSection(models.Model):
-#     class_nbr = models.CharField(max_length=255, primary_key=True)
-#     class_section = models.CharField(max_length=255)
-#     class_capacity = models.CharField(max_length=255)
-#     enrollment_total = models.CharField(max_length=255)
-#     enrollment_available = models.CharField(max_length=255)
-#     units = models.CharField(max_length=255)
-#     days = models.CharField(max_length=255)
-#     start_time = models.CharField(max_length=255)
-#     end_time = models.CharField(max_length=255)
-#     instructor = models.CharField(max_length=255)
-#     facility_descr = models.CharField(max_length=255)
+class ClassSection(models.Model):
+    class_nbr = models.CharField(max_length=255)
+    class_section = models.CharField(max_length=255)
+    class_capacity = models.CharField(max_length=255)
+    enrollment_total = models.CharField(max_length=255)
+    enrollment_available = models.CharField(max_length=255)
+    units = models.CharField(max_length=255)
+    days = models.CharField(max_length=255)
+    start_time = models.CharField(max_length=255)
+    end_time = models.CharField(max_length=255)
+    instructor = models.CharField(max_length=255)
+    facility_descr = models.CharField(max_length=255)
+    catalog_nbr = models.CharField(max_length=255, default='')
+    season = models.CharField(max_length=255)
 
-# class Schedule(models.Model):
-#     classes = ArrayField(ClassSection, blank=True)
+class Schedule(models.Model):
+    # Should be either spring or fall
+    season = models.CharField(max_length=255)
+    classes = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,
+    )
 
 
 
