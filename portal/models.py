@@ -56,6 +56,14 @@ class Class(models.Model):
     def __str__(self):
         return self.subject + '-' + self.catalog_nbr
 
+# class ClassSection(models.Model):
+#     crse_nbr = models.CharField(max_length=255)
+#
+#
+# class Schedule(models.Model):
+
+
+
 
 
 

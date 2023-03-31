@@ -9,21 +9,15 @@ import requests
 from requests.exceptions import HTTPError
 
 
-# def home(request):
-#     return render(request, 'pages/home.html', )
-
-
 def home(request):
     # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
     if request.user.is_authenticated:
         if request.user.email in uva_students:
-            student = Student.objects.get(student_email=request.user.email)
-            return render(request, 'pages/student_dashboard.html', {"student": student})
+            return HttpResponseRedirect(reverse('portal:student_dashboard'))
         if request.user.email in uva_advisors:
-            advisor = Advisor.objects.get(advisor_email=request.user.email)
-            return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor})
+            return HttpResponseRedirect(reverse('portal:advisor_dashboard'))
 
     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
 
@@ -31,22 +25,26 @@ def home(request):
 def student(request):
     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
     if request.user.is_authenticated and request.user.email in uva_students:
-        student = Student.objects.get(student_email=request.user.email)
-        return render(request, 'pages/student_dashboard.html', {"student": student})
+        student_logged_in = Student.objects.get(student_email=request.user.email)
+        return render(request, 'pages/student_dashboard.html', {"student": student_logged_in})
 
     if request.method == "POST":
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         year = request.POST['year']
-        # add some logic here for year
         newStudent = Student(student_first_name=first_name, student_last_name=last_name,
                              student_email=email,
                              year_in_school=year)
         newStudent.save()
-        return HttpResponseRedirect(reverse('portal:student_dashboard', args=(newStudent.id,)))
+        return HttpResponseRedirect(reverse('portal:student_dashboard'))
 
     return render(request, "pages/student_sign_up.html")
+
+
+def student_dashboard(request):
+    student_logged_in = Student.objects.get(student_email=request.user.email)
+    return render(request, 'pages/student_dashboard.html', {"student": student_logged_in})
 
 
 def advisor(request):
@@ -67,11 +65,6 @@ def advisor(request):
         return HttpResponseRedirect(reverse('portal:advisor_dashboard', args=(newAdvisor.id,)))
 
     return render(request, "pages/advisor_sign_up.html")
-
-
-def student_dashboard(request, student_id):
-    student = Student.objects.get(pk=student_id)
-    return render(request, 'pages/student_dashboard.html', {"student": student})
 
 
 def get_departments():
@@ -101,23 +94,29 @@ def student_class_lookup(request, student_id):
 
 
 def class_results(request, student_id):
+    print(request.user.email)
+    test_student = Student.objects.get(student_email=request.user.email)
+    print(test_student)
     student = Student.objects.get(pk=student_id)
+    print(student)
     classes = Class.objects.filter(subject=request.POST['department']).order_by('catalog_nbr')
-    return render(request, 'pages/class_results.html', {"classes": classes, "student" : student})
+    return render(request, 'pages/class_results.html',
+                  {"classes": classes, "student": student, "year": request.POST['year']})
 
-def class_view(request):
+
+def class_view(request, year):
     c = Class.objects.get(pk=request.POST['ClassPK'])
-    baseURL =  'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01&term=1232'
-    url = baseURL + "&subject=" + c.subject + "&catalog_nbr=" + c.catalog_nbr
-    print(url)
+    baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
+    url = baseURL + "&subject=" + c.subject + "&catalog_nbr=" + c.catalog_nbr + "&term=123" + year
     r = requests.get(url)
     classData = r.json()
-    print(classData)
-    return render(request, 'pages/class_view.html', {"classData": classData, "class": c.subject + '-' + c.descr })
+    return render(request, 'pages/class_view.html', {"classData": classData, "class": c.subject + '-' + c.descr})
+
 
 def advisor_dashboard(request, advisor_id):
     advisor = Advisor.objects.get(pk=advisor_id)
-    return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor,})
+    return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor, })
+
 
 def student_schedule(request, student_id):
     student = Student.objects.get(pk=student_id)
