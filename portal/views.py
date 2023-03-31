@@ -88,13 +88,15 @@ def class_view(request, year):
 def student_schedule(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
-    for item in student_logged_in.schedule.classes:
-        curClass = ClassSection.objects.get(pk=item)
-        schedule.append(curClass)
-    schedule = serializers.serialize('json', schedule)
-    data = json.loads(schedule)
-    print(data)
-    return render(request, 'pages/student_schedule.html', {"schedule": data})
+    if student_logged_in.schedule is None:
+        return render(request, 'pages/student_schedule.html', {"schedule": {}})
+    else:
+        for item in student_logged_in.schedule.classes:
+            curClass = ClassSection.objects.get(pk=item)
+            schedule.append(curClass)
+        schedule = serializers.serialize('json', schedule)
+        data = json.loads(schedule)
+        return render(request, 'pages/student_schedule.html', {"schedule": data})
 
 
 def advisor(request):
@@ -180,4 +182,5 @@ def manage_students(request):
 
 def student_profile(request):
     print((request.POST['advisee_email']))
-    return render(request, 'pages/student_profile.html')
+    student_advisee = Student.objects.get(student_email=request.POST['advisee_email'])
+    return render(request, 'pages/student_profile.html', {"student": student_advisee})
