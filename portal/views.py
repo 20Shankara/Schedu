@@ -145,6 +145,9 @@ def add_class(request, year):
             facility_descr=meetings['facility_descr'],
             catalog_nbr=r['catalog_nbr'],
             season=year,
+            subject=r['subject'],
+            subject_descr=['subject_descr'],
+            descr=['descr']
         )
         c.save()
     else:
