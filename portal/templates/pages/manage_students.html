@@ -13,17 +13,19 @@
 </div>
 
 <!-- CONTENT -->
-<h2>Students</h2>
-<form action="{% url 'portal:student_profile' %}" method="post">
-    <div>
-        {% csrf_token %}
-        {% for advisee in advisees %}
-            <ul>
-                <button name="advisee_email" value={{advisee.student_email}}> {{advisee.student_first_name}} - {{advisee.student_last_name}}</button><br>
-            </ul>
-        {% endfor %}
-    </div>
-</form>
+<div class="borders">
+    <h2>Students</h2>
+    <form action="{% url 'portal:student_profile' %}" method="post">
+        <div>
+            {% csrf_token %}
+            {% for advisee in advisees %}
+                <ul>
+                    <button name="advisee_email" value={{advisee.student_email}}> {{advisee.student_first_name}} - {{advisee.student_last_name}}</button><br>
+                </ul>
+            {% endfor %}
+        </div>
+    </form>
+</div>
 
 </body>
 </html>

@@ -14,15 +14,16 @@
 </div>
 
 <!-- CONTENT -->
-<h2>Classes: </h2>
-<form action="{% url 'portal:class_view' year %}" method="post">
-    <div>
-    {% csrf_token %}
-    {% for Class in classes %}
-    <button name="ClassPK" value={{Class.pk}}> {{Class.catalog_nbr}} - {{Class.descr}}</button><br>
-    {% endfor %}
-    </div>
-</form>
-
+<div class="borders">
+    <h2>Classes: </h2>
+    <form action="{% url 'portal:class_view' year %}" method="post">
+        <div>
+        {% csrf_token %}
+        {% for Class in classes %}
+        <button name="ClassPK" value={{Class.pk}}> {{Class.catalog_nbr}} - {{Class.descr}}</button><br>
+        {% endfor %}
+        </div>
+    </form>
+</div>
 </body>
 </html>

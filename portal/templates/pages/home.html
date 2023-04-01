@@ -12,14 +12,15 @@
 <!--     the logic is already built in for authenticated user -->
 <!--     to check if authenticated user is student/advisor, so only gets to this page -->
 <!--     if not already a student or advisor -->
-
-{% if user.is_authenticated %}
-    <h2>Welcome, {{ user.email }}</h2>
-    <h4>Please Log in Or Sign Up</h4>
-    <a href="{% url 'portal:student_link' %}">Students</a><br>
-    <a href="{% url 'portal:advisor_link' %}">Advisors</a>
-{% else %}
-  <a href="{% provider_login_url 'google' %}">Login With Google</a>
-{% endif %}
+<div class="borders">
+  {% if user.is_authenticated %}
+      <h2>Welcome, {{ user.email }}</h2>
+      <h4>Please Log in Or Sign Up</h4>
+      <a href="{% url 'portal:student_link' %}">Students</a><br>
+      <a href="{% url 'portal:advisor_link' %}">Advisors</a>
+  {% else %}
+    <a href="{% provider_login_url 'google' %}">Login With Google</a>
+  {% endif %}
+</div>
 </body>
 </html>

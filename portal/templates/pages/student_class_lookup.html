@@ -19,40 +19,42 @@
 
 <!-- CONTENT -->
 <!--<p>Class Lookup for {{ student.student_first_name }} ({{ student.id }})</p>-->
-<h2>Find Classes</h2><br>
-{% if error != "" %}
-    {{error}}
-{% endif %}
-<form action="{% url 'portal:class_results' %}" method="post">
-    {% csrf_token %}
+<div class="borders">
+    <h2>Find Classes</h2><br>
+    {% if error != "" %}
+        {{error}}
+    {% endif %}
+    <form action="{% url 'portal:class_results' %}" method="post">
+        {% csrf_token %}
 
-    <!-- -----------YEAR----------- -->
-    <label for="year">Year: </label>
-    <select id="year" name="year">
-        <option value="8"> Fall 2023 </option>
-        <option value="2">Spring 2023</option>
-    </select><br><br>
-    <!-- -----------DEPARTMENT----------- -->
-    <label for="department">Department: </label>
-    <select id="department" name="department" required>
-        <option readonly value="">--select--</option>
-        {% for department in departments %}
-            <option value={{department}}>{{department}}</option>
-        {% endfor %}
-    </select><br><br>
-    <!-- -----------COURSE NUMBER----------- -->
-<!--    <label for="course_number">Course Number (ex. 2150): </label>-->
-<!--    <input type="number" id="course_number" name="course_number"><br><br>-->
-<!--   <label for="instructor_name">Professor:</label>-->
-<!--        <input type="text" id="instructor_name" name="instructor_name"><br><br>-->
-<!--    <label for="days">Days:</label>-->
-<!--        <input type="checkbox" name="days[]" value="Mo">Monday</input>-->
-<!--        <input type="checkbox" name="days[]" value="Tu">Tuesday</input>-->
-<!--        <input type="checkbox" name="days[]" value="We">Wednesday</input>-->
-<!--        <input type="checkbox" name="days[]" value="Th">Thursday</input>-->
-<!--        <input type="checkbox" name="days[]" value="Fr">Friday</input><br><br>-->
-<!--    <input type="checkbox" name="enrl_stat" id="enrl_stat" value="O" checked = "checked">Only show open classes</input><br><br>-->
-    <button type="submit">Search</button>
-</form>
+        <!-- -----------YEAR----------- -->
+        <label for="year">Year: </label>
+        <select id="year" name="year">
+            <option value="8"> Fall 2023 </option>
+            <option value="2">Spring 2023</option>
+        </select><br><br>
+        <!-- -----------DEPARTMENT----------- -->
+        <label for="department">Department: </label>
+        <select id="department" name="department" required>
+            <option readonly value="">--select--</option>
+            {% for department in departments %}
+                <option value={{department}}>{{department}}</option>
+            {% endfor %}
+        </select><br><br>
+        <!-- -----------COURSE NUMBER----------- -->
+    <!--    <label for="course_number">Course Number (ex. 2150): </label>-->
+    <!--    <input type="number" id="course_number" name="course_number"><br><br>-->
+    <!--   <label for="instructor_name">Professor:</label>-->
+    <!--        <input type="text" id="instructor_name" name="instructor_name"><br><br>-->
+    <!--    <label for="days">Days:</label>-->
+    <!--        <input type="checkbox" name="days[]" value="Mo">Monday</input>-->
+    <!--        <input type="checkbox" name="days[]" value="Tu">Tuesday</input>-->
+    <!--        <input type="checkbox" name="days[]" value="We">Wednesday</input>-->
+    <!--        <input type="checkbox" name="days[]" value="Th">Thursday</input>-->
+    <!--        <input type="checkbox" name="days[]" value="Fr">Friday</input><br><br>-->
+    <!--    <input type="checkbox" name="enrl_stat" id="enrl_stat" value="O" checked = "checked">Only show open classes</input><br><br>-->
+        <button type="submit">Search</button>
+    </form>
+</div>
 </body>
 </html>
