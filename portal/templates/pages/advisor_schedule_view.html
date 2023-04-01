@@ -33,6 +33,11 @@
     </div>
 
     <!-- CONTENT -->
+    <form action="{% url 'portal:student_profile' %}" method="post">
+        {% csrf_token %}
+        <button name="advisee_email" value={{advisee.student_email}}>return to student's profile</button><br>
+    </form>
+
     <h2>{{advisee.student_first_name}} {{advisee.student_last_name}}'s Schedule:</h2>
     {% for class in schedule %}
         <h2> Section Number: {{class.fields.catalog_nbr}} - {{class.fields.class_section}}</h2>
@@ -42,5 +47,7 @@
             <h4>&emsp; Room: {{class.fields.facility_descr}}</h4>
             <h4>&emsp; Instructor: {{class.fields.instructor}}</h4>
     {% endfor %}
+
+    <button name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br>
   </body>
 </html>
