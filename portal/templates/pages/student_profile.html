@@ -1,29 +1,10 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Student Profile</title> <!-- change this to be their name -->
-    <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
-    <style>
-        body {
-            margin: 0;
-            font-family: "Times New Roman", Times, serif;
-        }
-
-        .topnav {
-          overflow: hidden;
-          background-color: #333;
-        }
-
-        .topnav a {
-          float: left;
-          color: #f2f2f2;
-          text-align: center;
-          padding: 14px 16px;
-          text-decoration: none;
-          font-size: 17px;
-        }
-    </style>
 </head>
 <body>
 <!-- NAVIGATION -->
@@ -33,16 +14,18 @@
 </div>
 
 <!-- CONTENT -->
-<h2>{{ student.student_first_name }} {{ student.student_last_name }}'s Profile</h2>
-<h4>Student Information: </h4>
-<p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
-<p>Email: {{ student.student_email }} </p>
-<p>Year: {{ student.year_in_school }} </p>
-<form action="{% url 'portal:advisor_schedule_view' %}" method="post">
-    <div>
-        {% csrf_token %}
-        <button name="student_email" value={{student.student_email}}> View Schedule</button><br>
-    </div>
-</form>
+<div class="borders">
+    <h2>{{ student.student_first_name }} {{ student.student_last_name }}'s Profile</h2>
+    <h4>Student Information: </h4>
+    <p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
+    <p>Email: {{ student.student_email }} </p>
+    <p>Year: {{ student.year_in_school }} </p>
+    <form action="{% url 'portal:advisor_schedule_view' %}" method="post">
+        <div>
+            {% csrf_token %}
+            <button name="student_email" value={{student.student_email}}> View Schedule</button><br>
+        </div>
+    </form>
+</div>
 </body>
 </html>
