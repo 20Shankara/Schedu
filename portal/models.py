@@ -81,6 +81,7 @@ class ClassSection(models.Model):
     subject = models.CharField(max_length=255, null=True)
     subject_descr = models.CharField(max_length=255, null=True)
     descr = models.CharField(max_length=255, null=True)
+    section_type = models.CharField(max_length=255, null=True)
 
 
 class Schedule(models.Model):
