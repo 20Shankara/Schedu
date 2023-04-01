@@ -77,6 +77,11 @@ class ClassSection(models.Model):
     facility_descr = models.CharField(max_length=255)
     catalog_nbr = models.CharField(max_length=255, default='')
     season = models.CharField(max_length=255)
+    # new fields
+    subject = models.CharField(max_length=255, null=True)
+    subject_descr = models.CharField(max_length=255, null=True)
+    descr = models.CharField(max_length=255, null=True)
+    section_type = models.CharField(max_length=255, null=True)
 
 
 class Schedule(models.Model):
