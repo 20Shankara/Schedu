@@ -1,6 +1,6 @@
 body {
-    margin: 5;
-    font-family: "Lora";
+    margin: 5px;
+    font-family: "Monaco", monospace;
     background-color: purple;
 }
 
