@@ -1,0 +1,10 @@
+body {
+    margin: 5;
+    font-family: "Lora";
+    background-color: purple;
+}
+
+.authenticated {
+    border-style: ridge;
+    border-margin: 5px;
+}
