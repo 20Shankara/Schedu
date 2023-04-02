@@ -4,8 +4,8 @@
     <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
     <style>
       body {
-          margin: 0;
           font-family: "Times New Roman", Times, serif;
+          background-color: #e0ffff;
       }
 
       .topnav {
@@ -21,6 +21,32 @@
         text-decoration: none;
         font-size: 17px;
       }
+      .header {
+          position: fixed;
+          left: 0;
+          top: 80px;
+          width: 100%;
+          margin: 5px;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-color: #fafad2;
+          text-indent: 10px;
+          border-width: thick;
+          border-color: purple;
+    }
+
+    .borders{
+        overflow: scroll;
+        background-color: #e0ffff;
+        font-family: "Monaco", monospace;
+        margin-top: 40px;
+        margin: 30px;
+        height: 200px;
+        width: 600px;
+        background-color: #fff0f5;
+    }
+
   </style>
 <html lang="en">
 <head>
@@ -32,14 +58,16 @@
 <div class="topnav">
   <a href="{% url 'portal:manage_students' %}">Manage Students</a>
 </div>
-<div class="borders">
   <!-- CONTENT -->
+    <div class="header">
   <h2>{{ advisor.advisor_first_name }}'s Dashboard</h2>
-  <h4>Advisor Information: </h4>
+    </div>
+  <h4 style="font-size: 18px">Advisor Information: </h4>
+    <div class="borders">
   <p>Name: {{ advisor.advisor_first_name }} {{ advisor.advisor_last_name }}</p>
   <p>Email: {{ advisor.advisor_email }} </p>
   <p>Year: {{ advisor.advisor_department }} </p>
 </div>
-<a href="{% url 'portal:home' %}">Back to home</a>
+<button onclick="{% url 'portal:home' %}">Back to home</button>
 </body>
 </html>

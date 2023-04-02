@@ -1,22 +1,75 @@
 {% load socialaccount %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
-<html>
 <html lang="en">
+<style>
+    body {
+          font-family: "Times New Roman", Times, serif;
+          background-color: #e0ffff;
+      }
+
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+      .header {
+          position: fixed;
+          left: 0;
+          top: 0px;
+          width: 100%;
+          margin: 5px;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-color: #fafad2;
+          text-indent: 10px;
+          border-width: thick;
+          border-color: purple;
+    }
+
+    .borders{
+        overflow: scroll;
+        top: 50px;
+        position: relative;
+        background-color: #e0ffff;
+        font-family: "Monaco", monospace;
+        margin-top: 40px;
+        margin: 20px;
+        height: 100px;
+        width: 600px;
+        background-color: #fff0f5;
+    }
+
+</style>
 <head>
     <meta charset="UTF-8">
     <title>Advisor Sign-Up</title>
 </head>
 <body>
+<div class="header">
+<h1>Advisor Sign-Up</h1>
+</div>
 <form novalidate action="{% url 'portal:advisor_link' %}" method="post">
     {% csrf_token %}
     <!-- from https://www.w3schools.com/tags/att_input_readonly.asp -->
+    <div class="borders">
     <label for="first_name">First name:</label>
-    <input type="text" id="first_name" name="first_name" value={{ user.first_name }}><br><br>
+    <input type="text" id="first_name" name="first_name" value={{ user.first_name }}>
     <label for="last_name">Last name:</label>
     <input type="text" id="last_name" name="last_name" value={{ user.last_name }}><br><br>
     <label for="email">Email: </label>
     <input type="email" value={{ user.email }} id="email" name="email" readonly><br><br>
+        </div>
+    <br><br>
     <label for="department">Department: </label>
     <select id="department" name="department" required>
         <option value="">--select--</option>
