@@ -22,6 +22,8 @@ urlpatterns = [
     path('student_schedule', views.student_schedule, name='student_schedule'),
     # Add Class
     path('<str:year>/add_class', views.add_class, name='add_class'),
+    # Shopping Cart
+    path('student_shopping_cart', views.student_shopping_cart, name='student_shopping_cart'),
 
     # -----------------------------------------------------------------------------------------------------
 
