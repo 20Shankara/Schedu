@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core import serializers
+from django.contrib.auth import logout
 import json, ast
 
 import login_app.views
@@ -22,6 +23,11 @@ def home(request):
             return HttpResponseRedirect(reverse('portal:advisor_dashboard'))
 
     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('portal:home'))
 
 
 def student(request):
@@ -56,7 +62,6 @@ def get_departments():
 
 
 def student_class_lookup(request):
-    # TODO: fix this to be redirect
     student_logged_in = Student.objects.get(student_email=request.user.email)
     try:
         all_departments = get_departments()
@@ -89,10 +94,21 @@ def student_schedule(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
     if student_logged_in.schedule is None:
-        return render(request, 'pages/student_schedule.html', {"schedule": {}})
+        return render(request, 'pages/student_schedule.html', {"schedule": "empty"})
     else:
         for item in student_logged_in.schedule.classes:
             curClass = ClassSection.objects.get(pk=item)
+            print(type(curClass.start_time))
+
+            # better time
+            # import datetime
+            #
+            # time = "14.00"
+            # format = '%H.%M'  # The format
+            # datetime_str = datetime.datetime.strptime(time, format)
+            # better = datetime_str.strftime("%I.%M %p")
+            # print(better.replace(".", ":"))
+
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
@@ -125,7 +141,7 @@ def advisor_dashboard(request):
 def add_class(request, year):
     class_nbr = (request.POST['Class_nbr'])
     base_URL = baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
-    url = baseURL + "&term=123" + year + "&class_nbr=" + class_nbr
+    url = base_URL + "&term=123" + year + "&class_nbr=" + class_nbr
     r = requests.get(url)
     r = r.json()[0]
     meetings = r['meetings'][0]
@@ -139,8 +155,8 @@ def add_class(request, year):
             enrollment_available=r['enrollment_available'],
             units=r['units'],
             days=meetings['days'],
-            start_time=meetings['start_time'],
-            end_time=meetings['end_time'],
+            start_time=meetings['start_time'][0:4],
+            end_time=meetings['end_time'][0:4],
             instructor=meetings['instructor'],
             facility_descr=meetings['facility_descr'],
             catalog_nbr=r['catalog_nbr'],
@@ -151,6 +167,9 @@ def add_class(request, year):
             section_type=r['section_type']
         )
         c.save()
+        print("------------ ADDING CLASS ------------")
+        print(c)
+        print("------------ >>>>>>>>>>>> ------------")
     else:
         c = ClassSection.objects.get(class_nbr=class_nbr, season=year)
     student = Student.objects.get(student_email=request.user.email)
