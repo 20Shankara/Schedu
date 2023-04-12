@@ -36,7 +36,7 @@
         border-margin: 30px;
         border-color: grey;
         overflow: scroll;
-        height: 500px;
+        height: 700px;
         width: 500px;
         margin: 50px;
         background-color: beige;
@@ -56,25 +56,28 @@
     <!-- CONTENT -->
     <div class="header">
       <h2>Schedule:</h2>
-        </div>
+    </div>
+    {% if schedule != "empty" %}
         <div class="info">
-      {% for class in schedule %}
-          <h2> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.class_section}} - {{class.fields.section_type}}</h2>
-          <h4>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h4>
+        {% for class in schedule %}
+<!--          <h2> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.class_section}} - {{class.fields.section_type}}</h2>-->
+            <h2> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.descr}} </h2>
+            <h4>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h4>
               <h4>&emsp; Time: {{class.fields.start_time}} - {{class.fields.end_time}}</h4>
               <h4>&emsp; Days: {{class.fields.days}} </h4>
               <h4>&emsp; Room: {{class.fields.facility_descr}}</h4>
               <h4>&emsp; Instructor: {{class.fields.instructor}}</h4>
-            </div>
-      {% endfor %}
-      <button onclick="send_student_Schedule()">Send Schedule </button>
-      <!-- <button onclick="myFunction()">Try it</button> -->
+        {% endfor %}
+        </div>
+        <button onclick="send_student_Schedule()">Send Schedule </button>
+    {% else %}
+        <h4>No classes added yet.</h4>
+    {% endif %}
 
-      <script>
+    <script>
         function send_student_Schedule() {
           alert("Your schedule was just sent!");
         }
-      </script>
-    </div>
+    </script>
   </body>
 </html>

@@ -61,17 +61,17 @@
 <!--     to check if authenticated user is student/advisor, so only gets to this page -->
 <!--     if not already a student or advisor -->
 
-  {% if user.is_authenticated %}
+{% if user.is_authenticated %}
     <div class="header">
-      <h2>Welcome, {{ user.email }}</h2>
-      <h4>Please Log in Or Sign Up</h4>
-        </div>
+        <h2>Welcome, {{ user.email }}</h2>
+        <h4>Please Log in Or Sign Up</h4>
+    </div>
     <div class="borders">
-      <button onclick="{% url 'portal:student_link' %}">Students</button><br>
-      <button onclick="{% url 'portal:advisor_link' %}">Advisors</button>
-  {% else %}
+      <a href="{% url 'portal:student_link' %}">Students</a><br>
+      <a href="{% url 'portal:advisor_link' %}">Advisors</a>
+    </div>
+{% else %}
     <a href="{% provider_login_url 'google' %}">Login With Google</a>
-  {% endif %}
-</div>
+{% endif %}
 </body>
 </html>

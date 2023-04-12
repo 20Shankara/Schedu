@@ -2,16 +2,15 @@ from django.contrib import admin
 from .models import Student, Advisor, Schedule
 
 
-# class ScheduleInline(admin.TabularInline):
-#     model = Schedule
-#     extra = 0
-#     exclude = ['season']
+class ScheduleAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('Schedule',
+         {'fields': ['classes']})
+    ]
+    list_display = ('classes',)
 
 
 class StudentAdmin(admin.ModelAdmin):
-    # inlines = [
-    #     ScheduleInline
-    # ]
     fieldsets = [
         ('Student Information',
          {'fields': ['student_email', 'student_first_name', 'student_last_name', 'year_in_school', 'advisor',
@@ -39,5 +38,6 @@ class AdvisorAdmin(admin.ModelAdmin):
     list_display = ('advisor_first_name', 'advisor_last_name', 'advisor_email', 'advisor_department')
 
 
+admin.site.register(Schedule, ScheduleAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Advisor, AdvisorAdmin)

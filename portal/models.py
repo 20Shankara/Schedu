@@ -85,7 +85,6 @@ class ClassSection(models.Model):
 
 
 class Schedule(models.Model):
-    # Should be either spring or fall
     season = models.CharField(max_length=255)
     classes = ArrayField(
         models.CharField(max_length=255),
