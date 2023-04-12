@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core import serializers
+from django.contrib.auth import logout
 import json, ast
 
 import login_app.views
@@ -22,6 +23,11 @@ def home(request):
             return HttpResponseRedirect(reverse('portal:advisor_dashboard'))
 
     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
+
+
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('portal:home'))
 
 
 def student(request):
@@ -96,6 +102,7 @@ def student_schedule(request):
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
+        print(data)
         return render(request, 'pages/student_schedule.html', {"schedule": data})
 
 
@@ -125,7 +132,7 @@ def advisor_dashboard(request):
 def add_class(request, year):
     class_nbr = (request.POST['Class_nbr'])
     base_URL = baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
-    url = baseURL + "&term=123" + year + "&class_nbr=" + class_nbr
+    url = base_URL + "&term=123" + year + "&class_nbr=" + class_nbr
     r = requests.get(url)
     r = r.json()[0]
     meetings = r['meetings'][0]
