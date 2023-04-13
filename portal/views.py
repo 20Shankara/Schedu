@@ -117,7 +117,6 @@ def student_schedule(request):
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
-        # todo: edit data here to be sent over
         for d in data:
             if d['fields']['start_time'] != '':
                 st_time = d['fields']['start_time'][0:5]
@@ -168,6 +167,7 @@ def checkForConflicts(student_user, meetings):
     # in case where there is no class in schedule, automatically, no conflict
     if not data:
         print("No conflict")
+        return False
     else:
         print("--------PROPOSED CLASS--------")
         print(meetings['days'])
@@ -175,12 +175,21 @@ def checkForConflicts(student_user, meetings):
         print(meetings['end_time'])
         print("-------------------")
         for c in data:
-            print("-------------------")
-            print(c['fields']['days'])
-            print(c['fields']['start_time'])
-            print(c['fields']['end_time'])
-            print("-------------------")
-        print("Conflict")
+            if c['fields']['days'] == meetings['days']:
+                print("SAME DAY")
+                if c['fields']['start_time'] <= meetings['start_time'] <= c['fields']['end_time']:
+                    print("Conflict with Start Time")
+                    return True
+                elif c['fields']['start_time'] <= meetings['end_time'] <= c['fields']['end_time']:
+                    print("Conflict with End Time")
+                    return True
+            # print("-------------------")
+            # print(c['fields']['days'])
+            # print(c['fields']['start_time'])
+            # print(c['fields']['end_time'])
+            # print("-------------------")
+        print("No conflict")
+        return False
 
 
 def add_class(request, year):
@@ -193,9 +202,8 @@ def add_class(request, year):
     student_logged_in = Student.objects.get(student_email=request.user.email)
 
     # check for class conflict
-    conflict = True
-    if conflict:
-        checkForConflicts(student_logged_in, meetings)
+    conflict = checkForConflicts(student_logged_in, meetings)
+    print(conflict)
 
     c = None
     if not ClassSection.objects.filter(class_nbr=r['class_nbr'], season=year).exists():
@@ -244,9 +252,14 @@ def add_class(request, year):
     else:
         schedule = student_logged_in.schedule
 
-    if not str(c.pk) in schedule.classes:
+    if (not str(c.pk) in schedule.classes) & (not conflict):
+        print("no conflicts with adding this class")
         schedule.classes.append(c.pk)
         schedule.save()
+    else:
+        # todo: add some messaging here to alert people
+        # https://www.youtube.com/watch?v=VIx3HD2gRWQ
+        print("todo: remove this...but there was a conflict, so not added")
 
     return HttpResponseRedirect('/student_schedule')
 
