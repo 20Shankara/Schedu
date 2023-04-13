@@ -133,6 +133,34 @@ def student_schedule(request):
         return render(request, 'pages/student_schedule.html', {"schedule": data})
 
 
+def student_schedule_warning(request):
+    student_logged_in = Student.objects.get(student_email=request.user.email)
+    schedule = []
+    print(student_logged_in.schedule)
+    if len(student_logged_in.schedule.classes) == 0:
+        return render(request, 'pages/student_schedule.html', {"schedule": "empty"})
+    else:
+        for item in student_logged_in.schedule.classes:
+            curClass = ClassSection.objects.get(pk=item)
+            schedule.append(curClass)
+        schedule = serializers.serialize('json', schedule)
+        data = json.loads(schedule)
+        for d in data:
+            if d['fields']['start_time'] != '':
+                st_time = d['fields']['start_time'][0:5]
+                en_time = d['fields']['end_time'][0:5]
+                time_format = '%H.%M'  # The format
+                st_time_str = datetime.datetime.strptime(st_time, time_format)
+                st_time_str_2 = st_time_str.strftime("%I.%M %p")
+                st_time_str_2 = st_time_str_2.replace(".", ":")
+                en_time_str = datetime.datetime.strptime(en_time, time_format)
+                en_time_str_2 = en_time_str.strftime("%I.%M %p")
+                en_time_str_2 = en_time_str_2.replace(".", ":")
+                d['fields']['start_time'] = st_time_str_2
+                d['fields']['end_time'] = en_time_str_2
+        return render(request, 'pages/student_schedule_conflict.html', {"schedule": data})
+
+
 def advisor(request):
     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
     if request.user.is_authenticated and request.user.email in uva_advisors:
@@ -158,6 +186,8 @@ def advisor_dashboard(request):
 
 def checkForConflicts(student_user, meetings):
     schedule = []
+    if student_user.schedule is None:
+        return False
     for item in student_user.schedule.classes:
         curClass = ClassSection.objects.get(pk=item)
         schedule.append(curClass)
@@ -256,12 +286,12 @@ def add_class(request, year):
         print("no conflicts with adding this class")
         schedule.classes.append(c.pk)
         schedule.save()
+        return HttpResponseRedirect('/student_schedule')
     else:
         # todo: add some messaging here to alert people
         # https://www.youtube.com/watch?v=VIx3HD2gRWQ
         print("todo: remove this...but there was a conflict, so not added")
-
-    return HttpResponseRedirect('/student_schedule')
+        return HttpResponseRedirect(reverse('portal:student_schedule_conflict'))
 
 
 def remove_class(request):
