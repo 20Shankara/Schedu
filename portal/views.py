@@ -221,6 +221,15 @@ def add_class(request, year):
     return HttpResponseRedirect('/student_schedule')
 
 
+def remove_class(request):
+    print(request.POST['class_pk'])
+    student_logged_in = Student.objects.get(student_email=request.user.email)
+    print(student_logged_in)
+    student_logged_in.schedule.classes.remove(request.POST['class_pk'])
+    student_logged_in.schedule.save()
+    return HttpResponseRedirect(reverse('portal:home'))
+
+
 def manage_students(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
     advisees = list(Student.objects.filter(advisor=advisor_logged_in))

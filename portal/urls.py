@@ -23,6 +23,8 @@ urlpatterns = [
     path('student_schedule', views.student_schedule, name='student_schedule'),
     # Add Class
     path('<str:year>/add_class', views.add_class, name='add_class'),
+    # Remove Class
+    path('remove_class', views.remove_class, name='remove_class'),
 
     # -----------------------------------------------------------------------------------------------------
 
