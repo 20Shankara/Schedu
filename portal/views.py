@@ -117,6 +117,20 @@ def student_schedule(request):
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
+        # todo: edit data here to be sent over
+        for d in data:
+            if d['fields']['start_time'] != '':
+                st_time = d['fields']['start_time'][0:5]
+                en_time = d['fields']['end_time'][0:5]
+                time_format = '%H.%M'  # The format
+                st_time_str = datetime.datetime.strptime(st_time, time_format)
+                st_time_str_2 = st_time_str.strftime("%I.%M %p")
+                st_time_str_2 = st_time_str_2.replace(".", ":")
+                en_time_str = datetime.datetime.strptime(en_time, time_format)
+                en_time_str_2 = en_time_str.strftime("%I.%M %p")
+                en_time_str_2 = en_time_str_2.replace(".", ":")
+                d['fields']['start_time'] = st_time_str_2
+                d['fields']['end_time'] = en_time_str_2
         return render(request, 'pages/student_schedule.html', {"schedule": data})
 
 
@@ -143,8 +157,30 @@ def advisor_dashboard(request):
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor_logged_in})
 
 
-def checkForConflicts(meetings):
-    print("Conflict")
+def checkForConflicts(student_user, meetings):
+    schedule = []
+    for item in student_user.schedule.classes:
+        curClass = ClassSection.objects.get(pk=item)
+        schedule.append(curClass)
+    schedule = serializers.serialize('json', schedule)
+    data = json.loads(schedule)
+    print(data)
+    # in case where there is no class in schedule, automatically, no conflict
+    if not data:
+        print("No conflict")
+    else:
+        print("--------PROPOSED CLASS--------")
+        print(meetings['days'])
+        print(meetings['start_time'])
+        print(meetings['end_time'])
+        print("-------------------")
+        for c in data:
+            print("-------------------")
+            print(c['fields']['days'])
+            print(c['fields']['start_time'])
+            print(c['fields']['end_time'])
+            print("-------------------")
+        print("Conflict")
 
 
 def add_class(request, year):
@@ -154,24 +190,25 @@ def add_class(request, year):
     r = requests.get(url)
     r = r.json()[0]
     meetings = r['meetings'][0]
+    student_logged_in = Student.objects.get(student_email=request.user.email)
 
     # check for class conflict
     conflict = True
     if conflict:
-        checkForConflicts(meetings)
+        checkForConflicts(student_logged_in, meetings)
 
     c = None
     if not ClassSection.objects.filter(class_nbr=r['class_nbr'], season=year).exists():
         # Logic for correcting start time and end time
-        st_time = meetings['start_time'][0:5]
-        en_time = meetings['end_time'][0:5]
-        time_format = '%H.%M'  # The format
-        st_time_str = datetime.datetime.strptime(st_time, time_format)
-        st_time_str_2 = st_time_str.strftime("%I.%M %p")
-        st_time_str_2 = st_time_str_2.replace(".", ":")
-        en_time_str = datetime.datetime.strptime(en_time, time_format)
-        en_time_str_2 = en_time_str.strftime("%I.%M %p")
-        en_time_str_2 = en_time_str_2.replace(".", ":")
+        # st_time = meetings['start_time'][0:5]
+        # en_time = meetings['end_time'][0:5]
+        # time_format = '%H.%M'  # The format
+        # st_time_str = datetime.datetime.strptime(st_time, time_format)
+        # st_time_str_2 = st_time_str.strftime("%I.%M %p")
+        # st_time_str_2 = st_time_str_2.replace(".", ":")
+        # en_time_str = datetime.datetime.strptime(en_time, time_format)
+        # en_time_str_2 = en_time_str.strftime("%I.%M %p")
+        # en_time_str_2 = en_time_str_2.replace(".", ":")
         c = ClassSection(
             class_nbr=r['class_nbr'],
             class_section=r['class_section'],
@@ -180,8 +217,10 @@ def add_class(request, year):
             enrollment_available=r['enrollment_available'],
             units=r['units'],
             days=meetings['days'],
-            start_time=st_time_str_2,
-            end_time=en_time_str_2,
+            # start_time=st_time_str_2,
+            # end_time=en_time_str_2,
+            start_time=meetings['start_time'],
+            end_time=meetings['end_time'],
             instructor=meetings['instructor'],
             facility_descr=meetings['facility_descr'],
             catalog_nbr=r['catalog_nbr'],
@@ -194,7 +233,6 @@ def add_class(request, year):
         c.save()
     else:
         c = ClassSection.objects.get(class_nbr=class_nbr, season=year)
-    student_logged_in = Student.objects.get(student_email=request.user.email)
 
     # Check if student has a schedule
     schedule = None
