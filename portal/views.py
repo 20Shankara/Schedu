@@ -222,6 +222,7 @@ def add_class(request, year):
 
 
 def remove_class(request):
+    # TODO: have popup here to make sure they want to remove
     print(request.POST['class_pk'])
     student_logged_in = Student.objects.get(student_email=request.user.email)
     print(student_logged_in)
