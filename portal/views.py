@@ -108,21 +108,12 @@ def class_view(request, year):
 def student_schedule(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
-    if student_logged_in.schedule is None:
+    print(student_logged_in.schedule)
+    if len(student_logged_in.schedule.classes) == 0:
         return render(request, 'pages/student_schedule.html', {"schedule": "empty"})
     else:
         for item in student_logged_in.schedule.classes:
             curClass = ClassSection.objects.get(pk=item)
-
-            # better time
-            # import datetime
-            #
-            # time = "14.00"
-            # format = '%H.%M'  # The format
-            # datetime_str = datetime.datetime.strptime(time, format)
-            # better = datetime_str.strftime("%I.%M %p")
-            # print(better.replace(".", ":"))
-
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
