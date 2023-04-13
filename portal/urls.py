@@ -21,6 +21,8 @@ urlpatterns = [
     path('<str:year>/class_view', views.class_view, name='class_view'),
     # Student's Schedule
     path('student_schedule', views.student_schedule, name='student_schedule'),
+    # Student's Schedule Conflict Page
+    path('student_schedule_warning', views.student_schedule_warning, name='student_schedule_conflict'),
     # Add Class
     path('<str:year>/add_class', views.add_class, name='add_class'),
     # Remove Class
