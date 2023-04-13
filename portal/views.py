@@ -89,17 +89,18 @@ def class_view(request, year):
     # logic here to fix times to be able to see in class view page - json will have long times like 15.30.00.00000
     for d in classData:
         for m in d['meetings']:
-            st_time = m['start_time'][0:5]
-            en_time = m['end_time'][0:5]
-            time_format = '%H.%M'  # The format
-            st_time_str = datetime.datetime.strptime(st_time, time_format)
-            st_time_str_2 = st_time_str.strftime("%I.%M %p")
-            st_time_str_2 = st_time_str_2.replace(".", ":")
-            en_time_str = datetime.datetime.strptime(en_time, time_format)
-            en_time_str_2 = en_time_str.strftime("%I.%M %p")
-            en_time_str_2 = en_time_str_2.replace(".", ":")
-            m['start_time'] = st_time_str_2
-            m['end_time'] = en_time_str_2
+            if m['start_time'] != '':
+                st_time = m['start_time'][0:5]
+                en_time = m['end_time'][0:5]
+                time_format = '%H.%M'  # The format
+                st_time_str = datetime.datetime.strptime(st_time, time_format)
+                st_time_str_2 = st_time_str.strftime("%I.%M %p")
+                st_time_str_2 = st_time_str_2.replace(".", ":")
+                en_time_str = datetime.datetime.strptime(en_time, time_format)
+                en_time_str_2 = en_time_str.strftime("%I.%M %p")
+                en_time_str_2 = en_time_str_2.replace(".", ":")
+                m['start_time'] = st_time_str_2
+                m['end_time'] = en_time_str_2
     return render(request, 'pages/class_view.html',
                   {"classData": classData, "class": c.subject + '-' + c.descr, "year": year})
 
