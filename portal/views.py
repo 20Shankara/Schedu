@@ -9,7 +9,6 @@ from django.shortcuts import render
 from django.urls import reverse
 # from https://pynative.com/parse-json-response-using-python-requests-library/ for HTTPError
 from requests.exceptions import HTTPError
-
 from .models import *
 
 
@@ -152,6 +151,10 @@ def advisor_dashboard(request):
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor_logged_in})
 
 
+def checkForConflicts(meetings):
+    print("Conflict")
+
+
 def add_class(request, year):
     class_nbr = (request.POST['Class_nbr'])
     base_URL = baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
@@ -159,6 +162,12 @@ def add_class(request, year):
     r = requests.get(url)
     r = r.json()[0]
     meetings = r['meetings'][0]
+
+    # check for class conflict
+    conflict = True
+    if conflict:
+        checkForConflicts(meetings)
+
     c = None
     if not ClassSection.objects.filter(class_nbr=r['class_nbr'], season=year).exists():
         # Logic for correcting start time and end time
@@ -191,10 +200,6 @@ def add_class(request, year):
             section_type=r['section_type']
         )
         c.save()
-        print("------------ ADDING CLASS ------------")
-        print(c.start_time)
-        print(c.end_time)
-        print("------------ >>>>>>>>>>>> ------------")
     else:
         c = ClassSection.objects.get(class_nbr=class_nbr, season=year)
     student_logged_in = Student.objects.get(student_email=request.user.email)

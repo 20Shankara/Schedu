@@ -61,6 +61,9 @@
     <title>Dashboard</title>
 </head>
 <body>
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <!-- NAVIGATION -->
  <div class="topnav">
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
