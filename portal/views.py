@@ -335,3 +335,6 @@ def advisor_schedule_view(request):
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
         return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee})
+
+def student_shopping_cart(request):
+    return render(request, 'pages/student_shopping_cart.html')

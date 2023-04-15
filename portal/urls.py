@@ -25,6 +25,8 @@ urlpatterns = [
     path('student_schedule_warning', views.student_schedule_warning, name='student_schedule_conflict'),
     # Add Class
     path('<str:year>/add_class', views.add_class, name='add_class'),
+    # Shopping Cart
+    path('student_shopping_cart', views.student_shopping_cart, name='student_shopping_cart'),
     # Remove Class
     path('remove_class', views.remove_class, name='remove_class'),
 
