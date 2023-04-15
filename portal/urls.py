@@ -6,6 +6,7 @@ app_name = 'portal'
 urlpatterns = [
     # Homepage
     path('', views.home, name='home'),
+    path('logout', views.logout_user, name='logout'),
     # -----------------------------------------------------------------------------------------------------
     #                                           STUDENTS
     # Student Sign-Up
@@ -20,10 +21,14 @@ urlpatterns = [
     path('<str:year>/class_view', views.class_view, name='class_view'),
     # Student's Schedule
     path('student_schedule', views.student_schedule, name='student_schedule'),
+    # Student's Schedule Conflict Page
+    path('student_schedule_warning', views.student_schedule_warning, name='student_schedule_conflict'),
     # Add Class
     path('<str:year>/add_class', views.add_class, name='add_class'),
     # Shopping Cart
     path('student_shopping_cart', views.student_shopping_cart, name='student_shopping_cart'),
+    # Remove Class
+    path('remove_class', views.remove_class, name='remove_class'),
 
     # -----------------------------------------------------------------------------------------------------
 

@@ -5,23 +5,50 @@
     <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
     <style>
         body {
-            margin: 0;
-            font-family: "Times New Roman", Times, serif;
-        }
-  
-        .topnav {
-          overflow: hidden;
-          background-color: #333;
-        }
-  
-        .topnav a {
-          float: left;
-          color: #f2f2f2;
-          text-align: center;
-          padding: 14px 16px;
-          text-decoration: none;
-          font-size: 17px;
-        }
+          font-family: "Times New Roman", Times, serif;
+          background-color: #e0ffff;
+      }
+
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+      .header {
+          position: fixed;
+          left: 0;
+          top: 80px;
+          width: 100%;
+          margin: 5px;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-color: #fafad2;
+          text-indent: 10px;
+          border-width: thick;
+          border-color: purple;
+    }
+
+    .borders{
+        overflow: scroll;
+        top: 100px;
+        position: relative;
+        background-color: #e0ffff;
+        font-family: "Monaco", monospace;
+        margin-top: 40px;
+        margin: 20px;
+        height: 300px;
+        width: 600px;
+        background-color: #fff0f5;
+    }
     </style>
 <head>
     <meta charset="UTF-8">
@@ -32,9 +59,12 @@
  <div class="topnav">
   <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
+  <a href="{% url 'portal:logout' %}">Log Out</a>
 </div>
 <div class="borders">
+    <div class="header">
     <h1>{{class}}</h1>
+    </div>
     <div>
         {% for class in classData %}
         <form action="{% url 'portal:add_class' year %}" method="post">
@@ -47,9 +77,9 @@
                 <h4>&emsp; Room: {{meeting.facility_descr}}</h4>
                 <h4>&emsp; Instructor: {{meeting.instructor}}</h4>
             {% endfor %}
-        <button name="Class_nbr" value="{{class.class_nbr}}" name>Add Class</button>
+            <button name="Class_nbr" value="{{class.class_nbr}}" name>Add Class</button>
+        </form>
         {% endfor %}
-            </form>
     </div>
 </div>
 </body>
