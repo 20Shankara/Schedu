@@ -40,7 +40,7 @@ class Student(models.Model):
         default='',
     )
     schedule = models.ForeignKey('Schedule', on_delete=models.CASCADE, blank=True, null=True, default='')
-
+    shopping_cart = models.ForeignKey('ShoppingCart', on_delete=models.CASCADE, blank=True, null=True, default='')
     def __str__(self):
         return self.student_email
 
@@ -85,6 +85,14 @@ class ClassSection(models.Model):
 
 
 class Schedule(models.Model):
+    season = models.CharField(max_length=255)
+    classes = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        null=True,
+    )
+
+class ShoppingCart(models.Model):
     season = models.CharField(max_length=255)
     classes = ArrayField(
         models.CharField(max_length=255),
