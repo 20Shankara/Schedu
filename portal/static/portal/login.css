@@ -1,6 +1,7 @@
 body {
     margin: 5px;
-    font-family: "Monaco", monospace;
+    font-family: "Trebuchet MS", Tahoma, sans-serif;
+    /* font-family: "Monaco", monospace; */
     background-color: purple;
 }
 

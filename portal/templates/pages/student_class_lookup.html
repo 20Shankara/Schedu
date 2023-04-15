@@ -75,21 +75,25 @@
 <div class="header">
     <h2>Find Classes</h2><br>
 </div>
-    {% if error != "" %}
-        {{error}}
-    {% endif %}
-    <div class="borders">
+
+{% if error != "" %}
+    {{error}}
+{% endif %}
+<div class="borders">
     <form action="{% url 'portal:class_results' %}" method="post">
         {% csrf_token %}
 
         <!-- -----------YEAR----------- -->
-        <label for="year">Year: </label>
+        <span class ="label year">Year: </span>
+        <!-- <label for="year">Year: </label> -->
         <select id="year" name="year">
             <option value="2">Spring 2023</option>
             <option value="8"> Fall 2023 </option>
         </select><br><br>
         <!-- -----------DEPARTMENT----------- -->
         <label for="department">Department: </label>
+        <!-- <span class ="label department">Department: </span> -->
+
         <select id="department" name="department" required>
             <option readonly value="">--select--</option>
             {% for department in departments %}
