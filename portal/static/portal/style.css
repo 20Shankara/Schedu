@@ -18,6 +18,45 @@ body {
   font-size: 17px;
 }
 
-.borders {
-    padding: 2%;
+.header {
+  position: fixed;
+  left: 0;
+  top: 80px;
+  width: 100%;
+  margin: 5px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: #fafad2;
+  text-indent: 10px;
+  border-width: thick;
+  border-color: blue;
+}
+
+.borders{
+  overflow: scroll;
+  top: 100px;
+  position: relative;
+  background-color: #e0ffff;
+  font-family: "Monaco", monospace;
+  margin-top: 40px;
+  margin: 20px;
+  height: 300px;
+  width: 600px;
+  background-color: #fff0f5;
+}
+
+.info {
+  text-align: left;
+  /* border-margin: 30px; */
+  border-color: grey;
+  overflow: scroll;
+  height: 700px;
+  width: 500px;
+  margin: 50px;
+  background-color: beige;
+}
+
+.button{
+  margin: 10px;
 }
