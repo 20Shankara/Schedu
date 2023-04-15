@@ -88,7 +88,7 @@ p {
   height: 700px;
   width: 500px;
   margin: 50px;
-  background-color: rgb(123, 123, 65);
+  background-color: rgb(255, 255, 255);
 }
 .label {
   color: #232D4B;
@@ -98,6 +98,17 @@ p {
 .year {background-color: #FFFFFF;}
 .department {background-color: #FFFFFF;}
 
-.button{
+/* .button{
   margin: 10px;
+} */
+
+.submit {
+  background-color: #232D4B; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
