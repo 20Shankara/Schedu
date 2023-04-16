@@ -418,7 +418,7 @@ def student_shopping_cart(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     shopping_cart = []
     print(student_logged_in.shopping_cart)
-    if (len(student_logged_in.shopping_cart.classes) == 0) or (student_logged_in.shopping_cart is None):
+    if (student_logged_in.shopping_cart is None) or (len(student_logged_in.shopping_cart.classes) == 0):
         return render(request, 'pages/student_shopping_cart.html', {"shopping_cart": "empty"})
     else:
         for item in student_logged_in.shopping_cart.classes:
