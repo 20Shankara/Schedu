@@ -23,10 +23,16 @@ urlpatterns = [
     path('student_schedule', views.student_schedule, name='student_schedule'),
     # Student's Schedule Conflict Page
     path('student_schedule_warning', views.student_schedule_warning, name='student_schedule_conflict'),
-    # Add Class
+    # Add Class to Shopping Cart
     path('<str:year>/add_class', views.add_class, name='add_class'),
+    # Shopping Cart
+    path('student_shopping_cart', views.student_shopping_cart, name='student_shopping_cart'),
     # Remove Class
     path('remove_class', views.remove_class, name='remove_class'),
+    #Add Class to Schedule
+    path('<str:year>/add_to_schedule', views.add_to_schedule, name='add_to_schedule'),
+    #Remove Class to Schedule
+    path('remove_from_shopping', views.remove_from_shopping, name='remove_from_shopping'),
 
     # -----------------------------------------------------------------------------------------------------
 
