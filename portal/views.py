@@ -2,6 +2,7 @@ import datetime
 import json
 
 import requests
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.core import serializers
 from django.http import HttpResponseRedirect
@@ -137,6 +138,7 @@ def student_schedule_warning(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
     print(student_logged_in.schedule)
+    # this if statement shouldn't be necessary...since no conflict will arise if schedule is empty
     if len(student_logged_in.schedule.classes) == 0:
         return render(request, 'pages/student_schedule.html', {"schedule": "empty"})
     else:
@@ -293,6 +295,7 @@ def add_to_schedule(request, year):
     else:
         # todo: add some messaging here to alert people
         # https://www.youtube.com/watch?v=VIx3HD2gRWQ
+        messages.warning(request, 'Class Conflict.')
         print("todo: remove this...but there was a conflict, so not added")
         return HttpResponseRedirect(reverse('portal:student_schedule_conflict'))
 
