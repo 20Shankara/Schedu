@@ -1,5 +1,4 @@
-
-
+<!DOCTYPE html>
 <!--** WANT THIS: https://mdbootstrap.com/docs/standard/navigation/navbar/ -->
 {% load socialaccount %}
 {% load static %}
@@ -64,8 +63,8 @@
 <!-- NAVIGATION -->
  <div class="topnav">
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
-  <a href="{% url 'portal:student_shopping_cart'%}">Shopping Cart</a>
   <a href="{% url 'portal:student_schedule' %}">Schedule</a>
+  <a href="{% url 'portal:student_shopping_cart'%}">Shopping Cart</a>
   <a href="{% url 'portal:logout' %}">Log Out</a>
 </div>
 
