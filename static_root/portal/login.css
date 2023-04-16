@@ -1,0 +1,10 @@
+body {
+    margin: 5px;
+    font-family: "Monaco", monospace;
+    background-color: purple;
+}
+
+.authenticated {
+    border-style: ridge;
+    border-margin: 5px;
+}
