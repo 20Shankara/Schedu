@@ -154,7 +154,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
+STATICFILES_DIRS = [
+    os.path.join("portal", 'static'),
+]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # added for google login
 
 # Default primary key field type

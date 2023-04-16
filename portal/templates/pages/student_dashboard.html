@@ -2,6 +2,9 @@
 <!--** WANT THIS: https://mdbootstrap.com/docs/standard/navigation/navbar/ -->
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
   <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
@@ -57,9 +60,6 @@
     <title>Dashboard</title>
 </head>
 <body>
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 <!-- NAVIGATION -->
  <div class="topnav">
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
