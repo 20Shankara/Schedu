@@ -1,5 +1,8 @@
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
   <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
@@ -36,7 +39,7 @@
     <a href="{% url 'portal:logout' %}">Log Out</a>
   </div>
     <!-- CONTENT -->
-    <div class="header">
+    <div>
       <h2>Shopping Cart:</h2>
     </div>
     {% if shopping_cart != "empty" %}
