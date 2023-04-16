@@ -1,62 +1,114 @@
 body {
     margin: 0;
-    font-family: "Times New Roman", Times, serif;
+    /* font-family: "Times New Roman", Times, serif; */
+    /* font-family: 'Helvetica', 'Arial', sans-serif; */
+    font-family: "Trebuchet MS", Tahoma, sans-serif;
+
 }
 
 /* Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp */
+
+/* topnav creates the actual bar and changes the colors */
 .topnav {
   overflow: hidden;
-  background-color: #333;
+  background-color: #232D4B;
 }
 
+/* topnav a styles the links inside the nav bar */
 .topnav a {
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
   float: left;
-  color: #f2f2f2;
+  color: #FFFFFF;
   text-align: center;
-  padding: 14px 16px;
+  padding: 14px 40px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 18px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #db9b5b;
+  color: #232D4B;
 }
 
 .header {
-  position: fixed;
+  position: fixed; 
+  /* change position */
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
   left: 0;
-  top: 80px;
+  top: 60px;
   width: 100%;
-  margin: 5px;
+  margin: 20px;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-color: #fafad2;
-  text-indent: 10px;
+  background-color: #ffffff;
+  /* text-indent: 10px; */
+  text-indent: 30px;
+  color: #232D4B;
   border-width: thick;
-  border-color: blue;
+  border-color: rgb(255, 255, 255);
+}
+
+.header h4 {
+  font-size: 40px;
+}
+
+/* div {
+  background-color: #F0EDE4;
+  color: #232D4B;
+} */
+
+p {
+  color: #232D4B;
+  text-indent: 30px;
+  /* text-transform: uppercase; */
 }
 
 .borders{
+  color: #232D4B;
   overflow: scroll;
-  top: 100px;
+  top: 70px;
   position: relative;
-  background-color: #e0ffff;
-  font-family: "Monaco", monospace;
+  background-color: #ffffff;
+  text-indent: 30px;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
   margin-top: 40px;
   margin: 20px;
   height: 300px;
   width: 600px;
-  background-color: #fff0f5;
+  /* background-color: #fff0f5; */
 }
 
 .info {
   text-align: left;
   /* border-margin: 30px; */
-  border-color: grey;
+  border-color: rgb(255, 255, 255);
   overflow: scroll;
   height: 700px;
   width: 500px;
   margin: 50px;
-  background-color: beige;
+  background-color: rgb(255, 255, 255);
 }
+.label {
+  color: #232D4B;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  /* padding: 8px; */
+}
+.year {background-color: #FFFFFF;}
+.department {background-color: #FFFFFF;}
 
-.button{
+/* .button{
   margin: 10px;
+} */
+
+.submit {
+  background-color: #232D4B; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
 }
