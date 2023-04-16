@@ -31,6 +31,10 @@ body {
   color: #232D4B;
 }
 
+.topnav-right {
+  float: right;
+}
+
 .header {
   /* position: fixed;  */
   /* change position */
