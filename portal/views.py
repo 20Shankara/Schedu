@@ -281,10 +281,14 @@ def add_to_schedule(request, year):
     else:
         schedule = student_logged_in.schedule
 
-    if (not str(c.pk) in schedule.classes) & (not conflict):
+    if (not str(c.pk) in schedule.classes) and (not conflict) and (schedule.credit_count() + int(c.units[0]) <= 12):
         print("no conflicts with adding this class")
         schedule.classes.append(c.pk)
         schedule.save()
+        cart = student_logged_in.shopping_cart
+        print(cart.classes)
+        cart.classes.remove(str(c.pk))
+        cart.save()
         return HttpResponseRedirect('/student_schedule')
     else:
         # todo: add some messaging here to alert people
@@ -347,8 +351,8 @@ def add_class(request, year):
         student_logged_in.save()
     else:
         shopping_cart = student_logged_in.shopping_cart
-    print("!!!!!!!!!!!!!!")
-    print(str(c.pk))
+
+
     if (not str(c.pk) in shopping_cart.classes):
         shopping_cart.classes.append(c.pk)
         shopping_cart.save()

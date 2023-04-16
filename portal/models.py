@@ -91,6 +91,13 @@ class Schedule(models.Model):
         blank=True,
         null=True,
     )
+    def credit_count(self):
+        creditCount = 0
+        for c in self.classes:
+            curClass = ClassSection.objects.get(pk=c)
+            creditCount += int(curClass.units[0])
+        return creditCount
+
 
 class ShoppingCart(models.Model):
     season = models.CharField(max_length=255)
