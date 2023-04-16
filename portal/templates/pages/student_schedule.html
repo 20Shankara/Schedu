@@ -47,10 +47,23 @@
     <title>Schedule</title>
 </head>
   <body>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message | safe }}
+        </div>
+    {% endfor %}
+
     <!-- NAVIGATION -->
     <div class="topnav">
       <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
       <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
+      <a href="{% url 'portal:student_schedule' %}">Schedule</a>
       <a href="{% url 'portal:student_shopping_cart' %}">Shopping Cart</a>
       <div class="topnav-right">
         <a href="{% url 'portal:logout' %}">Log Out</a>

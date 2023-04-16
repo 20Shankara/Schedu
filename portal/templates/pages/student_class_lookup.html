@@ -66,8 +66,9 @@
 <!-- NAVIGATION -->
  <div class="topnav">
   <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
-  <a href="{% url 'portal:student_shopping_cart'%}">Shopping Cart</a>
+  <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
   <a href="{% url 'portal:student_schedule'%}">Schedule</a>
+  <a href="{% url 'portal:student_shopping_cart'%}">Shopping Cart</a>
   <div class="topnav-right">
     <a href="{% url 'portal:logout' %}">Log Out</a>
   </div>
@@ -89,25 +90,26 @@
         <form action="{% url 'portal:class_results' %}" method="post">
             {% csrf_token %}
 
-            <!-- -----------YEAR----------- -->
-            <span class ="label year">Year: </span>
-            <!-- <label for="year">Year: </label> -->
-            <select id="year" name="year">
-                <option value="2">Spring 2023</option>
-                <option value="8"> Fall 2023 </option>
-            </select>
-            <br><br>
+            <div class="filters_lookup">
+                <span class ="label bogus"></span><br>
+                <!-- -----------YEAR----------- -->
+                <span class ="label year">Year: </span><br>
+                <select id="year" name="year">
+                    <option value="2">Spring 2023</option>
+                    <option value="8"> Fall 2023 </option>
+                </select>
+                <br><br>
 
-            <!-- -----------DEPARTMENT----------- -->
-            <label for="department">Department: </label>
-            <!-- <span class ="label department">Department: </span> -->
-            <select id="department" name="department" required>
-                <option readonly value="">--select--</option>
-                {% for department in departments %}
-                    <option value={{department}}>{{department}}</option>
-                {% endfor %}
-            </select>
-            <br><br>
+                <!-- -----------DEPARTMENT----------- -->
+                <span class ="label department">Department: </span>
+                <select id="department" name="department" required>
+                    <option readonly value="">--select--</option>
+                    {% for department in departments %}
+                        <option value={{department}}>{{department}}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+            </div>
 
             <!-- -----------COURSE NUMBER----------- -->
         <!--    <label for="course_number">Course Number (ex. 2150): </label>-->
