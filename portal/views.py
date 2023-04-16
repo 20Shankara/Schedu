@@ -376,7 +376,7 @@ def remove_from_shopping(request):
     print(student_logged_in)
     student_logged_in.shopping_cart.classes.remove(request.POST['class_pk'])
     student_logged_in.shopping_cart.save()
-    return HttpResponseRedirect(reverse('portal:home'))
+    return HttpResponseRedirect(reverse('portal:student_shopping_cart'))
 
 def manage_students(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)

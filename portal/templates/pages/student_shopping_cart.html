@@ -52,10 +52,10 @@
               {% csrf_token %}
                 <button name="class_number" value="{{class.fields.class_nbr}}" name>Add to Schedule</button>
             </form>
-            <!-- <form action="{% url 'portal:remove_from_shopping' %}" method="post">
+            <form action="{% url 'portal:remove_from_shopping' %}" method="post">
                 {% csrf_token %}
-                <button name="remove_from_shopping" value="{{class.pk}}" name>Remove Class</button>
-            </form> -->
+                <button name="class_pk" value="{{class.pk}}" name>Remove Class</button>
+            </form>
         {% endfor %}
         </div>
     {% else %}
