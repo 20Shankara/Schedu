@@ -221,8 +221,8 @@ def checkForConflicts(student_user, meetings):
         print("No conflict")
         return False
 
-def create_Schedule(request, year):
-    class_nbr = (request.POST['Class_nbr'])
+def add_to_schedule(request, year):
+    class_nbr = (request.POST['class_number'])
     base_URL = baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
     url = base_URL + "&term=123" + year + "&class_nbr=" + class_nbr
     r = requests.get(url)
@@ -347,7 +347,8 @@ def add_class(request, year):
         student_logged_in.save()
     else:
         shopping_cart = student_logged_in.shopping_cart
-
+    print("!!!!!!!!!!!!!!")
+    print(str(c.pk))
     if (not str(c.pk) in shopping_cart.classes):
         shopping_cart.classes.append(c.pk)
         shopping_cart.save()
@@ -368,6 +369,14 @@ def remove_class(request):
     student_logged_in.schedule.save()
     return HttpResponseRedirect(reverse('portal:home'))
 
+def remove_from_shopping(request):
+    # TODO: have popup here to make sure they want to remove
+    print(request.POST['class_pk'])
+    student_logged_in = Student.objects.get(student_email=request.user.email)
+    print(student_logged_in)
+    student_logged_in.shopping_cart.classes.remove(request.POST['class_pk'])
+    student_logged_in.shopping_cart.save()
+    return HttpResponseRedirect(reverse('portal:home'))
 
 def manage_students(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
