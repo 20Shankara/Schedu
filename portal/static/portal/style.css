@@ -69,6 +69,11 @@ p {
   /* text-transform: uppercase; */
 }
 
+.filters_lookup {
+    margin-left: 40px;
+    float: left;
+}
+
 .borders{
   color: #232D4B;
   overflow: scroll;
@@ -79,8 +84,8 @@ p {
   font-family: "Trebuchet MS", Tahoma, sans-serif;
   margin-top: 40px;
   margin: 20px;
-  height: 300px;
-  width: 600px;
+  height: 700px;
+  width: 700px;
   /* background-color: #fff0f5; */
 }
 
