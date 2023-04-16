@@ -63,12 +63,12 @@
     <div class="header">
   <h2>{{ advisor.advisor_first_name }}'s Dashboard</h2>
     </div>
-  <h4 style="font-size: 18px">Advisor Information: </h4>
+  <!-- <h4 style="font-size: 18px">Advisor Information: </h4> -->
     <div class="borders">
   <p>Name: {{ advisor.advisor_first_name }} {{ advisor.advisor_last_name }}</p>
   <p>Email: {{ advisor.advisor_email }} </p>
   <p>Year: {{ advisor.advisor_department }} </p>
+  <button onclick="{% url 'portal:home' %}">Back to home</button>
 </div>
-<button onclick="{% url 'portal:home' %}">Back to home</button>
 </body>
 </html>
