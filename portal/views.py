@@ -462,6 +462,7 @@ def approve_schedule(request):
     schedule.is_approved = True
     schedule.save()
     msg = "Approved Schedule for " + student.student_first_name + ' ' + student.student_last_name
+    list(messages.get_messages(request))
     messages.success(request, msg)
     return HttpResponseRedirect('/advisor_dashboard')
 
