@@ -1,5 +1,8 @@
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
     <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
     <!-- <style>
@@ -54,7 +57,15 @@
     <title>Dashboard</title>
 </head>
 <body>
-<!-- NAVIGATION --> 
+ {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message | safe }}
+        </div>
+    {% endfor %}
+<!-- NAVIGATION -->
 <div class="topnav">
   <a href="{% url 'portal:manage_students' %}">Manage Students</a>
   <div class="topnav-right">
