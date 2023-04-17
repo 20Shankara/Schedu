@@ -284,7 +284,7 @@ def add_to_schedule(request, year):
     else:
         schedule = student_logged_in.schedule
 
-    if (not str(c.pk) in schedule.classes) and (not conflict) and (schedule.credit_count() + int(c.units[0]) <= 12):
+    if (not str(c.pk) in schedule.classes) and (not conflict) and (schedule.credit_count() + int(c.units[0]) <= 17):
         print("no conflicts with adding this class")
         schedule.classes.append(c.pk)
         schedule.save()
