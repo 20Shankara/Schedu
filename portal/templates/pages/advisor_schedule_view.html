@@ -79,7 +79,15 @@
               <h4>&emsp; Room: {{class.fields.facility_descr}}</h4>
               <h4>&emsp; Instructor: {{class.fields.instructor}}</h4>
       {% endfor %}
-        <button name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br>
+
+      {% if is_approved %}
+            <label> Schedule has already been approved</label>
+      {% else %}
+        <form action="{% url 'portal:approve_schedule' %}" method="post" >
+            {% csrf_token %}
+            <button type="submit" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br>
+        </form>
+      {% endif %}
         </div>
   </body>
 </html>

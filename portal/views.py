@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.core import serializers
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 # from https://pynative.com/parse-json-response-using-python-requests-library/ for HTTPError
 from requests.exceptions import HTTPError
@@ -416,6 +416,7 @@ def student_profile(request):
 def advisor_schedule_view(request):
     print((request.POST['student_email']))
     student_advisee = Student.objects.get(student_email=request.POST['student_email'])
+    s = student_advisee.schedule
     schedule = []
     if student_advisee.schedule is None:
         return render(request, 'pages/advisor_schedule_view.html', {"schedule": {}})
@@ -425,7 +426,7 @@ def advisor_schedule_view(request):
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
-        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee})
+        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee, "is_approved": s.is_approved})
 
 
 def student_shopping_cart(request):
@@ -454,3 +455,13 @@ def student_shopping_cart(request):
                 d['fields']['start_time'] = st_time_str_2
                 d['fields']['end_time'] = en_time_str_2
         return render(request, 'pages/student_shopping_cart.html', {"shopping_cart": data})
+
+def approve_schedule(request):
+    student = Student.objects.get(student_email=request.POST['approve_schedule'])
+    schedule = Schedule.objects.get(pk=student.schedule.pk)
+    schedule.is_approved = True
+    schedule.save()
+    msg = "Approved Schedule for " + student.student_first_name + ' ' + student.student_last_name
+    messages.success(request, msg)
+    return HttpResponseRedirect('/advisor_dashboard')
+
