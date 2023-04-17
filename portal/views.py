@@ -277,7 +277,7 @@ def add_to_schedule(request, year):
     # Check if student has a schedule
     schedule = None
     if student_logged_in.schedule is None:
-        schedule = Schedule(season=year, classes=[])
+        schedule = Schedule(season=year, classes=[], is_approved=False)
         schedule.save()
         student_logged_in.schedule = schedule
         student_logged_in.save()
