@@ -91,6 +91,7 @@ class Schedule(models.Model):
         blank=True,
         null=True,
     )
+    is_approved = models.BooleanField()
     def credit_count(self):
         creditCount = 0
         for c in self.classes:
