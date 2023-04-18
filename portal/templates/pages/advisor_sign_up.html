@@ -58,7 +58,7 @@
 <div class="header">
 <h1>Advisor Sign-Up</h1>
 </div>
-<form novalidate action="{% url 'portal:advisor_link' %}" method="post">
+<form action="{% url 'portal:advisor_link' %}" method="post">
     {% csrf_token %}
     <!-- from https://www.w3schools.com/tags/att_input_readonly.asp -->
     <div class="borders">

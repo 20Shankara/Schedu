@@ -87,7 +87,7 @@
 
 <div class="borders">
     <div class="custom-select" style="width:200px;">
-        <form action="{% url 'portal:class_results' %}" method="post">
+        <form name="class_search" action="{% url 'portal:class_results' %}" method="post">
             {% csrf_token %}
 
             <div class="filters_lookup">
@@ -109,6 +109,11 @@
                     {% endfor %}
                 </select>
                 <br><br>
+
+                <!-- -----------Course Number ----------- -->
+                <span class ="label course number">Course Number: </span> <br>
+                <input type="course_num" id="course_num" name="course_num" placeholder="i.e. 1010, etc. "><br>
+                <br><br>
             </div>
 
             <!-- -----------COURSE NUMBER----------- -->
@@ -123,9 +128,12 @@
         <!--        <input type="checkbox" name="days[]" value="Th">Thursday</input>-->
         <!--        <input type="checkbox" name="days[]" value="Fr">Friday</input><br><br>-->
         <!--    <input type="checkbox" name="enrl_stat" id="enrl_stat" value="O" checked = "checked">Only show open classes</input><br><br>-->
+
             <button type="submit">Search</button>
         </form>
     </div>
 </div>
+
+
 </body>
 </html>

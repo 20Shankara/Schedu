@@ -76,7 +76,12 @@ def student_class_lookup(request):
 
 def class_results(request):
     test_student = Student.objects.get(student_email=request.user.email)
-    classes = Class.objects.filter(subject=request.POST['department']).order_by('catalog_nbr')
+    class_nbr = request.POST['course_num']
+    if class_nbr != "":
+        print("Class Number: " + class_nbr)
+        classes = Class.objects.filter(subject=request.POST['department']).filter(catalog_nbr=class_nbr)
+    else:
+        classes = Class.objects.filter(subject=request.POST['department']).order_by('catalog_nbr')
     return render(request, 'pages/class_results.html',
                   {"classes": classes, "student": test_student, "year": request.POST['year']})
 
