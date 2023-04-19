@@ -1,9 +1,6 @@
 body {
     margin: 0;
-    /* font-family: "Times New Roman", Times, serif; */
-    /* font-family: 'Helvetica', 'Arial', sans-serif; */
     font-family: "Trebuchet MS", Tahoma, sans-serif;
-
 }
 
 /* Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp */
@@ -27,28 +24,30 @@ body {
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  background-color: #db9b5b;
+  /* background-color: #db9b5b; */
+  background-color: #E57200;
   color: #232D4B;
 }
 
 .header {
-  position: fixed; 
+  position: sticky; 
   /* change position */
   font-family: "Trebuchet MS", Tahoma, sans-serif;
   left: 0;
-  top: 60px;
+  top: 100px;
   width: 100%;
   margin: 20px;
-  background-position: center;
+  /* background-position: center;
   background-size: cover;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
   background-color: #ffffff;
   /* text-indent: 10px; */
   text-indent: 30px;
   color: #232D4B;
-  border-width: thick;
+  /* border-width: thick; */
   border-color: rgb(255, 255, 255);
 }
+
 
 .header h4 {
   font-size: 40px;
@@ -68,7 +67,7 @@ p {
 .borders{
   color: #232D4B;
   overflow: scroll;
-  top: 70px;
+  top: 30px;
   position: relative;
   background-color: #ffffff;
   text-indent: 30px;
@@ -86,7 +85,7 @@ p {
   border-color: rgb(255, 255, 255);
   overflow: scroll;
   height: 700px;
-  width: 500px;
+  width: 1000px;
   margin: 50px;
   background-color: rgb(255, 255, 255);
 }
@@ -95,15 +94,18 @@ p {
   font-family: "Trebuchet MS", Tahoma, sans-serif;
   /* padding: 8px; */
 }
-.year {background-color: #FFFFFF;}
+.year {
+  background-color: #FFFFFF;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+}
 .department {background-color: #FFFFFF;}
 
 /* .button{
   margin: 10px;
 } */
 
-.submit {
-  background-color: #232D4B; /* Green */
+/* .submit {
+  background-color: #232D4B;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -111,4 +113,17 @@ p {
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
-}
+} */
+/* 
+.button{
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+} */
+/* 
+.form-select{
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+} */
+
+/* .dropdown-menu li{
+  font-family:'Trebuchet MS", Tahoma, sans-serif' !important;
+  font-size:16px
+} */

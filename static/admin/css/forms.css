@@ -243,6 +243,7 @@ fieldset.collapsed .collapse-toggle {
 
 fieldset.monospace textarea {
     font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+    /* font-family: "Trebuchet MS", Tahoma, sans-serif; */
 }
 
 /* SUBMIT ROW */

@@ -3,64 +3,19 @@
 <!--** WANT THIS: https://mdbootstrap.com/docs/standard/navigation/navbar/ -->
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
   <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
-  <!-- <style>
-        body {
-          font-family: "Times New Roman", Times, serif;
-          background-color: #e0ffff;
-      }
-
-      .topnav {
-        overflow: hidden;
-        background-color: #333;
-      }
-
-      .topnav a {
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-      }
-      .header {
-          position: fixed;
-          left: 0;
-          top: 80px;
-          width: 100%;
-          margin: 5px;
-          background-position: center;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-color: #fafad2;
-          text-indent: 10px;
-          border-width: thick;
-          border-color: purple;
-    }
-
-    .borders{
-        overflow: scroll;
-        top: 100px;
-        position: relative;
-        background-color: #e0ffff;
-        font-family: "Monaco", monospace;
-        margin-top: 40px;
-        margin: 20px;
-        height: 300px;
-        width: 600px;
-        background-color: #fff0f5;
-    }
-    </style> -->
+  
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
 <body>
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+
 <!-- NAVIGATION -->
  <div class="topnav">
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
