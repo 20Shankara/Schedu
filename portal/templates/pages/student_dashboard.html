@@ -1,5 +1,3 @@
-
-
 <!--** WANT THIS: https://mdbootstrap.com/docs/standard/navigation/navbar/ -->
 {% load socialaccount %}
 {% load static %}
@@ -8,7 +6,6 @@
 {% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
-  <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
   
 <head>
     <meta charset="UTF-8">
@@ -17,22 +14,27 @@
 <body>
 
 <!-- NAVIGATION -->
- <div class="topnav">
+<!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
+<div class="topnav">
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
   <a href="{% url 'portal:student_schedule' %}">Schedule</a>
   <a href="{% url 'portal:student_shopping_cart'%}">Shopping Cart</a>
-  <a href="{% url 'portal:logout' %}">Log Out</a>
+  <div class="topnav-right">
+    <a href="{% url 'portal:logout' %}">Log Out</a>
+  </div>
 </div>
 
 <!-- CONTENT -->
-<div class="header">
-  <h2>{{ student.student_first_name }}'s Dashboard</h2>
-</div>
-<div class="borders">
-  <h4>Student Information: </h4>
-  <p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
-  <p>Email: {{ student.student_email }} </p>
-  <p>Year: {{ student.year_in_school }} </p>
+<div class="container-fluid"> 
+  <div class="header">
+    <h2>{{ student.student_first_name }}'s Dashboard</h2>
+  </div>
+  <div class="borders">
+    <h4>Student Information: </h4>
+    <p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
+    <p>Email: {{ student.student_email }} </p>
+    <p>Year: {{ student.year_in_school }} </p>
+  </div>
 </div>
 </body>
 </html>

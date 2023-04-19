@@ -24,9 +24,13 @@ body {
 
 /* Change the color of links on hover */
 .topnav a:hover {
-  /* background-color: #db9b5b; */
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
   background-color: #E57200;
   color: #232D4B;
+}
+
+.topnav-right {
+  float: right;
 }
 
 .header {
@@ -66,7 +70,7 @@ p {
 
 .borders{
   color: #232D4B;
-  overflow: scroll;
+  /* overflow: scroll; */
   top: 30px;
   position: relative;
   background-color: #ffffff;
@@ -127,3 +131,8 @@ p {
   font-family:'Trebuchet MS", Tahoma, sans-serif' !important;
   font-size:16px
 } */
+
+.btn-dark{
+  background-color: #232D4B !important;
+  margin-left: 30px;
+}
