@@ -160,3 +160,7 @@ p {
   width: 100%;
   /* background-color: #fff0f5; */
 }
+
+.custom {
+  width: 200px !important;
+}

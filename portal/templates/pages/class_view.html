@@ -1,4 +1,9 @@
+{% load socialaccount %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load static %}
+
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <!DOCTYPE html>
 <html lang="en">
@@ -9,18 +14,40 @@
 </head>
 <body>
 <!-- NAVIGATION -->
- <div class="topnav">
+<div class="topnav">
   <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
   <div class="topnav-right">
     <a href="{% url 'portal:logout' %}">Log Out</a>
   </div>
 </div>
-<div class="borders">
-    <div class="header">
-    <h1>{{class}}</h1>
+
+<!-- Abby note: need to set minimum page length so that footer doesn't move up all the way -->
+<div class="container-flex">
+    <div class="border2">
+        <h2>{{class}}</h2>
+        {% for class in classData %}
+        <form action="{% url 'portal:add_class' year %}" method="post">
+            {% csrf_token %}
+            <h5> Section Number: {{class.class_section}} - {{class.section_type}}</h5>
+            <h6>&emsp; Enrollment: {{class.enrollment_total}} / {{class.class_capacity}}</h6>
+            {% for meeting in class.meetings %}
+                <h6>&emsp; Time: {{meeting.start_time}} - {{meeting.end_time}}</h6>
+                <h6>&emsp; Days: {{meeting.days}} </h6>
+                <h6>&emsp; Room: {{meeting.facility_descr}}</h6>
+                <h6>&emsp; Instructor: {{meeting.instructor}}</h6>
+            {% endfor %}
+            <button class="btn btn-outline-dark btn-rounded" name="Class_nbr" value="{{class.class_nbr}}" name>Add Class</button>
+        </form>
+        {% endfor %}
     </div>
-    <div>
+</div>
+
+
+    <!-- <div class="header">
+    <h1>{{class}}</h1>
+    </div> -->
+    <!-- <div>
         {% for class in classData %}
         <form action="{% url 'portal:add_class' year %}" method="post">
             {% csrf_token %}
@@ -35,7 +62,39 @@
             <button name="Class_nbr" value="{{class.class_nbr}}" name>Add Class</button>
         </form>
         {% endfor %}
-    </div>
-</div>
+    </div> -->
+
 </body>
+
+
+<footer class="bg-white text-center text-lg-start">
+  <!-- Grid container -->
+  <div class="container p-4">
+    <!--Grid row-->
+    <div class="row">
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3 text-light" style="background-color: #232D4B;">
+    © 2023 Copyright: Abby Dhakal, Gavin Fortner, Ananya Ananda, Ashwin Shankar, Caleb Lee
+  </div>
+  <!-- Copyright -->
+</footer>
+
 </html>

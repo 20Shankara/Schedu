@@ -1,3 +1,7 @@
+{% load socialaccount %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 {% load static %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <!DOCTYPE html>
@@ -18,18 +22,51 @@
 </div>
 
 <!-- CONTENT -->
-<div class="borders">
-    <div class="header">
-    <h2>Classes: </h2>
-    </div>
+<div class="container-fluid">
+  <div class="border2">
+    <h2>Classes</h2>
+    <h5>Please click on a class you would like to view</h5>
     <form action="{% url 'portal:class_view' year %}" method="post">
         <div>
         {% csrf_token %}
         {% for Class in classes %}
-        <button name="ClassPK" value={{Class.pk}}> {{Class.catalog_nbr}} - {{Class.descr}}</button><br>
+        <!-- Abby note: can we implement a search feature for the buttons? or a better way to organize the buttons?-->
+        <!-- Abby note: maybe add a <- (back) button on top left corner -->
+        <button class="btn btn-outline-dark btn-rounded" name="ClassPK" value={{Class.pk}}> {{Class.catalog_nbr}} - {{Class.descr}}</button><br>
         {% endfor %}
         </div>
     </form>
+  </div>
 </div>
 </body>
+
+<footer class="bg-white text-center text-lg-start">
+  <!-- Grid container -->
+  <div class="container p-4">
+    <!--Grid row-->
+    <div class="row">
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3 text-light" style="background-color: #232D4B;">
+    © 2023 Copyright: Abby Dhakal, Gavin Fortner, Ananya Ananda, Ashwin Shankar, Caleb Lee
+  </div>
+  <!-- Copyright -->
+</footer>
 </html>
