@@ -32,34 +32,73 @@
     <h4>Student Information: </h4>
   </div>
   <div class="border2">
-    <!-- NAME CARD -->
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/mckim-hall.jpg" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Name:</h5>
-        <h6 class="card-text">{{ student.student_first_name }} {{ student.student_last_name }}</h6>
+    <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+      <!-- NAME CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/mckim-hall.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-title">Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
+            <!-- <p class="card-text">{{ student.student_first_name }} {{ student.student_last_name }}</p> -->
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- EMAIL CARD -->
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/alderman-and-peabody.jpg" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Email:</h5>
-        <h6 class="card-text">{{ student.student_email }}</h6>
+      <!-- EMAIL CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/alderman-and-peabody.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-title">Email: {{ student.student_email }}</p>
+            <!-- <p class="card-text">{{ student.student_email }}</p> -->
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!-- YEAR CARD -->
-    <div class="card" style="width: 18rem;">
-      <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/old-cabell.jpg" alt="Card image cap">
-      <div class="card-body">
-        <h5 class="card-title">Year:</h5>
-        <h6 class="card-text">{{ student.year_in_school }}</h6>
+        
+      <!-- YEAR CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/old-cabell.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-title">Year: {{ student.year_in_school }}</p>
+            <!-- <p class="card-text">{{ student.year_in_school }}</p> -->
+          </div>
+        </div>
       </div>
-    </div>
 
+    </div>
   </div>
+</div>
+
+    <!-- <div class="card-deck">
+
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/mckim-hall.jpg" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Name:</h5>
+          <h6 class="card-text">{{ student.student_first_name }} {{ student.student_last_name }}</h6>
+        </div>
+      </div>
+
+      
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/alderman-and-peabody.jpg" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Email:</h5>
+          <h6 class="card-text">{{ student.student_email }}</h6>
+        </div>
+      </div>
+
+      
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/old-cabell.jpg" alt="Card image cap">
+        <div class="card-body">
+          <h5 class="card-title">Year:</h5>
+          <h6 class="card-text">{{ student.year_in_school }}</h6>
+        </div>
+      </div>
+    </div> -->
+  
   
 
   <!-- <div class="info">
@@ -68,7 +107,7 @@
     <p>Year: {{ student.year_in_school }} </p>
   </div> -->
 
-</div>
+
 
 </body>
 </html>
