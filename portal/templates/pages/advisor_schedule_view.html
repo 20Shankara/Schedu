@@ -3,6 +3,7 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
   <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
@@ -27,19 +28,23 @@
   <div class="border2">
     <form action="{% url 'portal:student_profile' %}" method="post">
       {% csrf_token %}
-      <button class="btn btn-outline-dark btn-rounded" name="advisee_email" value={{advisee.student_email}}>Return to Student's Profile</button><br>
     </form>
-    
     <h2>{{advisee.student_first_name}} {{advisee.student_last_name}}'s Schedule:</h2>
     {% for class in schedule %}
-      <h2> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.class_section}} - {{class.fields.section_type}}</h2>
-      <h4>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h4>
-          <h4>&emsp; Time: {{class.fields.start_time}} - {{class.fields.end_time}}</h4>
-          <h4>&emsp; Days: {{class.fields.days}} </h4>
-          <h4>&emsp; Room: {{class.fields.facility_descr}}</h4>
-          <h4>&emsp; Instructor: {{class.fields.instructor}}</h4>
+    <h5> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.class_section}} - {{class.fields.section_type}}</h5>
+    <h6>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h6>
+        <h6>&emsp; Time: {{class.fields.start_time}} - {{class.fields.end_time}}</h6>
+        <h6>&emsp; Days: {{class.fields.days}} </h6>
+        <h6>&emsp; Room: {{class.fields.facility_descr}}</h6>
+        <h6>&emsp; Instructor: {{class.fields.instructor}}</h6>
     {% endfor %}
-    <button class="btn btn-outline-dark btn-rounded" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br>
+    <br></br>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-dark btn-rounded" name="advisee_email" value={{advisee.student_email}}>Return to Student's Profile</button>
+      <button type="button" class="btn btn-dark btn-secondary" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button>
+    </div>
+    <!-- Abby note: the button links don't work -->
+    <!-- Abby note: the dark button colors are wrong on the advisor end -->
   </div>
 </div>
 <!-- 
@@ -61,5 +66,37 @@
       </div>
     {% endfor %}
   <button name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br> -->
+  <!-- <button class="btn btn-outline-dark btn-rounded" name="advisee_email" value={{advisee.student_email}}>Return to Student's Profile</button><br>
+    <button class="btn btn-dark" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br> -->
 </body>
+
+<footer class="bg-white text-center text-lg-start">
+  <!-- Grid container -->
+  <div class="container p-4">
+    <!--Grid row-->
+    <div class="row">
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3 text-light" style="background-color: #232D4B;">
+    © 2023 Copyright: Abby Dhakal, Gavin Fortner, Ananya Ananda, Ashwin Shankar, Caleb Lee
+  </div>
+  <!-- Copyright -->
+</footer>
 </html>
