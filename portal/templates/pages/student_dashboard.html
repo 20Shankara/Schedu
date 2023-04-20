@@ -27,12 +27,10 @@
 
 <!-- CONTENT -->
 <div class="container-fluid"> 
-  <div class="header">
-    <h2>{{ student.student_first_name }}'s Dashboard</h2>
-    <h4>Student Information: </h4>
-  </div>
   <div class="border2">
-    <div class="row row-cols-1 row-cols-md-3 g-4 text-center">
+    <h2>{{ student.student_first_name }}'s Dashboard</h2>
+    <h5>Student Information </h5>
+    <div class="row row-cols-1 row-cols-md-3 text-center">
       <!-- NAME CARD -->
       <div class="col">
         <div class="card h-100">
@@ -65,9 +63,47 @@
           </div>
         </div>
       </div>
-
     </div>
   </div>
+ <!-- <br></br> -->
+
+  <div class="border2">
+    <h5>Scheduler Actions</h5>
+    <div class="row row-cols-1 row-cols-md-3 text-center">
+      <!-- FIND CLASSES CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/rotunda-lawnside.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <a href="{% url 'portal:student_class_lookup' %}" class="btn btn-dark">Find Classes</a>
+            <!-- <p class="card-text">{{ student.student_first_name }} {{ student.student_last_name }}</p> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW SCHEDULE CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/davenport-field.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <a href="{% url 'portal:student_schedule' %}" class="btn btn-dark">View Schedule</a>
+            <!-- <p class="card-text">{{ student.student_email }}</p> -->
+          </div>
+        </div>
+      </div>
+        
+      <!-- VIEW SHOPPING CART CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/thornton-hall.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <a href="{% url 'portal:student_shopping_cart'%}" class="btn btn-dark">View Shopping Cart</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
     <!-- <div class="card-deck">
