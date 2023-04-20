@@ -27,17 +27,46 @@
 
 <!-- CONTENT -->
 <div class="container-fluid"> 
-  
   <div class="header">
     <h2>{{ student.student_first_name }}'s Dashboard</h2>
     <h4>Student Information: </h4>
   </div>
+  <div class="border2">
+    <!-- NAME CARD -->
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/mckim-hall.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Name:</h5>
+        <h6 class="card-text">{{ student.student_first_name }} {{ student.student_last_name }}</h6>
+      </div>
+    </div>
 
-  <div class="info">
+    <!-- EMAIL CARD -->
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/alderman-and-peabody.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Email:</h5>
+        <h6 class="card-text">{{ student.student_email }}</h6>
+      </div>
+    </div>
+
+    <!-- YEAR CARD -->
+    <div class="card" style="width: 18rem;">
+      <img class="card-img-top" src="https://communications.virginia.edu/sites/communications/files/old-cabell.jpg" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Year:</h5>
+        <h6 class="card-text">{{ student.year_in_school }}</h6>
+      </div>
+    </div>
+
+  </div>
+  
+
+  <!-- <div class="info">
     <p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
     <p>Email: {{ student.student_email }} </p>
     <p>Year: {{ student.year_in_school }} </p>
-  </div>
+  </div> -->
 
 </div>
 
