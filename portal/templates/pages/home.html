@@ -1,6 +1,9 @@
 {% load socialaccount %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'portal/style.css' %}">
+{% load bootstrap5 %}
+{% bootstrap_css %}
+<!-- <link rel="stylesheet" href="{% static 'portal/style.css' %}"> -->
+<link rel="stylesheet" href="{% static 'portal/home.css' %}">
 <html lang="en">
 
 <head>
@@ -8,23 +11,33 @@
     <title>Home</title>
 </head>
 
-<body>
 <!-- reason logic is either sign up or google, is that in view.py -->
 <!--     the logic is already built in for authenticated user -->
 <!--     to check if authenticated user is student/advisor, so only gets to this page -->
 <!--     if not already a student or advisor -->
-
-{% if user.is_authenticated %}
+<body>
+    {% if user.is_authenticated %}
+    <!-- logged in user will always see limited top nav with the option to logout -->
+    <div class="topnav"> 
+        <div class="topnav-right">
+            <a href="{% url 'portal:logout' %}">Log Out</a>
+        </div>
+    </div>
     <div class="header">
-        <h2>Welcome, {{ user.email }}</h2>
-        <h4>Please Log in Or Sign Up</h4>
-    </div>
-    <div class="borders">
-      <a href="{% url 'portal:student_link' %}">Students</a><br>
-      <a href="{% url 'portal:advisor_link' %}">Advisors</a>
-    </div>
-{% else %}
-    <a href="{% provider_login_url 'google' %}">Login With Google</a>
-{% endif %}
+        <div class="mask">
+            <h2>Welcome, {{ user.email }}</h2>
+            <h4>Please Click On Your Role</h4>
+            <a class="btn btn-outline-light btn-lg" href="{% url 'portal:student_link' %}" role="button">Student</a>
+            <a class="btn btn-outline-light btn-lg" href="{% url 'portal:advisor_link' %}" role="button">Advisor</a>
+        </div>
+    </div>    
+
+    <!-- <div class="borders">
+        <a href="{% url 'portal:student_link' %}">Students</a><br>
+        <a href="{% url 'portal:advisor_link' %}">Advisors</a>
+    </div> -->
+    {% else %}
+        <a href="{% provider_login_url 'google' %}">Login With Google</a>
+    {% endif %}
 </body>
 </html>

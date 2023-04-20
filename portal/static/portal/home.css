@@ -1,0 +1,57 @@
+/* Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp */
+
+/* topnav creates the actual bar and changes the colors */
+.topnav {
+    overflow: hidden;
+    background-color: #232D4B;
+  }
+  
+/* topnav a styles the links inside the nav bar */
+.topnav a {
+font-family: "Trebuchet MS", Tahoma, sans-serif;
+float: left;
+color: #FFFFFF;
+text-align: center;
+padding: 14px 40px;
+text-decoration: none;
+font-size: 18px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    font-family: "Trebuchet MS", Tahoma, sans-serif;
+    background-color: #E57200;
+    color: #232D4B;
+  }
+  
+.topnav-right {
+float: right;
+}
+
+/* Header/Logo Title */
+.header {
+    /* padding: 300px; */
+    /* padding-bottom: 37.5%; */
+    /* display: flex; */
+    /* align-items: center; */
+    text-align: center;
+    background: url('https://communications.virginia.edu/sites/communications/files/lawn.jpg') no-repeat center center fixed;
+    background-size: cover;
+
+    /* background-image: url('https://communications.virginia.edu/sites/communications/files/lawn.jpg'); */
+    /* background: #1abc9c; */
+    color: white;
+    font-size: 30px;
+    font-family: "Trebuchet MS", Tahoma, sans-serif;
+    margin: 0;
+  }
+
+.mask{
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 323px;
+}
+
+body {
+    font-family: "Trebuchet MS", Tahoma, sans-serif;
+    margin: 0;
+}

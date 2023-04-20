@@ -98,7 +98,9 @@ p {
   background-color: #FFFFFF;
   font-family: "Trebuchet MS", Tahoma, sans-serif;
 }
-.department {background-color: #FFFFFF;}
+.department {
+  background-color: #FFFFFF;
+}
 
 /* .button{
   margin: 10px;
@@ -124,7 +126,7 @@ p {
 } */
 
 .select{
-  text-emphasis-color: #232D4B !important;
+  color: #232D4B !important;
   font-family: "Trebuchet MS", Tahoma, sans-serif !important;
 }
 /* .dropdown-menu li{
@@ -136,3 +138,17 @@ p {
   background-color: #232D4B !important;
   margin-left: 30px;
 }
+
+.banner{
+  height: 400px;
+  /* padding-bottom: 50%; */
+  background-image: url( 'https://communications.virginia.edu/sites/communications/files/lawn.jpg' );
+  background-size: cover;
+  background-color: white;
+}
+
+/* .hero {
+  padding-bottom: 66.6%; = ( 1600 / 2400 ) x 100
+  background-image: url( 'https://communications.virginia.edu/sites/communications/files/lawn.jpg' );
+  background-size: cover;
+} */
