@@ -1,15 +1,20 @@
+{% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <!DOCTYPE html>
 <html lang="en">
-    <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
     
 <head>
     <meta charset="UTF-8">
     <title>Student Profile</title> <!-- change this to be their name -->
 </head>
 <body>
+
 <!-- NAVIGATION -->
+<!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
  <div class="topnav">
     <a href="{% url 'portal:advisor_dashboard' %}">Dashboard</a>
     <a href="{% url 'portal:manage_students' %}">Manage Students</a>
@@ -19,20 +24,22 @@
 </div>
 
 <!-- CONTENT -->
-<div class="header">
-    <h2>{{ student.student_first_name }} {{ student.student_last_name }}'s Profile</h2>
+<div class="container-flex">
+    <div class="border2">
+        <h2>{{ student.student_first_name }} {{ student.student_last_name }}'s Profile</h2>
+        <h5>Student Information: </h5>
+        <h6>Name: {{ student.student_first_name }} {{ student.student_last_name }}</h6>
+        <h6>Email: {{ student.student_email }} </h6>
+        <h6>Year: {{ student.year_in_school }} </h6>
+        <form action="{% url 'portal:advisor_schedule_view' %}" method="post">
+            <div>
+                {% csrf_token %}
+                <button class="btn btn-outline-dark btn-rounded" name="student_email" value={{student.student_email}}> View Schedule</button><br>
+            </div>
+        </form>
+
     </div>
-<div class="borders">
-    <h4>Student Information: </h4>
-    <p>Name: {{ student.student_first_name }} {{ student.student_last_name }}</p>
-    <p>Email: {{ student.student_email }} </p>
-    <p>Year: {{ student.year_in_school }} </p>
-    <form action="{% url 'portal:advisor_schedule_view' %}" method="post">
-        <div>
-            {% csrf_token %}
-            <button name="student_email" value={{student.student_email}}> View Schedule</button><br>
-        </div>
-    </form>
 </div>
+    
 </body>
 </html>
