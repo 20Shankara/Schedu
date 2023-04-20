@@ -70,10 +70,10 @@ p {
   top: 30px;
   position: relative;
   background-color: #ffffff;
-  text-indent: 30px;
+  text-indent: 10px;
   font-family: "Trebuchet MS", Tahoma, sans-serif;
   margin-top: 40px;
-  margin: 20px;
+  margin: 10px;
   height: 300px;
   width: 600px;
   /* background-color: #fff0f5; */
@@ -92,7 +92,7 @@ p {
 .label {
   color: #232D4B;
   font-family: "Trebuchet MS", Tahoma, sans-serif;
-  /* padding: 8px; */
+  padding: 8px;
 }
 .year {
   background-color: #FFFFFF;
@@ -102,41 +102,14 @@ p {
   background-color: #FFFFFF;
 }
 
-/* .button{
-  margin: 10px;
-} */
-
-/* .submit {
-  background-color: #232D4B;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-} */
-/* 
-.button{
-  font-family: "Trebuchet MS", Tahoma, sans-serif;
-} */
-/* 
-.form-select{
-  font-family: "Trebuchet MS", Tahoma, sans-serif;
-} */
-
 .select{
   color: #232D4B !important;
   font-family: "Trebuchet MS", Tahoma, sans-serif !important;
 }
-/* .dropdown-menu li{
-  font-family:'Trebuchet MS", Tahoma, sans-serif' !important;
-  font-size:16px
-} */
 
 .btn-dark{
   background-color: #232D4B !important;
-  margin-left: 30px;
+  /* margin-left: 30px; */
 }
 
 .banner{
@@ -147,8 +120,37 @@ p {
   background-color: white;
 }
 
-/* .hero {
-  padding-bottom: 66.6%; = ( 1600 / 2400 ) x 100
-  background-image: url( 'https://communications.virginia.edu/sites/communications/files/lawn.jpg' );
-  background-size: cover;
-} */
+.border2{
+  color: #232D4B;
+  /* overflow: scroll; */
+  top: 10px;
+  left: 0;
+  /* text-align: left; */
+  position: relative;
+  /* background-color: #ffffff; */
+  /* text-indent: 30px; */
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  margin-top: 40px;
+  margin: 45px;
+  height: 200px;
+  width: 100%;
+  /* background-color: #fff0f5; */
+}
+
+.studpgborder{
+  color: #232D4B;
+  /* overflow: scroll; */
+  top: 10px;
+  left: 1;
+  /* text-align: left; */
+  position: relative;
+  /* background-color: #ffffff; */
+  /* text-indent: 30px; */
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  margin-left: 45px;
+  margin-top: 40px;
+  /* margin: 45px; */
+  /* height: 200px; */
+  width: 100%;
+  /* background-color: #fff0f5; */
+}
