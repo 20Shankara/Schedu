@@ -29,7 +29,6 @@
     <h2>Schedule</h2>
   
   {% if schedule != "empty" %}
-      <!-- <div class="info"> -->
       {% for class in schedule %}
           <form action="{% url 'portal:remove_class' %}" method="post">
               {% csrf_token %}
@@ -43,9 +42,8 @@
           </form>
       {% endfor %}
       <button class="btn btn-dark" onclick="send_student_Schedule()" class="btn btn-dark">Send Schedule </button>
-      <!-- </div> -->
   {% else %}
-      <h4>No classes added yet.</h4>
+      <h5>No classes added yet.</h5>
   {% endif %}
 
   <script>
