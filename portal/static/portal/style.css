@@ -1,62 +1,171 @@
 body {
     margin: 0;
-    font-family: "Times New Roman", Times, serif;
+    font-family: "Trebuchet MS", Tahoma, sans-serif;
 }
 
 /* Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp */
+
+/* topnav creates the actual bar and changes the colors */
 .topnav {
   overflow: hidden;
-  background-color: #333;
+  background-color: #232D4B;
 }
 
+/* topnav a styles the links inside the nav bar */
 .topnav a {
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
   float: left;
-  color: #f2f2f2;
+  color: #FFFFFF;
   text-align: center;
-  padding: 14px 16px;
+  padding: 14px 40px;
   text-decoration: none;
-  font-size: 17px;
+  font-size: 18px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  background-color: #E57200;
+  color: #232D4B;
+}
+
+.topnav-right {
+  float: right;
 }
 
 .header {
-  position: fixed;
+  position: sticky; 
+  /* change position */
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
   left: 0;
-  top: 80px;
+  top: 100px;
   width: 100%;
-  margin: 5px;
-  background-position: center;
+  margin: 20px;
+  text-indent: 30px;
+  background-color: #ffffff;
+  border-color: rgb(255, 255, 255);
+  color: #232D4B;
+  /* border-width: thick; */
+  /* background-position: center;
   background-size: cover;
-  background-repeat: no-repeat;
-  background-color: #fafad2;
-  text-indent: 10px;
-  border-width: thick;
-  border-color: blue;
+  background-repeat: no-repeat; */
+  /* text-indent: 10px; */
+  
+}
+
+
+.header h4 {
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  font-size: 20px;
+}
+
+p {
+  color: #232D4B;
+  text-indent: 30px;
+  /* text-transform: uppercase; */
+}
+
+.filters_lookup {
+    margin-left: 40px;
+    float: left;
 }
 
 .borders{
-  overflow: scroll;
-  top: 100px;
+  color: #232D4B;
+  /* overflow: scroll; */
+  top: 30px;
   position: relative;
-  background-color: #e0ffff;
-  font-family: "Monaco", monospace;
+  background-color: #ffffff;
+  text-indent: 10px;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
   margin-top: 40px;
-  margin: 20px;
+  margin: 10px;
   height: 300px;
   width: 600px;
-  background-color: #fff0f5;
+  /* background-color: #fff0f5; */
 }
 
 .info {
   text-align: left;
   /* border-margin: 30px; */
-  border-color: grey;
+  border-color: rgb(255, 255, 255);
   overflow: scroll;
   height: 700px;
-  width: 500px;
-  margin: 50px;
-  background-color: beige;
+  width: 1000px;
+  margin-left: 20;
+  margin-top: 50;
+  background-color: rgb(255, 255, 255);
+}
+/* .label {
+  color: #232D4B;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  padding: 8px;
+} */
+.year {
+  background-color: #FFFFFF;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+}
+.department {
+  background-color: #FFFFFF;
 }
 
-.button{
-  margin: 10px;
+.select{
+  color: #232D4B !important;
+  font-family: "Trebuchet MS", Tahoma, sans-serif !important;
+}
+
+.btn-dark{
+  background-color: #232D4B !important;
+  /* margin-left: 30px; */
+}
+
+.banner{
+  height: 400px;
+  /* padding-bottom: 50%; */
+  background-image: url( 'https://communications.virginia.edu/sites/communications/files/lawn.jpg' );
+  background-size: cover;
+  background-color: white;
+}
+
+.border2{
+  color: #232D4B;
+  /* top: 10px;
+  left: 0; */
+  position: relative;
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  /* height: 200px;
+  width: 100%; */
+  top: 25px;
+  left: 30px;
+  /* right: 50px; */
+  width: 93%;
+  margin: 20px;
+  /* margin-top: 40px; */
+  /* overflow: scroll; */
+  /* background-color: #ffffff; */
+  /* text-indent: 30px; */
+  /* text-align: left; */
+  /* background-color: #fff0f5; */
+}
+
+.studpgborder{
+  color: #232D4B;
+  /* overflow: scroll; */
+  top: 10px;
+  left: 1;
+  /* text-align: left; */
+  position: relative;
+  /* background-color: #ffffff; */
+  /* text-indent: 30px; */
+  font-family: "Trebuchet MS", Tahoma, sans-serif;
+  margin-left: 45px;
+  margin-top: 40px;
+  /* margin: 45px; */
+  /* height: 200px; */
+  width: 100%;
+  /* background-color: #fff0f5; */
+}
+
+.custom {
+  width: 200px !important;
 }

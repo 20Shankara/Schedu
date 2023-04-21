@@ -2,10 +2,11 @@ import datetime
 import json
 
 import requests
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.core import serializers
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 # from https://pynative.com/parse-json-response-using-python-requests-library/ for HTTPError
 from requests.exceptions import HTTPError
@@ -109,7 +110,7 @@ def student_schedule(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
     print(student_logged_in.schedule)
-    if len(student_logged_in.schedule.classes) == 0:
+    if student_logged_in.schedule is None or len(student_logged_in.schedule.classes) == 0:
         return render(request, 'pages/student_schedule.html', {"schedule": "empty"})
     else:
         for item in student_logged_in.schedule.classes:
@@ -137,6 +138,7 @@ def student_schedule_warning(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     schedule = []
     print(student_logged_in.schedule)
+    # this if statement shouldn't be necessary...since no conflict will arise if schedule is empty
     if len(student_logged_in.schedule.classes) == 0:
         return render(request, 'pages/student_schedule.html', {"schedule": "empty"})
     else:
@@ -221,6 +223,7 @@ def checkForConflicts(student_user, meetings):
         print("No conflict")
         return False
 
+
 def add_to_schedule(request, year):
     class_nbr = (request.POST['class_number'])
     base_URL = baseURL = 'https://sisuva.admin.virginia.edu/psc/ihprd/UVSS/SA/s/WEBLIB_HCX_CM.H_CLASS_SEARCH.FieldFormula.IScript_ClassSearch?institution=UVA01'
@@ -274,14 +277,14 @@ def add_to_schedule(request, year):
     # Check if student has a schedule
     schedule = None
     if student_logged_in.schedule is None:
-        schedule = Schedule(season=year, classes=[])
+        schedule = Schedule(season=year, classes=[], is_approved=False)
         schedule.save()
         student_logged_in.schedule = schedule
         student_logged_in.save()
     else:
         schedule = student_logged_in.schedule
 
-    if (not str(c.pk) in schedule.classes) and (not conflict) and (schedule.credit_count() + int(c.units[0]) <= 12):
+    if (not str(c.pk) in schedule.classes) and (not conflict) and (schedule.credit_count() + int(c.units[0]) <= 17):
         print("no conflicts with adding this class")
         schedule.classes.append(c.pk)
         schedule.save()
@@ -289,11 +292,21 @@ def add_to_schedule(request, year):
         print(cart.classes)
         cart.classes.remove(str(c.pk))
         cart.save()
+        messages.success(request, "Class added to schedule.")
         return HttpResponseRedirect('/student_schedule')
-    else:
-        # todo: add some messaging here to alert people
-        # https://www.youtube.com/watch?v=VIx3HD2gRWQ
-        print("todo: remove this...but there was a conflict, so not added")
+    elif conflict:
+        # todo: could try form.cleaned_data to access their decision before this method
+        print("todo: remove this...time conflict")
+        # this line below is key because it removes all messages, or else you will get long list that grows
+        list(messages.get_messages(request))
+        messages.warning(request, "Cannot add this class since you already have a class in your schedule at that time.")
+        return HttpResponseRedirect(reverse('portal:student_schedule_conflict'))
+    elif schedule.credit_count() + int(c.units[0]) > 12:
+        # todo: could try form.cleaned_data to access their decision before this method
+        print("todo: remove this...credits conflict")
+        # this line below is key because it removes all messages, or else you will get long list that grows
+        list(messages.get_messages(request))
+        messages.warning(request, "Cannot add this class as you have already reached term credits limit.")
         return HttpResponseRedirect(reverse('portal:student_schedule_conflict'))
 
 
@@ -352,16 +365,14 @@ def add_class(request, year):
     else:
         shopping_cart = student_logged_in.shopping_cart
 
-
-    if (not str(c.pk) in shopping_cart.classes):
+    if not str(c.pk) in shopping_cart.classes:
         shopping_cart.classes.append(c.pk)
         shopping_cart.save()
-        return HttpResponseRedirect('/student_shopping_cart')
-    else:
-        # todo: add some messaging here to alert people
-        # https://www.youtube.com/watch?v=VIx3HD2gRWQ
-        print("todo: remove this...but there was a conflict, so not added")
-        return HttpResponseRedirect(reverse('portal:student_schedule_conflict'))
+
+    # this line below is key because it removes all messages, or else you will get long list that grows
+    list(messages.get_messages(request))
+    messages.success(request, "Class added to shopping cart.")
+    return HttpResponseRedirect('/student_shopping_cart')
 
 
 def remove_class(request):
@@ -373,6 +384,7 @@ def remove_class(request):
     student_logged_in.schedule.save()
     return HttpResponseRedirect(reverse('portal:home'))
 
+
 def remove_from_shopping(request):
     # TODO: have popup here to make sure they want to remove
     print(request.POST['class_pk'])
@@ -381,6 +393,7 @@ def remove_from_shopping(request):
     student_logged_in.shopping_cart.classes.remove(request.POST['class_pk'])
     student_logged_in.shopping_cart.save()
     return HttpResponseRedirect(reverse('portal:student_shopping_cart'))
+
 
 def manage_students(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
@@ -403,6 +416,7 @@ def student_profile(request):
 def advisor_schedule_view(request):
     print((request.POST['student_email']))
     student_advisee = Student.objects.get(student_email=request.POST['student_email'])
+    s = student_advisee.schedule
     schedule = []
     if student_advisee.schedule is None:
         return render(request, 'pages/advisor_schedule_view.html', {"schedule": {}})
@@ -412,13 +426,14 @@ def advisor_schedule_view(request):
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
-        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee})
+        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee, "is_approved": s.is_approved})
+
 
 def student_shopping_cart(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     shopping_cart = []
     print(student_logged_in.shopping_cart)
-    if len(student_logged_in.shopping_cart.classes) == 0:
+    if (student_logged_in.shopping_cart is None) or (len(student_logged_in.shopping_cart.classes) == 0):
         return render(request, 'pages/student_shopping_cart.html', {"shopping_cart": "empty"})
     else:
         for item in student_logged_in.shopping_cart.classes:
@@ -440,3 +455,14 @@ def student_shopping_cart(request):
                 d['fields']['start_time'] = st_time_str_2
                 d['fields']['end_time'] = en_time_str_2
         return render(request, 'pages/student_shopping_cart.html', {"shopping_cart": data})
+
+def approve_schedule(request):
+    student = Student.objects.get(student_email=request.POST['approve_schedule'])
+    schedule = Schedule.objects.get(pk=student.schedule.pk)
+    schedule.is_approved = True
+    schedule.save()
+    msg = "Approved Schedule for " + student.student_first_name + ' ' + student.student_last_name
+    list(messages.get_messages(request))
+    messages.success(request, msg)
+    return HttpResponseRedirect('/advisor_dashboard')
+

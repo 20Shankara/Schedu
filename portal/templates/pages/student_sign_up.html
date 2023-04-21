@@ -1,65 +1,18 @@
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
-<html>
+
 <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
-<!-- <style>
-        body {
-          font-family: "Times New Roman", Times, serif;
-          background-color: #e0ffff;
-      }
 
-      .topnav {
-        overflow: hidden;
-        background-color: #333;
-      }
-
-        button{
-        margin: 10px;
-        }
-
-      .topnav a {
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-      }
-
-      .header {
-          position: fixed;
-          left: 0;
-          top: 80px;
-          width: 100%;
-          margin: 5px;
-          background-position: center;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-color: #fafad2;
-          text-indent: 10px;
-          border-width: thick;
-          border-color: purple;
-    }
-
-    .borders{
-        overflow: scroll;
-        top: 100px;
-        position: relative;
-        background-color: #e0ffff;
-        font-family: "Monaco", monospace;
-        margin-top: 40px;
-        margin: 20px;
-        height: 250px;
-        width: 500px;
-        background-color: #fff0f5;
-    }
-    </style> -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Student Sign-Up</title>
 </head>
+
 <body>
 <!-- NAVIGATION -->
  <div class="topnav">
@@ -71,25 +24,29 @@
 <!--    {{ form.as_p }}-->
     <!-- from https://www.w3schools.com/tags/att_input_readonly.asp -->
     <div class="header">
-        <h1>Sign Up:</h1>
+        <h1>Student Sign-Up:</h1>
     </div>
-    <div class="borders">
-    <label for="first_name">First name:</label>
-    <input type="text" id="first_name" name="first_name" value={{ user.first_name }}><br><br>
-    <label for="last_name">Last name:</label>
-    <input type="text" id="last_name" name="last_name" value={{ user.last_name }}><br><br>
-    <label for="email">Email: </label>
-    <input type="email" value={{ user.email }} id="email" name="email" readonly><br><br>
-    <label for="year">Year: </label>
-    <select id="year" name="year">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-    </select><br><br>
+
+    <!-- CONTENT -->
+    <div class="container-fluid;" > 
+      <div class="border2">
+        <label for="first_name">First name:</label>
+        <input type="text" id="first_name" name="first_name" value={{ user.first_name }}><br><br>
+        <label for="last_name">Last name:</label>
+        <input type="text" id="last_name" name="last_name" value={{ user.last_name }}><br><br>
+        <label for="email">Email: </label>
+        <input type="email" value={{ user.email }} id="email" name="email" readonly><br><br>
+        <label for="year">Year: </label>
+        <select id="year" name="year">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select><br><br>
+        <button type="submit" class="btn btn-dark">Sign Up</button>
+      </div>
     </div>
     <br><br><br><br>
-    <button type="submit">Sign Up</button>
 </form>
 </body>
 </html>
