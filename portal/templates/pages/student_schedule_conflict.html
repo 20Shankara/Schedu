@@ -1,47 +1,12 @@
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
   <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
-  <!-- <style>
-    body {
-        margin: 0;
-        font-family: "Times New Roman", Times, serif;
-    }
-
-    .topnav {
-      overflow: hidden;
-      background-color: #333;
-    }
-
-    .topnav a{
-      float: left;
-      text-align: left;
-      padding: 14px 16px;
-      text-decoration: none;
-      text-color: #f2f2f2;
-    }
-
-    .borders {
-      float: left;
-      text-align: left;
-      padding: 14px 16px;
-      text-decoration: none;
-      font-size: 17px;
-      margin: 50px;
-    }
-
-    .info {
-        text-align: left
-        border-margin: 30px;
-        border-color: grey;
-        overflow: scroll;
-        height: 700px;
-        width: 500px;
-        margin: 50px;
-        background-color: beige;
-    }
-</style> -->
+ 
 <head>
     <meta charset="UTF-8">
     <title>Schedule</title>
@@ -49,10 +14,11 @@
     <!--  https://ordinarycoders.com/blog/article/django-messages-framework  -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
-  <body>
-  {% load bootstrap5 %}
+
+<body>
+  <!-- {% load bootstrap5 %}
   {% bootstrap_css %}
-  {% bootstrap_javascript %}
+  {% bootstrap_javascript %}-->
 
 <!--    <div class="alert alert-warning" role="alert">-->
 <!--      You cannot sign up for that class.-->
@@ -66,7 +32,6 @@
         {{ message | safe }}
     </div>
   {% endfor %}
-
 
     <!-- NAVIGATION -->
     <div class="topnav">
@@ -117,5 +82,5 @@
           alert("Your schedule was just sent!");
         }
     </script>
-  </body>
+</body>
 </html>

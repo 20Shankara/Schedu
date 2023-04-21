@@ -1,55 +1,12 @@
+{% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <!DOCTYPE html>
 <html lang="en">
     <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
-    <!-- <style>
-        body {
-          font-family: "Times New Roman", Times, serif;
-          background-color: #e0ffff;
-      }
-
-      .topnav {
-        overflow: hidden;
-        background-color: #333;
-      }
-
-      .topnav a {
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-      }
-      .header {
-          position: fixed;
-          left: 0;
-          top: 80px;
-          width: 100%;
-          margin: 5px;
-          background-position: center;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-color: #fafad2;
-          text-indent: 10px;
-          border-width: thick;
-          border-color: purple;
-    }
-
-    .borders{
-        overflow: scroll;
-        top: 100px;
-        position: relative;
-        background-color: #e0ffff;
-        font-family: "Monaco", monospace;
-        margin-top: 40px;
-        margin: 20px;
-        height: 100px;
-        width: 600px;
-        background-color: #fff0f5;
-    }
-    </style> -->
 <head>
     <meta charset="UTF-8">
     <title>Manage Students</title>
@@ -64,21 +21,52 @@
 </div>
 
 <!-- CONTENT -->
-<div class="header">
-    <h2>Students</h2>
+<div class="container-fluid">
+    <div class="border2">
+        <h2>Students</h2>
+        <form action="{% url 'portal:student_profile' %}" method="post">
+            <div>
+                {% csrf_token %}
+                {% for advisee in advisees %}
+                <button class="btn btn-outline-dark btn-rounded" name="advisee_email" value={{advisee.student_email}}> {{advisee.student_first_name}} - {{advisee.student_last_name}}</button><br>
+                    <!-- <ul>
+                        <button name="advisee_email" value={{advisee.student_email}}> {{advisee.student_first_name}} - {{advisee.student_last_name}}</button><br>
+                    </ul> -->
+                {% endfor %}
+            </div>
+        </form>
+    </div>
 </div>
-    <div class="borders">
-    <form action="{% url 'portal:student_profile' %}" method="post">
-        <div>
-            {% csrf_token %}
-            {% for advisee in advisees %}
-                <ul>
-                    <button name="advisee_email" value={{advisee.student_email}}> {{advisee.student_first_name}} - {{advisee.student_last_name}}</button><br>
-                </ul>
-            {% endfor %}
-        </div>
-    </form>
-</div>
-
 </body>
+
+
+<footer class="bg-white text-center text-lg-start">
+    <!-- Grid container -->
+    <div class="container p-4">
+      <!--Grid row-->
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+          <h5 class="text-uppercase"></h5>
+          <p></p>
+        </div>
+        <!--Grid column-->
+  
+        <!--Grid column-->
+        <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+          <h5 class="text-uppercase"></h5>
+          <p></p>
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+    </div>
+    <!-- Grid container -->
+  
+    <!-- Copyright -->
+    <div class="text-center p-3 text-light" style="background-color: #232D4B;">
+      © 2023 Copyright: Abby Dhakal, Gavin Fortner, Ananya Ananda, Ashwin Shankar, Caleb Lee
+    </div>
+    <!-- Copyright -->
+  </footer>
 </html>
