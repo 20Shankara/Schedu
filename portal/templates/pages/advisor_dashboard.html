@@ -3,7 +3,6 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 
 <html lang="en">
@@ -14,7 +13,15 @@
 <body>
 
 <!-- NAVIGATION --> 
-<!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
+ {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message | safe }}
+        </div>
+    {% endfor %}
+<!-- NAVIGATION -->
 <div class="topnav">
   <a href="{% url 'portal:manage_students' %}">Manage Students</a>
   <div class="topnav-right">
@@ -76,12 +83,6 @@
     </div>
   </div>
 </div>
-    
-<!--    
-  <p>Name: {{ advisor.advisor_first_name }} {{ advisor.advisor_last_name }}</p>
-  <p>Email: {{ advisor.advisor_email }} </p>
-  <p>Year: {{ advisor.advisor_department }} </p> -->
-
 </body>
 
 

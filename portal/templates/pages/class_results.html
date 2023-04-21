@@ -15,6 +15,7 @@
 <!-- NAVIGATION -->
  <div class="topnav">
   <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
+  <a href="{% url 'portal:student_shopping_cart'%}">Shopping Cart</a>
   <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
   <div class="topnav-right">
     <a href="{% url 'portal:logout' %}">Log Out</a>
@@ -29,6 +30,7 @@
     <form action="{% url 'portal:class_view' year %}" method="post">
         <div>
         {% csrf_token %}
+        <span class ="label bogus"></span><br>
         {% for Class in classes %}
         <!-- Abby note: can we implement a search feature for the buttons? or a better way to organize the buttons?-->
         <!-- Abby note: maybe add a <- (back) button on top left corner -->

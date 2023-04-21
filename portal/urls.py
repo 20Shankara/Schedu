@@ -23,12 +23,16 @@ urlpatterns = [
     path('student_schedule', views.student_schedule, name='student_schedule'),
     # Student's Schedule Conflict Page
     path('student_schedule_warning', views.student_schedule_warning, name='student_schedule_conflict'),
-    # Add Class
+    # Add Class to Shopping Cart
     path('<str:year>/add_class', views.add_class, name='add_class'),
     # Shopping Cart
     path('student_shopping_cart', views.student_shopping_cart, name='student_shopping_cart'),
     # Remove Class
     path('remove_class', views.remove_class, name='remove_class'),
+    #Add Class to Schedule
+    path('<str:year>/add_to_schedule', views.add_to_schedule, name='add_to_schedule'),
+    #Remove Class to Schedule
+    path('remove_from_shopping', views.remove_from_shopping, name='remove_from_shopping'),
 
     # -----------------------------------------------------------------------------------------------------
 
@@ -43,6 +47,8 @@ urlpatterns = [
     # Student Profile
     path('student_profile', views.student_profile, name='student_profile'),
     # Advisor Schedule View
-    path('view_schedule', views.advisor_schedule_view, name='advisor_schedule_view')
+    path('view_schedule', views.advisor_schedule_view, name='advisor_schedule_view'),
+    # Approve Student Schedule
+    path('approve_schedule', views.approve_schedule, name='approve_schedule')
     # -----------------------------------------------------------------------------------------------------
 ]

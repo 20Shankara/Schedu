@@ -1,5 +1,8 @@
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
   <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
@@ -8,9 +11,54 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
-<body>
-<!-- NAVIGATION -->
- <div class="topnav">
-  <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
-  <a href="{% url 'portal:student_schedule' %}">Schedule</a>
-</div>
+  <body>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message | safe }}
+        </div>
+    {% endfor %}
+
+  <!-- NAVIGATION -->
+  <div class="topnav">
+    <a href="{% url 'portal:student_dashboard' %}">Dashboard</a>
+    <a href="{% url 'portal:student_class_lookup' %}">Find Classes</a>
+    <a href="{% url 'portal:student_schedule' %}">Schedule</a>
+    <a href="{% url 'portal:student_shopping_cart'%}">Shopping Cart</a>
+    <div class="topnav-right">
+        <a href="{% url 'portal:logout' %}">Log Out</a>
+    </div>
+  </div>
+    <!-- CONTENT -->
+    <div>
+      <h2>Shopping Cart:</h2>
+    </div>
+    {% if shopping_cart != "empty" %}
+        <div class="info">
+        {% for class in shopping_cart %}
+                <h2> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.descr}} </h2>
+                <h4>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h4>
+                <h4>&emsp; Time: {{class.fields.start_time}} - {{class.fields.end_time}}</h4>
+                <h4>&emsp; Days: {{class.fields.days}} </h4>
+                <h4>&emsp; Room: {{class.fields.facility_descr}}</h4>
+                <h4>&emsp; Instructor: {{class.fields.instructor}}</h4>
+            <form action="{% url 'portal:add_to_schedule' class.fields.season%}" method="post">
+              {% csrf_token %}
+                <button name="class_number" value="{{class.fields.class_nbr}}" name>Add to Schedule</button>
+            </form>
+            <form action="{% url 'portal:remove_from_shopping' %}" method="post">
+                {% csrf_token %}
+                <button name="class_pk" value="{{class.pk}}" name>Remove Class</button>
+            </form>
+        {% endfor %}
+        </div>
+    {% else %}
+        <h4>No classes added yet.</h4>
+    {% endif %}
+  </body>
+</html>

@@ -65,6 +65,11 @@ p {
   /* text-transform: uppercase; */
 }
 
+.filters_lookup {
+    margin-left: 40px;
+    float: left;
+}
+
 .borders{
   color: #232D4B;
   /* overflow: scroll; */
