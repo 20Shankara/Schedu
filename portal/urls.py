@@ -47,6 +47,8 @@ urlpatterns = [
     # Student Profile
     path('student_profile', views.student_profile, name='student_profile'),
     # Advisor Schedule View
-    path('view_schedule', views.advisor_schedule_view, name='advisor_schedule_view')
+    path('view_schedule', views.advisor_schedule_view, name='advisor_schedule_view'),
+    # Approve Student Schedule
+    path('approve_schedule', views.approve_schedule, name='approve_schedule')
     # -----------------------------------------------------------------------------------------------------
 ]

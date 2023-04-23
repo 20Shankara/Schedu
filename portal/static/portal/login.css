@@ -2,7 +2,8 @@ body {
     margin: 5px;
     font-family: "Trebuchet MS", Tahoma, sans-serif;
     /* font-family: "Monaco", monospace; */
-    background-color: purple;
+    color: #232D4B;
+    background-color: rgb(255, 255, 255);
 }
 
 .authenticated {

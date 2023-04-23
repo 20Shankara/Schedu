@@ -171,6 +171,7 @@ input[type="submit"], button {
     /* Forms */
 
     label {
+        font-family: "Trebuchet MS", Tahoma, sans-serif;
         font-size: 0.875rem;
     }
 

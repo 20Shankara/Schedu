@@ -1,85 +1,103 @@
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
 <html lang="en">
   <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
-  <!-- <style>
-    body {
-          font-family: "Times New Roman", Times, serif;
-          background-color: #e0ffff;
-      }
 
-      .topnav {
-        overflow: hidden;
-        background-color: #333;
-      }
-
-      .topnav a {
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-      }
-      .header {
-          position: fixed;
-          left: 0;
-          top: 100px;
-          width: 100%;
-          margin: 5px;
-          background-position: center;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-color: #fafad2;
-          text-indent: 10px;
-          border-width: thick;
-          border-color: purple;
-    }
-
-    .borders{
-        overflow: scroll;
-        background-color: #e0ffff;
-        font-family: "Monaco", monospace;
-        margin-top: 40px;
-        margin: 30px;
-        height: 200px;
-        width: 600px;
-        background-color: #fff0f5;
-    }
-</style> -->
 <head>
     <meta charset="UTF-8">
     <title>View Schedule</title>
 </head>
-  <body>
-    <!-- NAVIGATION -->
-    <div class="topnav">
-        <a href="{% url 'portal:advisor_dashboard' %}">Dashboard</a>
-        <a href="{% url 'portal:manage_students' %}">Manage Students</a>
-        <div class="topnav-right">
-            <a href="{% url 'portal:logout' %}">Log Out</a>
-        </div>
-    </div>
 
-    <!-- CONTENT -->
-      <form action="{% url 'portal:student_profile' %}" method="post">
-          {% csrf_token %}
-          <button name="advisee_email" value={{advisee.student_email}}>return to student's profile</button><br>
-      </form>
-    <div class="header">
-      <h2>{{advisee.student_first_name}} {{advisee.student_last_name}}'s Schedule:</h2>
+<body>
+<!-- NAVIGATION -->
+<div class="topnav">
+    <a href="{% url 'portal:advisor_dashboard' %}">Dashboard</a>
+    <a href="{% url 'portal:manage_students' %}">Manage Students</a>
+    <div class="topnav-right">
+      <a href="{% url 'portal:logout' %}">Log Out</a>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container-flex">
+  <div class="border2">
+    <form action="{% url 'portal:student_profile' %}" method="post">
+      {% csrf_token %}
+    </form>
+    <h2>{{advisee.student_first_name}} {{advisee.student_last_name}}'s Schedule:</h2>
+    {% for class in schedule %}
+    <h5> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.class_section}} - {{class.fields.section_type}}</h5>
+    <h6>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h6>
+        <h6>&emsp; Time: {{class.fields.start_time}} - {{class.fields.end_time}}</h6>
+        <h6>&emsp; Days: {{class.fields.days}} </h6>
+        <h6>&emsp; Room: {{class.fields.facility_descr}}</h6>
+        <h6>&emsp; Instructor: {{class.fields.instructor}}</h6>
+    {% endfor %}
+    <br></br>
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-dark btn-rounded" name="advisee_email" value={{advisee.student_email}}>Return to Student's Profile</button>
+      <button type="button" class="btn btn-dark btn-secondary" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button>
+
+    </div>
+    <!-- Abby note: the button links don't work -->
+    <!-- Abby note: the dark button colors are wrong on the advisor end -->
+  </div>
+</div>
+<!-- 
+    <form action="{% url 'portal:student_profile' %}" method="post">
+        {% csrf_token %}
+        <button name="advisee_email" value={{advisee.student_email}}>return to student's profile</button><br>
+    </form>
+  <div class="header">
+    <h2>{{advisee.student_first_name}} {{advisee.student_last_name}}'s Schedule:</h2>
+    </div>
+    {% for class in schedule %}
+      <div class="borders">
+        <h2> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.class_section}} - {{class.fields.section_type}}</h2>
+        <h4>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h4>
+            <h4>&emsp; Time: {{class.fields.start_time}} - {{class.fields.end_time}}</h4>
+            <h4>&emsp; Days: {{class.fields.days}} </h4>
+            <h4>&emsp; Room: {{class.fields.facility_descr}}</h4>
+            <h4>&emsp; Instructor: {{class.fields.instructor}}</h4>
       </div>
-      {% for class in schedule %}
-        <div class="borders">
-          <h2> {{class.fields.subject}}: {{class.fields.catalog_nbr}} - {{class.fields.class_section}} - {{class.fields.section_type}}</h2>
-          <h4>&emsp; Enrollment: {{class.fields.enrollment_total}} / {{class.fields.class_capacity}}</h4>
-              <h4>&emsp; Time: {{class.fields.start_time}} - {{class.fields.end_time}}</h4>
-              <h4>&emsp; Days: {{class.fields.days}} </h4>
-              <h4>&emsp; Room: {{class.fields.facility_descr}}</h4>
-              <h4>&emsp; Instructor: {{class.fields.instructor}}</h4>
-      {% endfor %}
-        <button name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br>
-        </div>
-  </body>
+    {% endfor %}
+  <button name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br> -->
+  <!-- <button class="btn btn-outline-dark btn-rounded" name="advisee_email" value={{advisee.student_email}}>Return to Student's Profile</button><br>
+    <button class="btn btn-dark" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button><br> -->
+</body>
+
+<footer class="bg-white text-center text-lg-start">
+  <!-- Grid container -->
+  <div class="container p-4">
+    <!--Grid row-->
+    <div class="row">
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3 text-light" style="background-color: #232D4B;">
+    © 2023 Copyright: Abby Dhakal, Gavin Fortner, Ananya Ananda, Ashwin Shankar, Caleb Lee
+  </div>
+  <!-- Copyright -->
+</footer>
 </html>

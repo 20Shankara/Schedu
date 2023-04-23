@@ -1,76 +1,119 @@
 {% load socialaccount %}
 {% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 <link rel="stylesheet" href="{% static 'portal/style.css' %}">
-    <!-- Style here for navbar taken from https://www.w3schools.com/howto/howto_js_topnav.asp -->
-    <!-- <style>
-      body {
-          font-family: "Times New Roman", Times, serif;
-          background-color: #e0ffff;
-      }
 
-      .topnav {
-        overflow: hidden;
-        background-color: #333;
-      }
-
-      .topnav a {
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-      }
-      .header {
-          position: fixed;
-          left: 0;
-          top: 80px;
-          width: 100%;
-          margin: 5px;
-          background-position: center;
-          background-size: cover;
-          background-repeat: no-repeat;
-          background-color: #fafad2;
-          text-indent: 10px;
-          border-width: thick;
-          border-color: purple;
-    }
-
-    .borders{
-        overflow: scroll;
-        background-color: #e0ffff;
-        font-family: "Monaco", monospace;
-        margin-top: 40px;
-        margin: 30px;
-        height: 200px;
-        width: 600px;
-        background-color: #fff0f5;
-    }
-
-  </style> -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
 </head>
 <body>
+
 <!-- NAVIGATION --> 
+ {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ message | safe }}
+        </div>
+    {% endfor %}
+<!-- NAVIGATION -->
 <div class="topnav">
   <a href="{% url 'portal:manage_students' %}">Manage Students</a>
   <div class="topnav-right">
     <a href="{% url 'portal:logout' %}">Log Out</a>
   </div>
 </div>
+
   <!-- CONTENT -->
-    <div class="header">
-  <h2>{{ advisor.advisor_first_name }}'s Dashboard</h2>
+<div class="container-fluid">
+  <div class="border2">
+    <h2>{{ advisor.advisor_first_name }}'s Dashboard</h2>
+    <h5>Advisor Information</h5>
+    <div class="row row-cols-1 row-cols-md-3 text-center">
+      <!-- NAME CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/mckim-hall.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="fst-italic">Name: {{ advisor.advisor_first_name }} {{ advisor.advisor_last_name }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- EMAIL CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/alderman-and-peabody.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="fst-italic">Email: {{ advisor.advisor_email }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- YEAR CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/old-cabell.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="fst-italic">Department: {{ advisor.advisor_department }}</p>
+          </div>
+        </div>
+      </div>
+
     </div>
-  <!-- <h4 style="font-size: 18px">Advisor Information: </h4> -->
-    <div class="borders">
-  <p>Name: {{ advisor.advisor_first_name }} {{ advisor.advisor_last_name }}</p>
-  <p>Email: {{ advisor.advisor_email }} </p>
-  <p>Year: {{ advisor.advisor_department }} </p>
-  <button onclick="{% url 'portal:home' %}">Back to home</button>
+  </div>
+  <div class="border2">
+    <h5>Advisor Actions</h5>
+    <div class="row row-cols-1 row-cols-md-3 text-center">
+      <!-- MANAGE STUDENTS CARD -->
+      <div class="col">
+        <div class="card h-100">
+          <img src="https://communications.virginia.edu/sites/communications/files/rotunda-lawnside.jpg" class="card-img-top" alt="...">
+          <div class="card-body">
+            <a href="{% url 'portal:manage_students' %}" class="btn btn-dark">Manage Students</a>
+            <!-- <p class="card-text">{{ student.student_first_name }} {{ student.student_last_name }}</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 </body>
+
+
+<footer class="bg-white text-center text-lg-start">
+  <!-- Grid container -->
+  <div class="container p-4">
+    <!--Grid row-->
+    <div class="row">
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+
+      <!--Grid column-->
+      <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+        <h5 class="text-uppercase"></h5>
+        <p></p>
+      </div>
+      <!--Grid column-->
+    </div>
+    <!--Grid row-->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3 text-light" style="background-color: #232D4B;">
+    © 2023 Copyright: Abby Dhakal, Gavin Fortner, Ananya Ananda, Ashwin Shankar, Caleb Lee
+  </div>
+  <!-- Copyright -->
+</footer>
+
 </html>
