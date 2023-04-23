@@ -17,7 +17,8 @@
   <a href="{% url 'portal:home' %}">Home</a>
 </div>
 
-<form novalidate action="{% url 'portal:advisor_link' %}" method="post">
+<form action="{% url 'portal:advisor_link' %}" method="post">
+
     {% csrf_token %}
     <div class="header">
         <h1>Advisor Sign-Up:</h1>
