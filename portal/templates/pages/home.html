@@ -37,7 +37,12 @@
         <a href="{% url 'portal:advisor_link' %}">Advisors</a>
     </div> -->
     {% else %}
-        <a href="{% provider_login_url 'google' %}">Login With Google</a>
+    <div class="header" style="background: url(https://news.virginia.edu/sites/default/files/uva_east_rotunda_sunset_0.jpg); background-repeat: no-repeat">
+        <div class="mask">
+            <h2>Welcome to Schedu</h2>
+            <a class="btn btn-outline-light btn-lg" href="{% provider_login_url 'google' %}" role="button">Login with Google</a>
+        </div>
+    </div>
     {% endif %}
 </body>
 
