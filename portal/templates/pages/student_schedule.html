@@ -53,14 +53,29 @@
               <button class="btn btn-outline-dark btn-rounded" value="{{class.pk}}"  name>Remove Class</button>
           </form>
       {% endfor %}
-      <button class="btn btn-dark" onclick="send_student_Schedule()" class="btn btn-dark">Send Schedule </button>
-  {% else %}
+          {% if is_sent %}
+              {% if is_viewed %}
+                    {% if is_approved %}
+                        <h5>Schedule has been approved! If you add or remove classes, you will need to request approval again.</h5>
+                    {% else %}
+                        <h5>Schedule has been rejected. Please change your schedule and send again!</h5>
+                    {% endif %}
+              {% else %}
+                <h5> Schedule has been sent, but is awaiting advisor approval.</h5>
+              {% endif %}
+          {% else %}
+              <form action="{% url 'portal:send_schedule' %}" method="post">
+                  {% csrf_token %}
+                <button type="submit" class="btn btn-dark" onclick="send_student_Schedule()" class="btn btn-dark">Send Schedule </button>
+              </form>
+          {% endif %}
+      {% else %}
       <h5>No classes added yet.</h5>
   {% endif %}
 
   <script>
       function send_student_Schedule() {
-        alert("Your schedule was just sent!");
+        alert("Your schedule was just sent! If you change your schedule before your advisor looks at it, you will have to send it again!");
       }
   </script>
   </div>
