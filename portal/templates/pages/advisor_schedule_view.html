@@ -41,15 +41,31 @@
           {% csrf_token %}
             <button type="submit" class="btn btn-outline-dark btn-rounded" name="advisee_email" value={{advisee.student_email}}>Return to Student's Profile</button>
         </form>
-        {% if is_approved %}
-            <div class="border2">
-                <h6> Schedule Has Been Approved</h6>
-            </div>
+        {% if is_sent %}
+            {% if is_viewed %}
+                {% if is_approved %}
+                    <div class="border2">
+                        <h6> Schedule Has Been Approved</h6>
+                    </div>
+                {% else %}
+                    <div class="border2">
+                        <h6> Schedule Has Been Rejected</h6>
+                    </div>
+                {% endif %}
+            {% else %}
+                <form action="{% url 'portal:approve_schedule' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark btn-secondary" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button>
+                </form>
+                <form action="{% url 'portal:reject_schedule' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-dark btn-secondary" name="approve_schedule" value={{advisee.student_email}}>Reject Schedule</button>
+                </form>
+            {% endif %}
         {% else %}
-            <form action="{% url 'portal:approve_schedule' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-dark btn-secondary" name="approve_schedule" value={{advisee.student_email}}>Approve Schedule</button>
-            </form>
+            <div class="border2">
+                <h6> Student has not requested approval</h6>
+            </div>
         {% endif %}
     </div>
     <!-- Abby note: the button links don't work -->

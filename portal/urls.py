@@ -33,6 +33,8 @@ urlpatterns = [
     path('<str:year>/add_to_schedule', views.add_to_schedule, name='add_to_schedule'),
     #Remove Class to Schedule
     path('remove_from_shopping', views.remove_from_shopping, name='remove_from_shopping'),
+    #Send Schedule to Advisor
+    path('send_schedule', views.send_schedule, name='send_schedule'),
 
     # -----------------------------------------------------------------------------------------------------
 
@@ -49,6 +51,8 @@ urlpatterns = [
     # Advisor Schedule View
     path('view_schedule', views.advisor_schedule_view, name='advisor_schedule_view'),
     # Approve Student Schedule
-    path('approve_schedule', views.approve_schedule, name='approve_schedule')
+    path('approve_schedule', views.approve_schedule, name='approve_schedule'),
+    # Reject Student Schedule
+    path('reject_schedule', views.reject_schedule, name='reject_schedule'),
     # -----------------------------------------------------------------------------------------------------
 ]

@@ -136,7 +136,7 @@ def student_schedule(request):
                 en_time_str_2 = en_time_str_2.replace(".", ":")
                 d['fields']['start_time'] = st_time_str_2
                 d['fields']['end_time'] = en_time_str_2
-        return render(request, 'pages/student_schedule.html', {"schedule": data})
+        return render(request, 'pages/student_schedule.html', {"schedule": data,  "is_approved": student_logged_in.schedule.is_approved, "is_viewed": student_logged_in.schedule.is_viewed, "is_sent": student_logged_in.schedule.is_sent})
 
 
 def student_schedule_warning(request):
@@ -165,7 +165,7 @@ def student_schedule_warning(request):
                 en_time_str_2 = en_time_str_2.replace(".", ":")
                 d['fields']['start_time'] = st_time_str_2
                 d['fields']['end_time'] = en_time_str_2
-        return render(request, 'pages/student_schedule_conflict.html', {"schedule": data})
+        return render(request, 'pages/student_schedule_conflict.html', {"schedule": data,})
 
 
 def advisor(request):
@@ -292,6 +292,9 @@ def add_to_schedule(request, year):
     if (not str(c.pk) in schedule.classes) and (not conflict) and (schedule.credit_count() + int(c.units[0]) <= 17):
         print("no conflicts with adding this class")
         schedule.classes.append(c.pk)
+        schedule.is_approved = False
+        schedule.is_sent = False
+        schedule.is_viewed = False
         schedule.save()
         cart = student_logged_in.shopping_cart
         print(cart.classes)
@@ -386,6 +389,9 @@ def remove_class(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     print(student_logged_in)
     student_logged_in.schedule.classes.remove(request.POST['class_pk'])
+    student_logged_in.schedule.is_approved = False
+    student_logged_in.schedule.is_sent = False
+    student_logged_in.schedule.is_viewed = False
     student_logged_in.schedule.save()
     return HttpResponseRedirect(reverse('portal:home'))
 
@@ -430,7 +436,8 @@ def advisor_schedule_view(request):
             schedule.append(curClass)
         schedule = serializers.serialize('json', schedule)
         data = json.loads(schedule)
-        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee, "is_approved": s.is_approved})
+        return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee, "is_approved": s.is_approved, "is_sent": s.is_sent, "is_viewed": s.is_viewed})
+
 
 
 def student_shopping_cart(request):
@@ -460,14 +467,35 @@ def student_shopping_cart(request):
                 d['fields']['end_time'] = en_time_str_2
         return render(request, 'pages/student_shopping_cart.html', {"shopping_cart": data})
 
+def send_schedule(request):
+    student = Student.objects.get(student_email=request.user.email)
+    print(student.schedule.pk)
+    student.schedule.is_sent = True
+    student.schedule.is_viewed = False
+    student.schedule.is_approved = False
+    student.schedule.save()
+    return HttpResponseRedirect('/student_dashboard')
 def approve_schedule(request):
-    print("here")
     student = Student.objects.get(student_email=request.POST['approve_schedule'])
     schedule = Schedule.objects.get(pk=student.schedule.pk)
     schedule.is_approved = True
+    schedule.is_viewed = True
     schedule.save()
     msg = "Approved Schedule for " + student.student_first_name + ' ' + student.student_last_name
     list(messages.get_messages(request))
     messages.success(request, msg)
     return HttpResponseRedirect('/advisor_dashboard')
+
+def reject_schedule(request):
+    student = Student.objects.get(student_email=request.POST['approve_schedule'])
+    schedule = Schedule.objects.get(pk=student.schedule.pk)
+    schedule.is_approved = False
+    schedule.is_viewed = True
+    schedule.save()
+    msg = "Rejected Schedule for " + student.student_first_name + ' ' + student.student_last_name
+    list(messages.get_messages(request))
+    messages.success(request, msg)
+    return HttpResponseRedirect('/advisor_dashboard')
+
+
 
