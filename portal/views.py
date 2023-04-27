@@ -424,7 +424,6 @@ def student_profile(request):
 
 
 def advisor_schedule_view(request):
-    print((request.POST['student_email']))
     student_advisee = Student.objects.get(student_email=request.POST['student_email'])
     s = student_advisee.schedule
     schedule = []
@@ -469,7 +468,6 @@ def student_shopping_cart(request):
 
 def send_schedule(request):
     student = Student.objects.get(student_email=request.user.email)
-    print(student.schedule.pk)
     student.schedule.is_sent = True
     student.schedule.is_viewed = False
     student.schedule.is_approved = False
