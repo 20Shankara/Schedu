@@ -11,8 +11,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
 from django.contrib.messages import constants as messages
+
+load_dotenv()
+
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
     messages.INFO: 'alert-info',
@@ -89,25 +93,20 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-
      "default": {
-         "ENGINE": "django.db.backends.postgresql_psycopg2",
-         "NAME": "d91j10444ek3fv",
-         "USER": "thchwasvixrbtr",
-         "PASSWORD": "20396eed5d08e0c6e76897decc963b34bb4f13fddf0df62320a8273499474e6e",
-         "HOST": "ec2-3-209-124-113.compute-1.amazonaws.com",
-         "PORT": "5432",
-         "DATABASE_URI": "postgres://thchwasvixrbtr:20396eed5d08e0c6e76897decc963b34bb4f13fddf0df62320a8273499474e6e@ec2-3-209-124-113.compute-1.amazonaws.com:5432/d91j10444ek3fv",
-         "HEROKU_CLI": "heroku pg:psql postgresql-fitted-32662 --app schedu",
+         "ENGINE": f"{os.environ.get('ENGINE')}",
+         "NAME": f"{os.environ.get('NAME')}",
+         "USER": f"{os.environ.get('USER')}",
+         "PASSWORD": f"{os.environ.get('PASSWORD')}",
+         "HOST": f"{os.environ.get('HOST')}",
+         "PORT": f"{os.environ.get('PORT')}",
+         "DATABASE_URI": f"{os.environ.get('DATABASE_URI')}",
+         "HEROKU_CLI": f"{os.environ.get('HEROKU_CLI')}",
          "TEST": {
-             "NAME": "d91j10444ek3fv"
+             "NAME": f"{os.environ.get('NAME')}"
          }
      }
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -172,12 +171,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # added for google login
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Activate Django-Heroku.
-# Use this code to avoid the psycopg2 / django-heroku error!  
+# Use this code to avoid the psycopg2 / django-heroku error!
 # Do NOT import django-heroku above!
 try:
     if 'HEROKU' in os.environ:
         import django_heroku
-
         django_heroku.settings(locals())
 except ImportError:
     found = False
