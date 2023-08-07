@@ -6,3 +6,4 @@ __Note:__ This is a continuation of a school project. It is important to note th
 
 __Names:__ Gavin Fortner, Abby Dhakal, Ananya Ananda, Ashwin Shankar, Caleb Lee
 
+__WEBSITE LINK:__ https://schedu.herokuapp.com/
