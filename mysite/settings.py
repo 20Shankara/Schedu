@@ -94,16 +94,16 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 
 DATABASES = {
      "default": {
-         "ENGINE": f"{os.environ.get('ENGINE')}",
-         "NAME": f"{os.environ.get('NAME')}",
-         "USER": f"{os.environ.get('USER')}",
-         "PASSWORD": f"{os.environ.get('PASSWORD')}",
-         "HOST": f"{os.environ.get('HOST')}",
-         "PORT": f"{os.environ.get('PORT')}",
-         "DATABASE_URI": f"{os.environ.get('DATABASE_URI')}",
-         "HEROKU_CLI": f"{os.environ.get('HEROKU_CLI')}",
+         "ENGINE": f"{os.environ['ENGINE']}",
+         "NAME": f"{os.environ['NAME']}",
+         "USER": f"{os.environ['USER']}",
+         "PASSWORD": f"{os.environ['PASSWORD']}",
+         "HOST": f"{os.environ['HOST']}",
+         "PORT": f"{os.environ['PORT']}",
+         "DATABASE_URI": f"{os.environ['DATABASE_URI']}",
+         "HEROKU_CLI": f"{os.environ['HEROKU_CLI']}",
          "TEST": {
-             "NAME": f"{os.environ.get('NAME')}"
+             "NAME": f"{os.environ['NAME']}"
          }
      }
     }
