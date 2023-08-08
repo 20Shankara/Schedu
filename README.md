@@ -14,4 +14,7 @@ __GUIDE:__
 
   Teacher Login: Login as a teacher and look at your students' schedules. You must contact an administrator to have students assigned to you. 
 
-__Special Notes:__ The app only stores class details in the database. It does not actually store meeting/section times as this quickly filled up the database. Instead, it will store class details for all classes and then query the API for section details. This greatly improved space efficiency within the database and general speed and usability of the website. The database can be updated within CLI with '''python manage.py update_database```
+__Special Notes:__ The app only stores class details in the database. It does not actually store meeting/section times as this quickly filled up the database. Instead, it will store class details for all classes and then query the API for section details. This greatly improved space efficiency within the database and general speed and usability of the website. The database can be updated within CLI with 
+'''
+python manage.py update_database
+```
