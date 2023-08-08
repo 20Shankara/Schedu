@@ -40,7 +40,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'schedu.herokuapp.com']
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -91,7 +90,6 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
 DATABASES = {
      "default": {
          "ENGINE": f"{os.environ['ENGINE']}",
@@ -110,7 +108,6 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -149,7 +146,6 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
 
 TIME_ZONE = "UTC"
@@ -160,14 +156,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # added for google login
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Activate Django-Heroku.
