@@ -1,6 +1,5 @@
 import datetime
 import json
-
 import requests
 from django.contrib import messages
 from django.contrib.auth import logout
@@ -8,7 +7,6 @@ from django.core import serializers
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-# from https://pynative.com/parse-json-response-using-python-requests-library/ for HTTPError
 from requests.exceptions import HTTPError
 from .models import *
 
@@ -17,74 +15,62 @@ def home(request):
     # from https://stackoverflow.com/questions/14639106/how-can-i-retrieve-a-list-of-field-for-all-objects-in-django
     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
-    if request.user.is_authenticated:
-        if request.user.email in uva_students:
-            return HttpResponseRedirect(reverse('portal:student_dashboard'))
-        if request.user.email in uva_advisors:
-            return HttpResponseRedirect(reverse('portal:advisor_dashboard'))
-
+    if request.user.is_authenticated and request.user.email in uva_students:
+        return HttpResponseRedirect(reverse('portal:student_dashboard'))
+    if request.user.is_authenticated and request.user.email in uva_advisors:
+        return HttpResponseRedirect(reverse('portal:advisor_dashboard'))
     return render(request, 'pages/home.html', {"students": uva_students, "advisors": uva_advisors})
-
 
 def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('portal:home'))
 
-
 def student(request):
     uva_students = list(Student.objects.all().values_list('student_email', flat=True))
     if request.user.is_authenticated and request.user.email in uva_students:
-        # student_logged_in = Student.objects.get(student_email=request.user.email)
-        # return render(request, 'pages/student_dashboard.html', {"student": student_logged_in})
         return HttpResponseRedirect(reverse('portal:student_dashboard'))
-
     if request.method == "POST":
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         year = request.POST['year']
-        newStudent = Student(student_first_name=first_name, student_last_name=last_name,
-                             student_email=email,
-                             year_in_school=year)
+        newStudent = Student(
+            student_first_name=first_name,
+            student_last_name=last_name,
+            student_email=email,
+            year_in_school=year
+        )
         newStudent.save()
         return HttpResponseRedirect(reverse('portal:student_dashboard'))
-
     return render(request, "pages/student_sign_up.html")
-
 
 def student_dashboard(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     return render(request, 'pages/student_dashboard.html', {"student": student_logged_in})
 
-
 def get_departments():
     all_departments = Department.objects.all()
     return all_departments
-
 
 def student_class_lookup(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     try:
         all_departments = get_departments()
-        return render(request, 'pages/student_class_lookup.html',
-                      {"student": student_logged_in, "departments": all_departments, "error": ""})
+        return render(request, 'pages/student_class_lookup.html', {"student": student_logged_in, "departments": all_departments, "error": ""})
     # from https://pynative.com/parse-json-response-using-python-requests-library/
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     return render(request, 'pages/student_class_lookup.html', {"student": student_logged_in, "error": ""})
 
-
 def class_results(request):
     test_student = Student.objects.get(student_email=request.user.email)
     class_nbr = request.POST['course_num']
     if class_nbr != "":
-        print("Class Number: " + class_nbr)
         classes = Class.objects.filter(subject=request.POST['department']).filter(catalog_nbr=class_nbr)
     else:
         classes = Class.objects.filter(subject=request.POST['department']).order_by('catalog_nbr')
     return render(request, 'pages/class_results.html',
                   {"classes": classes, "student": test_student, "year": request.POST['year']})
-
 
 def class_view(request, year):
     c = Class.objects.get(pk=request.POST['ClassPK'])
@@ -107,9 +93,7 @@ def class_view(request, year):
                 en_time_str_2 = en_time_str_2.replace(".", ":")
                 m['start_time'] = st_time_str_2
                 m['end_time'] = en_time_str_2
-    return render(request, 'pages/class_view.html',
-                  {"classData": classData, "class": c.subject + '-' + c.descr, "year": year})
-
+    return render(request, 'pages/class_view.html', {"classData": classData, "class": c.subject + '-' + c.descr, "year": year})
 
 def student_schedule(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
@@ -136,8 +120,10 @@ def student_schedule(request):
                 en_time_str_2 = en_time_str_2.replace(".", ":")
                 d['fields']['start_time'] = st_time_str_2
                 d['fields']['end_time'] = en_time_str_2
-        return render(request, 'pages/student_schedule.html', {"schedule": data,  "is_approved": student_logged_in.schedule.is_approved, "is_viewed": student_logged_in.schedule.is_viewed, "is_sent": student_logged_in.schedule.is_sent})
-
+        return render(request, 'pages/student_schedule.html',
+                      {"schedule": data, "is_approved": student_logged_in.schedule.is_approved,
+                       "is_viewed": student_logged_in.schedule.is_viewed,
+                       "is_sent": student_logged_in.schedule.is_sent})
 
 def student_schedule_warning(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
@@ -165,31 +151,30 @@ def student_schedule_warning(request):
                 en_time_str_2 = en_time_str_2.replace(".", ":")
                 d['fields']['start_time'] = st_time_str_2
                 d['fields']['end_time'] = en_time_str_2
-        return render(request, 'pages/student_schedule_conflict.html', {"schedule": data,})
-
+        return render(request, 'pages/student_schedule_conflict.html', {"schedule": data})
 
 def advisor(request):
     uva_advisors = list(Advisor.objects.all().values_list('advisor_email', flat=True))
     if request.user.is_authenticated and request.user.email in uva_advisors:
         return HttpResponseRedirect(reverse('portal:advisor_dashboard'))
-
     if request.method == "POST":
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         department = request.POST['department']
-        newAdvisor = Advisor(advisor_first_name=first_name, advisor_last_name=last_name, advisor_email=email,
-                             advisor_department=department)
+        newAdvisor = Advisor(
+            advisor_first_name=first_name,
+            advisor_last_name=last_name,
+            advisor_email=email,
+            advisor_department=department
+        )
         newAdvisor.save()
         return HttpResponseRedirect(reverse('portal:advisor_dashboard'))
-
     return render(request, "pages/advisor_sign_up.html")
-
 
 def advisor_dashboard(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
     return render(request, 'pages/advisor_dashboard.html', {"advisor": advisor_logged_in})
-
 
 def checkForConflicts(student_user, meetings):
     schedule = []
@@ -200,32 +185,16 @@ def checkForConflicts(student_user, meetings):
         schedule.append(curClass)
     schedule = serializers.serialize('json', schedule)
     data = json.loads(schedule)
-    print(data)
     # in case where there is no class in schedule, automatically, no conflict
     if not data:
-        print("No conflict")
         return False
     else:
-        print("--------PROPOSED CLASS--------")
-        print(meetings['days'])
-        print(meetings['start_time'])
-        print(meetings['end_time'])
-        print("-------------------")
         for c in data:
             if c['fields']['days'] == meetings['days']:
-                print("SAME DAY")
                 if c['fields']['start_time'] <= meetings['start_time'] <= c['fields']['end_time']:
-                    print("Conflict with Start Time")
                     return True
                 elif c['fields']['start_time'] <= meetings['end_time'] <= c['fields']['end_time']:
-                    print("Conflict with End Time")
                     return True
-            # print("-------------------")
-            # print(c['fields']['days'])
-            # print(c['fields']['start_time'])
-            # print(c['fields']['end_time'])
-            # print("-------------------")
-        print("No conflict")
         return False
 
 
@@ -237,23 +206,10 @@ def add_to_schedule(request, year):
     r = r.json()[0]
     meetings = r['meetings'][0]
     student_logged_in = Student.objects.get(student_email=request.user.email)
-
     # check for class conflict
     conflict = checkForConflicts(student_logged_in, meetings)
-    print(conflict)
-
     c = None
     if not ClassSection.objects.filter(class_nbr=r['class_nbr'], season=year).exists():
-        # Logic for correcting start time and end time
-        # st_time = meetings['start_time'][0:5]
-        # en_time = meetings['end_time'][0:5]
-        # time_format = '%H.%M'  # The format
-        # st_time_str = datetime.datetime.strptime(st_time, time_format)
-        # st_time_str_2 = st_time_str.strftime("%I.%M %p")
-        # st_time_str_2 = st_time_str_2.replace(".", ":")
-        # en_time_str = datetime.datetime.strptime(en_time, time_format)
-        # en_time_str_2 = en_time_str.strftime("%I.%M %p")
-        # en_time_str_2 = en_time_str_2.replace(".", ":")
         c = ClassSection(
             class_nbr=r['class_nbr'],
             class_section=r['class_section'],
@@ -262,8 +218,6 @@ def add_to_schedule(request, year):
             enrollment_available=r['enrollment_available'],
             units=r['units'],
             days=meetings['days'],
-            # start_time=st_time_str_2,
-            # end_time=en_time_str_2,
             start_time=meetings['start_time'],
             end_time=meetings['end_time'],
             instructor=meetings['instructor'],
@@ -278,7 +232,6 @@ def add_to_schedule(request, year):
         c.save()
     else:
         c = ClassSection.objects.get(class_nbr=class_nbr, season=year)
-
     # Check if student has a schedule
     schedule = None
     if student_logged_in.schedule is None:
@@ -288,35 +241,29 @@ def add_to_schedule(request, year):
         student_logged_in.save()
     else:
         schedule = student_logged_in.schedule
-
     if (not str(c.pk) in schedule.classes) and (not conflict) and (schedule.credit_count() + int(c.units[0]) <= 17):
-        print("no conflicts with adding this class")
         schedule.classes.append(c.pk)
         schedule.is_approved = False
         schedule.is_sent = False
         schedule.is_viewed = False
         schedule.save()
         cart = student_logged_in.shopping_cart
-        print(cart.classes)
         cart.classes.remove(str(c.pk))
         cart.save()
         messages.success(request, "Class added to schedule.")
         return HttpResponseRedirect('/student_schedule')
     elif conflict:
         # todo: could try form.cleaned_data to access their decision before this method
-        print("todo: remove this...time conflict")
         # this line below is key because it removes all messages, or else you will get long list that grows
         list(messages.get_messages(request))
         messages.warning(request, "Cannot add this class since you already have a class in your schedule at that time.")
         return HttpResponseRedirect(reverse('portal:student_schedule_conflict'))
     elif schedule.credit_count() + int(c.units[0]) > 12:
         # todo: could try form.cleaned_data to access their decision before this method
-        print("todo: remove this...credits conflict")
         # this line below is key because it removes all messages, or else you will get long list that grows
         list(messages.get_messages(request))
         messages.warning(request, "Cannot add this class as you have already reached term credits limit.")
         return HttpResponseRedirect(reverse('portal:student_schedule_conflict'))
-
 
 def add_class(request, year):
     class_nbr = (request.POST['Class_nbr'])
@@ -326,19 +273,8 @@ def add_class(request, year):
     r = r.json()[0]
     meetings = r['meetings'][0]
     student_logged_in = Student.objects.get(student_email=request.user.email)
-
     c = None
     if not ClassSection.objects.filter(class_nbr=r['class_nbr'], season=year).exists():
-        # Logic for correcting start time and end time
-        # st_time = meetings['start_time'][0:5]
-        # en_time = meetings['end_time'][0:5]
-        # time_format = '%H.%M'  # The format
-        # st_time_str = datetime.datetime.strptime(st_time, time_format)
-        # st_time_str_2 = st_time_str.strftime("%I.%M %p")
-        # st_time_str_2 = st_time_str_2.replace(".", ":")
-        # en_time_str = datetime.datetime.strptime(en_time, time_format)
-        # en_time_str_2 = en_time_str.strftime("%I.%M %p")
-        # en_time_str_2 = en_time_str_2.replace(".", ":")
         c = ClassSection(
             class_nbr=r['class_nbr'],
             class_section=r['class_section'],
@@ -347,8 +283,6 @@ def add_class(request, year):
             enrollment_available=r['enrollment_available'],
             units=r['units'],
             days=meetings['days'],
-            # start_time=st_time_str_2,
-            # end_time=en_time_str_2,
             start_time=meetings['start_time'],
             end_time=meetings['end_time'],
             instructor=meetings['instructor'],
@@ -372,22 +306,17 @@ def add_class(request, year):
         student_logged_in.save()
     else:
         shopping_cart = student_logged_in.shopping_cart
-
     if not str(c.pk) in shopping_cart.classes:
         shopping_cart.classes.append(c.pk)
         shopping_cart.save()
-
     # this line below is key because it removes all messages, or else you will get long list that grows
     list(messages.get_messages(request))
     messages.success(request, "Class added to shopping cart.")
     return HttpResponseRedirect('/student_shopping_cart')
 
-
 def remove_class(request):
     # TODO: have popup here to make sure they want to remove
-    print(request.POST['class_pk'])
     student_logged_in = Student.objects.get(student_email=request.user.email)
-    print(student_logged_in)
     student_logged_in.schedule.classes.remove(request.POST['class_pk'])
     student_logged_in.schedule.is_approved = False
     student_logged_in.schedule.is_sent = False
@@ -398,30 +327,21 @@ def remove_class(request):
 
 def remove_from_shopping(request):
     # TODO: have popup here to make sure they want to remove
-    print(request.POST['class_pk'])
     student_logged_in = Student.objects.get(student_email=request.user.email)
-    print(student_logged_in)
     student_logged_in.shopping_cart.classes.remove(request.POST['class_pk'])
     student_logged_in.shopping_cart.save()
     return HttpResponseRedirect(reverse('portal:student_shopping_cart'))
-
 
 def manage_students(request):
     advisor_logged_in = Advisor.objects.get(advisor_email=request.user.email)
     advisees = list(Student.objects.filter(advisor=advisor_logged_in))
     if request.method == "POST":
         return HttpResponseRedirect(reverse('portal:student_profile'))
-    # print(advisees)
-    # for advisee in advisees:
-    #     a_student = Student.objects.get(student_email=advisee.student_email)
-    #     print(a_student.student_first_name)
     return render(request, 'pages/manage_students.html', {"advisees": advisees, "advisor": advisor_logged_in})
-
 
 def student_profile(request):
     student_advisee = Student.objects.get(student_email=request.POST['advisee_email'])
     return render(request, 'pages/student_profile.html', {"student": student_advisee})
-
 
 def advisor_schedule_view(request):
     student_advisee = Student.objects.get(student_email=request.POST['student_email'])
@@ -437,12 +357,9 @@ def advisor_schedule_view(request):
         data = json.loads(schedule)
         return render(request, 'pages/advisor_schedule_view.html', {"schedule": data, "advisee": student_advisee, "is_approved": s.is_approved, "is_sent": s.is_sent, "is_viewed": s.is_viewed})
 
-
-
 def student_shopping_cart(request):
     student_logged_in = Student.objects.get(student_email=request.user.email)
     shopping_cart = []
-    print(student_logged_in.shopping_cart)
     if (student_logged_in.shopping_cart is None) or (len(student_logged_in.shopping_cart.classes) == 0):
         return render(request, 'pages/student_shopping_cart.html', {"shopping_cart": "empty"})
     else:
@@ -473,6 +390,7 @@ def send_schedule(request):
     student.schedule.is_approved = False
     student.schedule.save()
     return HttpResponseRedirect('/student_dashboard')
+
 def approve_schedule(request):
     student = Student.objects.get(student_email=request.POST['approve_schedule'])
     schedule = Schedule.objects.get(pk=student.schedule.pk)
@@ -494,6 +412,3 @@ def reject_schedule(request):
     list(messages.get_messages(request))
     messages.success(request, msg)
     return HttpResponseRedirect('/advisor_dashboard')
-
-
-
