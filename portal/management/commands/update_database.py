@@ -21,10 +21,7 @@ class Command(BaseCommand):
         page = 1
         baseurl = url
         url += str(page)
-        r = requests.get(
-            url
-        )
-
+        r = requests.get(url)
         # Keep requesting pages until a page returns an empty json
         while r.json() != []:
             for item in r.json():
@@ -45,13 +42,11 @@ class Command(BaseCommand):
         Class.objects.all().delete()
         Department.objects.all().delete()
         self.updateDepartments()
-
         # Create requests for every department that was fetched above
         for department in Department.objects.all():
             subject = department.subject
             year = '23'
             seasons = ['2', '8']
-
             # Find all classes for both the Fall and Spring semesters
             for season in seasons:
                 term = '1' + year + season
