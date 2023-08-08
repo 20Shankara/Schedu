@@ -1,6 +1,6 @@
 # Schedu
 
-This is a Django Web App designed to help UVA students plan and design their schedules. It utilizes the UVA SIS API to retrieve course details and is hosted by Heroku. 
+This is a Django Web App designed to help UVA students plan and design their schedules and UVA advisors to review and approve/reject these schedules. It utilizes the UVA SIS API to retrieve course details and is hosted by Heroku. 
 
 __Note:__ This is a continuation of a school project. It is important to note that several others contributed to the project and their names are listed below.
 
